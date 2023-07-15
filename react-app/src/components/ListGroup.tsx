@@ -65,7 +65,7 @@ function ListGroup3() {
   );
 }
 
-function ListGroup() {
+function ListGroup4() {
   const items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
 
   // better way to achive the same result of condition (if we don't have to use parameters)
@@ -92,6 +92,8 @@ function ListGroup() {
 
   // active only the selected index -1 means nothing selected
   // Hook
+  // arr[0] variable (selectedIndex)
+  // arr[1] updater function
   const [selectedIndex, setSelectedIndex] = useState(-1);
   return (
     // empty brackets represents Fragment Element
@@ -120,4 +122,47 @@ function ListGroup() {
   );
 }
 
+// if we want to have a real data we us use Props(property: the input to our component)
+// in this list we will define Props { items: [], heading: string}
+interface Props {
+  items: string[];
+  heading: string;
+  // if we want somthing happen after an item is sleceted ex: log the item on the console
+  onSlecetItem: (item: string) => void;
+}
+
+// function ListGroup(props: Props)
+// better to use { items, heading } so we don't have to write props.items.map((item, index)
+// we have to call the OnSlecetItem also like a parameter
+function ListGroup({ items, heading, onSlecetItem }: Props) {
+  // move items (data) to App.tsx  file
+  // const items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
+
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  return (
+    <>
+      {/* replace the List with heading(to make it dynamically) */}
+      <h1>{heading}</h1>
+      <ul className="list-group">
+        {items.map((item, index) => (
+          <li
+            className={
+              selectedIndex === index
+                ? "list-group-item active"
+                : "list-group-item"
+            }
+            key={item}
+            onClick={() => {
+              setSelectedIndex(index);
+              // we have to call the function here too
+              onSlecetItem(item);
+            }}
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
 export default ListGroup;
