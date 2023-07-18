@@ -31,3 +31,20 @@ Summary
 - When the state or props of a component change,
  React will re-render the component and update the DOM accordingly.
 
+Difference between the Props and State
+- Props
+1- input passed to a component
+2- Similar to function args 
+3- Immutable (unchangeble: read only which means we can change them)
+4- cause a re-render
+
+
+State
+1- Data managed by a component
+2- Similar to local variables
+3- mutable (changeble)
+4- cause a re-render
+
+Commens:
+(4) when Props and state changes React will render the component
+ and update the DOM accordingly.
