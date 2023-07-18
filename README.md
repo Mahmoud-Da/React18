@@ -10,6 +10,9 @@ npm run dev / sudo npm run dev
 
 to install a package to react application we use node package manger (npm)
 
+Tools:
+React Developer Tools:
+to inspecting and analyis React Application
 Extintions:
 
 - Name: ES7+ React/Redux/React-Native snippets
