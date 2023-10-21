@@ -2,6 +2,7 @@ import Alert from "./components/Alert";
 import ListGroup from "./components/ListGroup";
 import ListGroup2 from "./components/Styling-lesson/ListGroup1(CssModules)";
 import ListGroup1 from "./components/Styling-lesson/ListGroup1(VanillaCss)";
+import Icon from "./components/Styling-lesson/add_icons/icon";
 
 function App() {
   const items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
@@ -12,6 +13,10 @@ function App() {
 
   return (
     <>
+      <div>
+        <Icon />
+      </div>
+
       <div>
         <ListGroup
           items={items}

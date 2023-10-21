@@ -13,7 +13,9 @@ function ListGroup2({ items, heading, onSlecetItem }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   return (
     <>
-      <h1>{heading}</h1>
+      {/* inline styling like html we can write style inside react component but its better to avaid it (makes our code hard to maintain) */}
+
+      <h1 style={{ background: "yellow" }}>{heading}</h1>
       {/* <ul className={styles["list-group2"]}> */}
       {/* to avoid using[] we change the Css class to Camel Notation */}
       {/* <ul className={styles.listGroup}> */}

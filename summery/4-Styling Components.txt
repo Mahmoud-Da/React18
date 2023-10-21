@@ -41,7 +41,9 @@ Summary
  and should only be used as a last resort.
 
 - We can add icons to our applications using the react-icons library.
-
+npm i react-icon
+use this site
+https://react-icons.github.io/react-icons/
 - There are several UI libraries available that can assist us in quickly building beautiful and modern applications.
  Some popular options include Bootstrap,
  Material UI, TailwindCSS, DaisyUI, ChakraUI, and more.
