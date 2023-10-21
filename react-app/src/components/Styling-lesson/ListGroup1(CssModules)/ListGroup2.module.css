@@ -1,0 +1,12 @@
+.list-group2 {
+    font-size: xx-large;
+}
+
+/* with Css Model better to use camel Notation */
+.listGroup{
+    font-size: smaller;
+}
+
+.fontFamily{
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
