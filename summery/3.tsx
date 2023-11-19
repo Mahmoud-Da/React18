@@ -1,4 +1,4 @@
-// REATING A COMPONENT
+// CREATING A COMPONENT
 const Message = () => {
     return <h1>Hello Wolrd</h1>
 }
