@@ -1,0 +1,50 @@
+・Reactは、動的でインタラクティブなユーザーインターフェースを構築するためのJavaScriptライブラリです。
+
+・Reactアプリケーションでは、DOMを直接問い合わせたり更新したりすることはありません。代わりに、
+小さく再利用可能なコンポーネントを使用してアプリケーションを記述します。ReactはDOM要素の効率的な作成と更新を担当します。
+
+・Reactコンポーネントは、関数またはクラスを使用して作成できます。
+関数ベースのコンポーネントが、より簡潔で扱いやすいため、好まれるアプローチです。
+
+・JSXはJavaScript XMLの略です。これはHTMLとJavaScriptを組み合わせた構文で、
+複雑なユーザーインターフェースを容易に作成することを可能にします。
+
+・アプリケーションが開始されると、Reactはコンポーネントのツリーを取り、
+仮想DOMと呼ばれるJavaScriptのデータ構造を構築します。
+この仮想DOMはブラウザの実際のDOMとは異なり、コンポーネントツリーの軽量なインメモリ表現です。
+
+・コンポーネントの状態またはデータが変更されると、Reactは新しい状態を反映するために仮想DOMの対応するノードを更新します。
+次に、現在の仮想DOMのバージョンと前のバージョンを比較して、更新が必要なノードを特定します。
+それから、実際のDOMのそれらのノードを更新します。
+
+・ブラウザベースのアプリでは、DOMの更新はReactDOMというライブラリによって行われます。
+モバイルアプリでは、React Nativeがネイティブコンポーネントを使用してユーザーインターフェースをレンダリングします。
+
+・ReactはAngularやVueのようなフレームワークではなく、単なるライブラリであるため、ルーティング、ステート管理、
+国際化、フォーム検証などの懸念に対して他のツールが必要となります。
+
+
+-React là một thư viện JavaScript dùng để xây dựng giao diện người dùng động và tương tác.
+
+-Trong các ứng dụng React, chúng ta không trực tiếp truy vấn và cập nhật DOM. Thay vào đó, chúng ta mô tả ứng dụng của mình bằng cách sử dụng các thành phần nhỏ, có thể tái sử dụng.
+React sẽ chịu trách nhiệm tạo và cập nhật các phần tử DOM một cách hiệu quả.
+
+-Các thành phần React có thể được tạo ra bằng cách sử dụng hàm hoặc lớp.
+Các thành phần dựa trên hàm được ưa chuộng hơn vì chúng ngắn gọn và dễ làm việc hơn.
+
+-JSX là viết tắt của JavaScript XML. Đây là cú pháp cho phép chúng ta viết các
+thành phần kết hợp HTML và JavaScript một cách dễ đọc và biểu cảm, giúp tạo giao diện người dùng phức tạp dễ dàng hơn.
+
+-Khi ứng dụng của chúng ta bắt đầu, React sẽ lấy cây thành phần và
+xây dựng một cấu trúc dữ liệu JavaScript gọi là DOM ảo. DOM ảo này khác với DOM thực tế trong trình duyệt. Nó là một biểu diễn nhẹ, trong bộ nhớ của cây thành phần của chúng ta.
+
+-Khi trạng thái hoặc dữ liệu của một thành phần thay đổi, React cập nhật nút tương ứng
+trong DOM ảo để phản ánh trạng thái mới. Sau đó, nó so sánh phiên bản hiện tại của DOM ảo với phiên bản trước để xác định những nút cần được cập nhật. React sau đó sẽ cập nhật những nút này trong DOM thực tế.
+
+-Trong các ứng dụng dựa trên trình duyệt, việc cập nhật DOM được thực hiện bởi một thư viện đi kèm gọi là ReactDOM.
+Trong các ứng dụng di động, React Native sử dụng các thành phần gốc để hiển thị giao diện người dùng.
+
+-Vì React chỉ là một thư viện chứ không phải là một framework như Angular hay Vue,
+chúng ta thường cần các công cụ khác cho các vấn đề như định tuyến, quản lý trạng thái, quốc tế hóa, kiểm tra biểu mẫu, v.v.
+
+
