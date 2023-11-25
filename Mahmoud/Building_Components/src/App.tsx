@@ -1,6 +1,8 @@
 import ListGroup1 from "./components/ListGroup1";
 import ListGroup2 from "./components/ListGroup2";
 import ListGroup3 from "./components/ListGroup3";
+import ListGroup4 from "./components/ListGroup4";
+import ListGroup5 from "./components/ListGroup5";
 
 function App() {
   return (
@@ -13,6 +15,14 @@ function App() {
 
       {/* conditional rendering */}
       <ListGroup3 />
+
+      {/* Handling click events */}
+      <ListGroup4 />
+
+      {/* Manging State */}
+      {/* every list group will have it owns state */}
+      <ListGroup5 />
+      <ListGroup5 />
     </>
   );
 }
