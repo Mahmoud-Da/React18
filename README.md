@@ -25,7 +25,7 @@ Extintions:
 we can type [rafce] (a shortcut to create a component and export it)
 (name shortcut means => react arrow function export component)
 
-tow ways to create React application
+two ways to create React application
 1- create React App (CRA)
 2- Vite (give us smaller bundlers size and faster)
 npm create vite@latest (in this app @4.1.0)
