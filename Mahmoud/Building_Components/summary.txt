@@ -1,0 +1,53 @@
+steps in this project:
+
+
+adding bootstrap
+
+1-install boot strap
+npm i bootstrap
+
+in this course the version is 
+npm i bootstrap@5.2.3
+
+2- removing the styles in App.css (app component), index.css(root styles {the entire file}) 
+
+3- in main.tsx we replace import './index.css' with import "bootstrap/dist/css/bootstrap.css";
+
+4- class is name in JS refers to the class so we need to chnage class -> ClassName
+ex: 
+<ul class="list-group">   =>   <ul className="list-group">
+
+
+
+Memo: we only can return on element in React
+cuz: 
+<h1>List</h1>; translate in react => React.createElement("h1")
+and can`t return multi statement
+
+to fix this issue:
+1- wrap all the elemnets with div
+ (but not recomannded coz we add extra element in the DWM without meaning )
+
+2- import { Fragment } from "react"; and wrap with Fragment
+(but not recomannded coz are importing make our code size large if we want use it multi times )
+
+
+3- best way to use Fragment tags {<> </>}
+
+
+rendering list
+in jsx we can`t use for loop so we use diffrent technic like map method
+
+
+&& operater (coomen technic for React Developer)
+true && 1
+=>1
+
+true && "moody"
+=> 'moody'
+
+false && "moody"
+=> false
+ex:
+if statement items.length === 0 is true result is <p> No Item found</p>
+if statement items.length === 0 is false result is false which means nothing will render
