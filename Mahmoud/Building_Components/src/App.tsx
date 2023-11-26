@@ -1,3 +1,4 @@
+import Card from "./components/Card";
 import ListGroup1 from "./components/ListGroup1";
 import ListGroup2 from "./components/ListGroup2";
 import ListGroup3 from "./components/ListGroup3";
@@ -18,6 +19,7 @@ function App() {
 
       {/* Handling click events */}
       <ListGroup4 />
+      <Card />
 
       {/* Manging State */}
       {/* every list group will have it owns state */}
