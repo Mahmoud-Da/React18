@@ -2,8 +2,13 @@ import { useState } from "react";
 import girls from "../assets/girls.png";
 
 const Cards = () => {
+  // const [selectedButton, setSelectedButtton] = useState(-1);
+
+  // const handleButtonClick = () => {
+  //   setSelectedButtton(selectedButton === 0 ? -1 : 0);
+  // };
   return (
-    <div className="card mb-3">
+    <div className="card">
       <img src={girls} className="card-img-top" alt="..." />
       <div className="card-body">
         <h5 className="card-title">Card title</h5>
@@ -19,9 +24,14 @@ const Cards = () => {
         <li className="list-group-item">A third item</li>
       </ul>
 
-      <a href="#" className="btn btn-primary">
+      <button
+      // className={
+      //   selectedButton === 0 ? "btn btn-primary" : "btn btn-secondary"
+      // }
+      // onClick={handleButtonClick}
+      >
         Go somewhere
-      </a>
+      </button>
     </div>
   );
 };
