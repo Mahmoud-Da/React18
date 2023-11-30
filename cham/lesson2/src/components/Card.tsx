@@ -18,7 +18,13 @@ const Card = () => {
           bulk of the card's content.
         </p>
 
-        <a href="#" className="btn btn-primary">
+        <a
+          href="#"
+          className={
+            selectedButton === 0 ? "btn btn-primary" : "btn btn-secondary"
+          }
+          onClick={handleButtonClick}
+        >
           Go somewhere
         </a>
       </div>
