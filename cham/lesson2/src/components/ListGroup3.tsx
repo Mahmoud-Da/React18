@@ -17,7 +17,7 @@ const ListGroup3s = () => {
 
   return (
     <>
-      <h1>List Group</h1>
+      <h1>Programming Languge Group</h1>
       <ul className="list-group">
         {message}
         {items.map((item, index) => (
