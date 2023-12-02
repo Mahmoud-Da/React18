@@ -1,15 +1,12 @@
 import { useState } from "react";
+// Props: input するデータの形式を決める
+interface Props {
+  items: string[];
+  header: string;
 
-const ListGroup3 = () => {
-  let items: string[] = [
-    "Html",
-    "Css",
-    "GitHub",
-    "JavaScript",
-    "TypeScript",
-    "React",
-  ];
-
+  onSlecetedItem: (item: string) => void;
+}
+const ListGroup3 = ({ items, header, onSlecetedItem }: Props) => {
   // Hook
   const [selectIndex, setSelectedIndex] = useState(-1);
 
@@ -17,7 +14,7 @@ const ListGroup3 = () => {
 
   return (
     <>
-      <h1>Programming Languge Group</h1>
+      <h1>{header}</h1>
       <ul className="list-group">
         {message}
         {items.map((item, index) => (
@@ -29,7 +26,10 @@ const ListGroup3 = () => {
             }
             key={item}
             // onClick={() => setSelectedIndex(0)}
-            onClick={() => setSelectedIndex(index)}
+            onClick={() => {
+              setSelectedIndex(index);
+              onSlecetedItem(item);
+            }}
           >
             {item}
           </li>
