@@ -34,3 +34,9 @@ to run:
 
 - npm install
 - npm run dev
+
+Extentions:
+ES7+ React/Redux/React-Native snippets
+
+shortcut: to create component shortcut
+rafce {react arrow function component export}

@@ -51,3 +51,47 @@ false && "moody"
 ex:
 if statement items.length === 0 is true result is <p> No Item found</p>
 if statement items.length === 0 is false result is false which means nothing will render
+
+
+if we defined the input(type of list) in our component
+we will have to create new component each time we want to change the input (list of colors, list of names and so ..)
+to make our component reausble we used Props or Property (Props are the input to our component)
+1- type the shape of our component (ins this case {item: [], heading: string})
+using Interface (we use Props as common name)
+
+2- give the functions argument and the type of that argument is the Interface
+  ex ListGroup(props: Props)
+  or better practice ({attrubutes} : Props) so we don`t have to use prefex
+
+3- move the items(data) to App component
+
+4- call the intaface attrubutes as html attrubutes
+<ListGroup6 items={items} heading="Cites"/>
+
+
+      Props              Vs                  State
+- input passed                       - Data managed by component        
+ to a component
+
+- similar to function arguments      - Similar to local varibale
+
+- immutable(unchangeble)             - mutable (changeble)        
+
+- cause a re-render                  - cause a re-render
+
+
+pass child to component
+example 
+<Alert text="Alert"
+
+better  way
+<Alert>Alert</Alert>
+
+or evenn if we want to add html elements inside
+Hello <span>World</span>
+
+inside  Interface
+we add and the Type is ReactNode
+interface Props {
+  children: ReactNode;
+}
