@@ -3,6 +3,7 @@
 import Alert from "./components/Alert";
 import ListGroups1 from "./components/ListGroup1";
 import ListGroups2 from "./components/ListGroup1";
+import Navbar from "./components/Navar";
 import Scrollspy from "./components/Scrollspy";
 
 function App() {
@@ -46,7 +47,8 @@ function App() {
         <br></br>
         <span>My cat</span>
       </Alert> */}
-      <Scrollspy />
+      {/* <Scrollspy /> */}
+      <Navbar />
     </>
   );
 }
