@@ -47,3 +47,40 @@ to be able to called it like normal object ex: styles.listGroup
 
 to call multi class
 className={[styles.listGroup, styles.container].join(" ")}
+*********************************************************
+
+CSS-in-JS: define all the styles for a component alongside its code.
+Like CSS modules, this provides scoping for CSS classes and eliminates conflicts.
+It also makes it easier for us to change or delete a component without affecting other components.
+
+1- install library called styled-components
+npm i styled-components
+import styled from "styled-components";  
+styled.ul`
+  list-style: none;
+  padding: 0;
+  color: green;
+`
+we add to const (react element)
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+  color: green;
+`
+instead of 
+<ul className="list-group">
+
+we called like react component
+<List>
+
+
+same thing for li element with applaying hook 
+interface ListItemProps {
+  active: boolean;
+}
+const ListItem = styled.li<ListItemProps>`
+  padding: 5px 0;
+  background: ${(props) => props.active && "blue"};
+`;
+
+*********************************************************
