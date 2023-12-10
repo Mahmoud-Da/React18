@@ -1,4 +1,18 @@
 import { useState } from "react";
+import styled from "styled-components";
+
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+  color: green;
+`;
+// selectIndex === index ? style : "list-group-item"
+interface ListItemProps {
+  active: boolean;
+}
+const ListItem = styled.li<ListItemProps>`
+  background: ${(props) => props.active && "yellow"};
+`;
 
 interface Props {
   items: string[];
@@ -7,7 +21,7 @@ interface Props {
 
   onSlecetedItem: (item: string) => void;
 }
-const ListGroup = ({ items, header, style, onSlecetedItem }: Props) => {
+const ListGroupS = ({ items, header, style, onSlecetedItem }: Props) => {
   // Hook
   const [selectIndex, setSelectedIndex] = useState(-1);
 
@@ -16,11 +30,11 @@ const ListGroup = ({ items, header, style, onSlecetedItem }: Props) => {
   return (
     <>
       <h1>{header}</h1>
-      <ul className="list-group">
+      <List>
         {message}
         {items.map((item, index) => (
-          <li
-            className={selectIndex === index ? style : "list-group-item"}
+          <ListItem
+            active={selectIndex === index}
             key={item}
             onClick={() => {
               setSelectedIndex(index);
@@ -28,11 +42,11 @@ const ListGroup = ({ items, header, style, onSlecetedItem }: Props) => {
             }}
           >
             {item}
-          </li>
+          </ListItem>
         ))}
-      </ul>
+      </List>
     </>
   );
 };
 
-export default ListGroup;
+export default ListGroupS;

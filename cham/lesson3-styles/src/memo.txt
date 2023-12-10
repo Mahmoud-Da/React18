@@ -1,0 +1,17 @@
+1- vanilla CSS (vanilla: 生)
+2- CSS modules
+3- CSS-in-JS
+
+vanilla CSS:
+
+
+
+CSS-in-JS: 
+(styled-components: package)
+import styled from "styled-components";
+styled.ul``
+
+
+icons:
+npm i react-icons
+https://react-icons.github.io/react-icons/
