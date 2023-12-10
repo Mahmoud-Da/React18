@@ -27,7 +27,8 @@ function ListGroupS({ items, heading, onSelectedItem }: Props) {
   useState;
   return (
     <>
-      <h1>{heading}</h1>
+      {/* inline style */}
+      <h1 style={{ backgroundColor: "yellow" }}>{heading}</h1>
       <List>
         {items.length === 0 && <p> No Item found</p>}
         {items.map((item, index) => (

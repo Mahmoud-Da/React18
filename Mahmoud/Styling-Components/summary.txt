@@ -84,3 +84,30 @@ const ListItem = styled.li<ListItemProps>`
 `;
 
 *********************************************************
+The separation of concerns principle:
+ suggests that we divide a program into distinct sections or modules where each section handles a specific functionality.
+  It helps us build modular and maintainable applications.
+
+*********************************************************
+we can use inline styles but not recommanded coz make our code hard to read
+<h1 style={{ backgroundColor: "yellow" }}>{heading}</h1>
+
+
+***********************************************************
+- There are several UI libraries available that can assist us in quickly building beautiful and modern applications.
+ Some popular options include Bootstrap,
+ Material UI, TailwindCSS, DaisyUI, ChakraUI, and more.
+
+ ***********************************************************
+- We can add icons to our applications using the react-icons library
+
+
+1- npm i react-icons
+
+2- use this site
+https://react-icons.github.io/react-icons/
+
+3- copy the icon name and wrap it inside import statement
+import { SlCalender } from "react-icons/sl";
+and called like react component
+ <SlCalender />

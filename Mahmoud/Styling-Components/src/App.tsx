@@ -1,6 +1,7 @@
 import ListGroupV from "./components/ListGroupV";
 import ListGroupM from "./components/ListGroupM";
 import ListGroupS from "./components/ListGroupS";
+import { SlCalender } from "react-icons/sl";
 import "./App.css";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   };
   return (
     <>
+      <SlCalender />
       <ListGroupV
         items={items}
         heading="City1"
