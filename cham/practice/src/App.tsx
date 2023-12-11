@@ -1,8 +1,9 @@
 // import Cards from "./components/Cards";
 
-import Alert from "./components/Alert";
-import ListGroups1 from "./components/ListGroup1";
-import ListGroups2 from "./components/ListGroup1";
+// import Alert from "./components/Alert";
+// import ListGroups1 from "./components/ListGroup1";
+// import ListGroups2 from "./components/ListGroup1";
+import ListGroupM from "./components/ListGroupM";
 
 function App() {
   let t_flowers: string[] = [
@@ -27,7 +28,7 @@ function App() {
   };
   return (
     <>
-      {/* <Cards /> */}
+      {/* <Cards />
       <ListGroups1
         items={t_flowers}
         header="The flowers"
@@ -44,7 +45,13 @@ function App() {
         Hello <span>Lily</span>
         <br></br>
         <span>My cat</span>
-      </Alert>
+      </Alert> */}
+      <ListGroupM
+        items={t_fruits}
+        header="The fruits"
+        style="list-group-item list-group-item-warning"
+        onSlecetedItem={handleSlecetedItem}
+      />
     </>
   );
 }
