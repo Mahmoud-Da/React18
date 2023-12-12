@@ -1,9 +1,10 @@
 // import Cards from "./components/Cards";
 
-import Alert from "./components/Alert";
+// import Alert from "./components/Alert";
 // import ListGroups1 from "./components/ListGroup1";
 // import ListGroups2 from "./components/ListGroup1";
-import ListGroupV from "./components/ListGroupV";
+// import ListGroupV from "./components/ListGroupV";
+import ListGroupS from "./components/ListGroupS";
 
 function App() {
   let t_flowers: string[] = [
@@ -46,7 +47,13 @@ function App() {
         <br></br>
         <span>My cat</span>
       </Alert> */}
-      <ListGroupV
+      {/* <ListGroupV
+        items={t_flowers}
+        header="The flowers"
+        style="list-group-item list-group-item-primary"
+        onSlecetedItem={handleSlecetedItem}
+      /> */}
+      <ListGroupS
         items={t_flowers}
         header="The flowers"
         style="list-group-item list-group-item-primary"
