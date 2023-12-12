@@ -11,7 +11,7 @@ interface ListItemProps {
   active: boolean;
 }
 const ListItem = styled.li<ListItemProps>`
-  background: ${(props) => props.active && "blue"};
+  background: ${(props) => props.active && "yellow"};
 `;
 
 interface Props {
@@ -33,7 +33,7 @@ const ListGroupS = ({ items, header, style, onSlecetedItem }: Props) => {
         {attention}
         {items.map((item, index) => (
           <ListItem
-            className={selectIndex === index ? style : "list-group-item"}
+            active={selectIndex === index}
             key={item}
             onClick={() => {
               setSelectedIndex(index);
