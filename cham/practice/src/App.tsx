@@ -4,17 +4,18 @@
 // import ListGroups1 from "./components/ListGroup1";
 // import ListGroups2 from "./components/ListGroup1";
 // import ListGroupV from "./components/ListGroupV";
-import ListGroupS from "./components/ListGroupS";
+// import ListGroupS from "./components/ListGroupS";
+import Carousel from "./components/Carousel";
 
 function App() {
-  let t_flowers: string[] = [
-    "Lily",
-    "Rose",
-    "Lavender",
-    "Violet",
-    "Tulip",
-    "Sunflower",
-  ];
+  //   let t_flowers: string[] = [
+  //     "Lily",
+  //     "Rose",
+  //     "Lavender",
+  //     "Violet",
+  //     "Tulip",
+  //     "Sunflower",
+  //   ];
 
   // let t_fruits: string[] = [
   //   "Cherris",
@@ -24,9 +25,10 @@ function App() {
   //   "Plum",
   //   "Peach",
   // ];
-  const handleSlecetedItem = (item: string) => {
-    console.log(item);
-  };
+
+  // const handleSlecetedItem = (item: string) => {
+  //   console.log(item);
+  // };
   return (
     <>
       {/* <Cards />
@@ -53,12 +55,13 @@ function App() {
         style="list-group-item list-group-item-primary"
         onSlecetedItem={handleSlecetedItem}
       /> */}
-      <ListGroupS
+      {/* <ListGroupS
         items={t_flowers}
         header="The flowers"
         style="list-group-item list-group-item-primary"
         onSlecetedItem={handleSlecetedItem}
-      />
+      /> */}
+      <Carousel />
     </>
   );
 }
