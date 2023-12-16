@@ -125,3 +125,6 @@ setTags(tags.filter((tag) => tag !== "a"));
 
 // Updating
 setTags(tags.map((tag) => (tag === "a" ? "A" : tag)));
+
+************* Simplifying Update Logic with Immer *************
+first install immer package (9.0.19)
