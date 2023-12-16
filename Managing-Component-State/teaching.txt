@@ -1,4 +1,4 @@
-****State Hook****
+************* State Hook *************
 1- React updates the state asynchronously(not immediately)
 coz: 
 Performance reasons (every time we handle event if we set too much variables the Performance will be slow)
@@ -24,7 +24,7 @@ the React stored them in order
 thats why we can not use hooks in if statemnet or for loops (impact the order if stored hooks values)
 
 
-****choosing the state structure****
+************* choosing the state structure *************
 example: 
 FullName component
 - Aviod redundant state variables (like const fullName somthing can created from existed varible) {ex1}
@@ -38,7 +38,7 @@ Aviod deeply nested structure (coz hard to update)
 {ex2}
 
 
-****Keeping Pure****
+************* Keeping Pure *************
 in computer Saince:
 Pure Function:  (opposite inPure)
 Given the same input, always returns the same result
@@ -55,3 +55,73 @@ to keep our component Pure
 - keep changes out of the render phase
 
 Massege component
+
+
+************* Sharing The Strict Mode *************
+when we rendered theree Message componenst
+we got
+Message2
+Message4
+Message6
+
+why not 1, 2, 3
+coz Strict Mode in React
+
+
+in main component 
+the App component wraped between <React.StrictMode> component 
+React.StrictMode is not visual componet it`s only for catching potential (possible can happned) problem
+
+InPure component is example of potential problem
+React.StrictMode make App component rendrenig twice (to show potential problems) and take the result of the second rendred
+- the first rendred to detact and report potential problems in our code
+- the second rendred for update user interface
+
+in ex:
+Massege2 component
+
+in console we expected to see Message called 2 but we saw Message called 1
+
+
+************* Update Objects *************
+
+
+when dealing with objects and arrays we should remember to treat them as immutibe (not changble) like readonly
+ex1
+
+so we have to create new object 
+ex2
+
+// Update Objects
+const [drink, setDrink] = useState({
+  title: "Americano",
+  price: 5,
+});
+
+setDrink({ ...drink, price: 2 });
+
+
+************* Update Nasted Objects *************
+PS: we need to set address to new object coz sprate oprator refere the same location of address of memory
+
+const [customer, setCustomer] = useState({
+  name: "John",
+  address: {
+    city: "San Francisco",
+    zipCode: 94111,
+  },
+});
+
+setCustomer({ ...customer, address: { ...customer.address, zipCode: 94112 } });
+
+
+************* Update Array *************
+const [tags, setTags] = useState(["a", "b"]);
+// Adding
+setTags([...tags, "c"]);
+
+// Removing
+setTags(tags.filter((tag) => tag !== "a"));
+
+// Updating
+setTags(tags.map((tag) => (tag === "a" ? "A" : tag)));
