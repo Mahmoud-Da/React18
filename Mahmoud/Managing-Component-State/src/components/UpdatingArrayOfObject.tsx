@@ -17,7 +17,7 @@ const UpdatingArrayOfObject = () => {
           {`Bug ID: ${bug.id}, Title: ${bug.title}, Fixed: ${bug.fixed}`}
         </div>
       ))}
-      <div onClick={handleClick}>Click</div>
+      <button onClick={handleClick}>Click</button>
     </>
   );
 };

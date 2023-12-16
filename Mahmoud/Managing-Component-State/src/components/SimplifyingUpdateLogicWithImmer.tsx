@@ -1,25 +1,30 @@
 import { useState } from "react";
+import produce from "immer";
 
 const SimplifyingUpdateLogicWithImmer = () => {
-  const [customer, setCustomer] = useState({
-    name: "John",
-    address: {
-      city: "San Francisco",
-      zipCode: 94111,
-    },
-  });
+  const [bugs, setBugs] = useState([
+    { id: 1, title: "Bug 1", fixed: false },
+    { id: 2, title: "Bug 2", fixed: false },
+  ]);
 
-  // update the zipcode
   const handleClick = () => {
-    setCustomer({
-      ...customer,
-      address: { ...customer.address, zipCode: 94112 },
-    });
+    // setBugs(bugs.map((bug) => (bug.id === 1 ? { ...bug, fixed: true } : bug)));
+    // using immer
+    setBugs(
+      produce((draft) => {
+        const bug = draft.find((bug) => bug.id === 1);
+        if (bug) bug.fixed = true;
+      })
+    );
   };
 
   return (
     <>
-      {customer.address.zipCode}
+      {bugs.map((bug) => (
+        <div key={bug.id}>
+          {`Bug ID: ${bug.id}, Title: ${bug.title}, Fixed: ${bug.fixed}`}
+        </div>
+      ))}
       <button onClick={handleClick}>Click</button>
     </>
   );

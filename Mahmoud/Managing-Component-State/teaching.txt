@@ -100,7 +100,7 @@ const [drink, setDrink] = useState({
 
 setDrink({ ...drink, price: 2 });
 
-
+ex: Update Objects component
 ************* Update Nasted Objects *************
 PS: we need to set address to new object coz sprate oprator refere the same location of address of memory
 
@@ -114,7 +114,7 @@ const [customer, setCustomer] = useState({
 
 setCustomer({ ...customer, address: { ...customer.address, zipCode: 94112 } });
 
-
+ex: Update Nasted Objects component
 ************* Update Array *************
 const [tags, setTags] = useState(["a", "b"]);
 // Adding
@@ -128,3 +128,26 @@ setTags(tags.map((tag) => (tag === "a" ? "A" : tag)));
 
 ************* Simplifying Update Logic with Immer *************
 first install immer package (9.0.19)
+import produce from "immer";
+
+
+
+
+************* Sharing State between Components *************
+example if we had a navbar and shopping cart if the item removed from shopping cart the navbar notification will decreased by one
+so this two component need to share state and be sync
+
+
+imagine
+ (shared state)   ↓   App    ↓  (shared state)      2- then we can shared with it`s children using Props
+                     /    \                            so Navbar and the Cart will receive the same component
+                    /      \                
+                   /        \    ↑(state)  1- first we left state up to the closet parent component 
+                 NavBar     Cart
+
+
+
+
+
+
+ex: Sharing State between component 
