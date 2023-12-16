@@ -150,4 +150,4 @@ imagine
 
 
 
-ex: Sharing State between component 
+ex: NavBar componet + Cart component
