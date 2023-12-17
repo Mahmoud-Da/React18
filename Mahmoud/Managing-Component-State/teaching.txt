@@ -1,0 +1,153 @@
+************* State Hook *************
+1- React updates the state asynchronously(not immediately)
+coz: 
+Performance reasons (every time we handle event if we set too much variables the Performance will be slow)
+so after the handle finish the execution it patch all the change togather
+example: 
+ButtonShow1 component (ex1)
+
+2- State is stored outside of components
+example: 
+ButtonShow1 component (ex2)
+
+when we difined our count variable it`s scope inside the ButtonShow function
+which means when function(component) finish the it excution the count local variable will removed from memory
+that`s means next time we call the component count variable will reset to 0 and the updated that we made count++ will lost
+that`s why we use useState to store the varible outside the component
+
+
+3- only use hooks at the top level of our component
+example: 
+ButtonShow1 component (ex3)
+when we stored our too hooks values [first hook value, second hook value] and map it to the local hooks variables inside the function
+the React stored them in order
+thats why we can not use hooks in if statemnet or for loops (impact the order if stored hooks values)
+
+
+************* choosing the state structure *************
+example: 
+FullName component
+- Aviod redundant state variables (like const fullName somthing can created from existed varible) {ex1}
+
+- when we have multible variables related
+Group related variables inisde and object
+{ex2}
+
+-when using objects
+Aviod deeply nested structure (coz hard to update)
+{ex2}
+
+
+************* Keeping Pure *************
+in computer Saince:
+Pure Function:  (opposite inPure)
+Given the same input, always returns the same result
+which means:
+if we called a function 10 times it should the same result
+
+in React:
+Props  --->     Componet    ---> JSX
+if we give the same props it shuold give the same jsx
+
+so if the props not change the component can skip reRendrenig and make our Performance fast
+
+to keep our component Pure
+- keep changes out of the render phase
+
+Massege component
+
+
+************* Sharing The Strict Mode *************
+when we rendered theree Message componenst
+we got
+Message2
+Message4
+Message6
+
+why not 1, 2, 3
+coz Strict Mode in React
+
+
+in main component 
+the App component wraped between <React.StrictMode> component 
+React.StrictMode is not visual componet it`s only for catching potential (possible can happned) problem
+
+InPure component is example of potential problem
+React.StrictMode make App component rendrenig twice (to show potential problems) and take the result of the second rendred
+- the first rendred to detact and report potential problems in our code
+- the second rendred for update user interface
+
+in ex:
+Massege2 component
+
+in console we expected to see Message called 2 but we saw Message called 1
+
+
+************* Update Objects *************
+
+
+when dealing with objects and arrays we should remember to treat them as immutibe (not changble) like readonly
+ex1
+
+so we have to create new object 
+ex2
+
+// Update Objects
+const [drink, setDrink] = useState({
+  title: "Americano",
+  price: 5,
+});
+
+setDrink({ ...drink, price: 2 });
+
+ex: Update Objects component
+************* Update Nasted Objects *************
+PS: we need to set address to new object coz sprate oprator refere the same location of address of memory
+
+const [customer, setCustomer] = useState({
+  name: "John",
+  address: {
+    city: "San Francisco",
+    zipCode: 94111,
+  },
+});
+
+setCustomer({ ...customer, address: { ...customer.address, zipCode: 94112 } });
+
+ex: Update Nasted Objects component
+************* Update Array *************
+const [tags, setTags] = useState(["a", "b"]);
+// Adding
+setTags([...tags, "c"]);
+
+// Removing
+setTags(tags.filter((tag) => tag !== "a"));
+
+// Updating
+setTags(tags.map((tag) => (tag === "a" ? "A" : tag)));
+
+************* Simplifying Update Logic with Immer *************
+first install immer package (9.0.19)
+import produce from "immer";
+
+
+
+
+************* Sharing State between Components *************
+example if we had a navbar and shopping cart if the item removed from shopping cart the navbar notification will decreased by one
+so this two component need to share state and be sync
+
+
+imagine
+ (shared state)   ↓   App    ↓  (shared state)      2- then we can shared with it`s children using Props
+                     /    \                            so Navbar and the Cart will receive the same component
+                    /      \                
+                   /        \    ↑(state)  1- first we left state up to the closet parent component 
+                 NavBar     Cart
+
+
+
+
+
+
+ex: NavBar componet + Cart component

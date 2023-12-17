@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ListGroup3s = () => {
+const ListGroup3 = () => {
   let items: string[] = [
     "Html",
     "Css",
@@ -17,7 +17,7 @@ const ListGroup3s = () => {
 
   return (
     <>
-      <h1>List Group</h1>
+      <h1>Programming Languge Group</h1>
       <ul className="list-group">
         {message}
         {items.map((item, index) => (
@@ -39,4 +39,4 @@ const ListGroup3s = () => {
   );
 };
 
-export default ListGroup3s;
+export default ListGroup3;

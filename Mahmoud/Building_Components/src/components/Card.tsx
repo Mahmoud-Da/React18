@@ -1,5 +1,5 @@
 import { useState } from "react";
-import lili from "../assets/lili.png";
+import lili from "../assets/img/lili.jpeg";
 const Card = () => {
   const [selectedButton, setSelectedButtton] = useState(-1);
 
@@ -17,7 +17,6 @@ const Card = () => {
           bulk of the card's content.
         </p>
         <a
-          href="#"
           className={
             selectedButton === 0 ? "btn btn-primary" : "btn btn-secondary"
           }
