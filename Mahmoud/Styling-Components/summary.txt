@@ -1,0 +1,113 @@
+3types of styling our components
+vanilla CSS, CSS modules, CSS-in-JS
+
+*********************************************************
+vanilla CSS: time consuming (style everything from scratch)
+
+1- create new project with ListGroup(use ListGroup7 from the previos lessons)
+2- create ListGroup.css inside component folder better to make it next to ListGroup.tsx for multi resonst
+ * if we had a change in our component we don`t have to dive in multi folders
+ * move our component easily by copy-paste the related files related tsx and css near to each others
+
+we can take it to next level by created ListGroup folder and add our related files of the component inside it
+in ListGroup.tsx we can import ListGroup.css
+
+PS: in App.tsx we had
+import ListGroup from "./components/ListGroup/ListGroup";
+it`s a little ugly to solve this problem we craete index.ts inside ListGroup folder
+in this folder we need to import ListGroup componest and export it like a defualt object
+with that
+import ListGroup from "./components/ListGroup"
+cos by defult the compiler will look at file called index
+
+*********************************************************
+CSS modules:
+the problem in the vanilla CSS is the name clashes 
+example if we 
+.list-group in the App class it will overwrite our styles in in ListGroup.css
+
+here we use CSS modules
+1- add "module" name css file as ListGroup.module.css
+
+2- inside tsx we import as object
+import styles from "./ListGroupM.css";
+
+3- replace {/* <ul className="list-group"> */} with 
+<ul className={styles.list-group}>
+we had complition error cos we can`t use "-" is not valid property name in TS or JS
+
+so we type it like this 
+<ul className={styles["list-group"]}>
+
+using dev too we can see the class name is encoded
+<ul class="_list-group_1n6if_1">
+
+styles["list-group"] is a little ugly so is better to use camelNotation
+to be able to called it like normal object ex: styles.listGroup
+
+to call multi class
+className={[styles.listGroup, styles.container].join(" ")}
+*********************************************************
+
+CSS-in-JS: define all the styles for a component alongside its code.
+Like CSS modules, this provides scoping for CSS classes and eliminates conflicts.
+It also makes it easier for us to change or delete a component without affecting other components.
+
+1- install library called styled-components
+npm i styled-components
+import styled from "styled-components";  
+styled.ul`
+  list-style: none;
+  padding: 0;
+  color: green;
+`
+we add to const (react element)
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+  color: green;
+`
+instead of 
+<ul className="list-group">
+
+we called like react component
+<List>
+
+
+same thing for li element with applaying hook 
+interface ListItemProps {
+  active: boolean;
+}
+const ListItem = styled.li<ListItemProps>`
+  padding: 5px 0;
+  background: ${(props) => props.active && "blue"};
+`;
+
+*********************************************************
+The separation of concerns principle:
+ suggests that we divide a program into distinct sections or modules where each section handles a specific functionality.
+  It helps us build modular and maintainable applications.
+
+*********************************************************
+we can use inline styles but not recommanded coz make our code hard to read
+<h1 style={{ backgroundColor: "yellow" }}>{heading}</h1>
+
+
+***********************************************************
+- There are several UI libraries available that can assist us in quickly building beautiful and modern applications.
+ Some popular options include Bootstrap,
+ Material UI, TailwindCSS, DaisyUI, ChakraUI, and more.
+
+ ***********************************************************
+- We can add icons to our applications using the react-icons library
+
+
+1- npm i react-icons
+
+2- use this site
+https://react-icons.github.io/react-icons/
+
+3- copy the icon name and wrap it inside import statement
+import { SlCalender } from "react-icons/sl";
+and called like react component
+ <SlCalender />
