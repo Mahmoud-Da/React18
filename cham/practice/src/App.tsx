@@ -18,6 +18,19 @@ import ListGroupM from "./components/ListGroupM";
 
 // import ListGroupS from "./components/ListGroupS";
 
+import Carousel from "./components/Carousel";
+
+function App() {
+  //   let t_flowers: string[] = [
+  //     "Lily",
+  //     "Rose",
+  //     "Lavender",
+  //     "Violet",
+  //     "Tulip",
+  //     "Sunflower",
+  //   ];
+
+
 import Card from "./components/Card";
 
 
@@ -50,6 +63,7 @@ function App() {
   //   };
 
   // ];
+
 
 
   let nameList: string[] = [
@@ -125,6 +139,9 @@ function App() {
 
         onSlecetedItem={handleSlecetedItem}
       /> */}
+
+      <Carousel />
+
 
       <Card
         items={nameList}
