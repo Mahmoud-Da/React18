@@ -33,14 +33,14 @@ const Cards = () => {
           bulk of the card's content.
         </p>
       </div>
-      {/* <a
+      <a
         className={
           selectedButton === 0 ? "btn btn-primary" : "btn btn-secondary"
         }
         onClick={handleButtonClick}
       >
         Go somewhere
-      </a> */}
+      </a>
     </div>
   );
 };
