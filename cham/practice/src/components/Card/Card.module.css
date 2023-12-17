@@ -1,8 +1,47 @@
 .list-group {
   color: yellowgreen;
   list-style: disc;
+
 }
 .list-group-item {
   color: brown;
   list-style: none;
 }
+
+ font-style: italic;
+}
+.text {
+  color: brown;
+  list-style: none;
+  font-style: italic;
+}
+.apple {
+  height: 50px;
+  width: 50px;
+
+  color: gray;
+}
+#navbar {
+  width: 100%;
+  border: 1px solid white;
+  height: 100px;
+  background-color: rgb(233, 251, 206);
+  font-family: Helvetica, sans-serif;
+  font-size: 30px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+#navbar ul li {
+  color: gray;
+  list-style-type: none;
+  display: inline-block;
+  margin-left: 30px;
+}
+/* #navbar form {
+  color: brown;
+  list-style-type: none;
+  display: inline-block;
+  margin-left: 30px;
+} */
+

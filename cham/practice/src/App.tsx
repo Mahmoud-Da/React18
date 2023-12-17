@@ -6,20 +6,27 @@
 // import ListGroupV from "./components/ListGroupV";
 
 
+
+
+// import ListGroupS from "./components/ListGroupS";
+
 import Card from "./components/Card";
 
-import ListGroupS from "./components/ListGroupS";
 
 
 function App() {
-  //   let t_flowers: string[] = [
-  //     "Lily",
-  //     "Rose",
-  //     "Lavender",
-  //     "Violet",
-  //     "Tulip",
-  //     "Sunflower",
-  //   ];
+
+ 
+
+  // let t_flowers: string[] = [
+  //   "Lily",
+  //   "Rose",
+  //   "Lavender",
+  //   "Violet",
+  //   "Tulip",
+  //   "Sunflower",
+  // ];
+
 
   // let t_fruits: string[] = [
   //   "Cherris",
@@ -28,10 +35,14 @@ function App() {
   //   "Fig",
   //   "Plum",
   //   "Peach",
+
   //   ];
   //   const handleSlecetedItem = (item: string) => {
   //     console.log(item);
   //   };
+
+  // ];
+
 
   let nameList: string[] = [
     "LyLy",
@@ -41,6 +52,11 @@ function App() {
     "Cheryl",
     "Jessica",
   ];
+
+
+
+  let navList: string[] = ["Home", "Link", "About"];
+
 
   const handleSlecetedItem = (item: string) => {
     console.log(item);
@@ -81,11 +97,21 @@ function App() {
         style="list-group-item list-group-item-primary"
         onSlecetedItem={handleSlecetedItem}
       /> */}
-      <ListGroupS
+      {/* <ListGroupS
         items={t_flowers}
         header="The flowers"
         style="list-group-item list-group-item-primary"
 
+        onSlecetedItem={handleSlecetedItem}
+      /> */}
+
+      <Card
+        items={nameList}
+        navList={navList}
+        header="Baby girl's name"
+        style="list-group-item"
+        text="Some quick example text to build on the card title and make up the
+       bulk of the card's content."
         onSlecetedItem={handleSlecetedItem}
       />
     </>
