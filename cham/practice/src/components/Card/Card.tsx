@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import { IoLogoApple } from "react-icons/io5";
+
 import styles from "./Card.module.css";
 import girl1 from "../../assets/girl1.png";
 
@@ -8,10 +10,13 @@ interface Props {
   header: string;
   style: string;
   text: string;
+
   navList: string[];
+
 
   onSlecetedItem: (item: string) => void;
 }
+
 
 const Card = ({
   items,
@@ -66,7 +71,9 @@ const Card = ({
         {attention}
         {items.map((item, index) => (
           <li
+
             className={selectIndex === index ? style : styles.text}
+
             key={item}
             onClick={() => {
               setSelectedIndex(index);

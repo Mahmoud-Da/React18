@@ -12,6 +12,10 @@ import Scrollspy from "./components/Scrollspy";
 import ListGroupM from "./components/ListGroupM";
 
 // import ListGroupV from "./components/ListGroupV";
+
+
+
+
 // import ListGroupS from "./components/ListGroupS";
 
 import Carousel from "./components/Carousel";
@@ -30,7 +34,11 @@ function App() {
 import Card from "./components/Card";
 
 
+
 function App() {
+
+ 
+
   // let t_flowers: string[] = [
   //   "Lily",
   //   "Rose",
@@ -40,6 +48,7 @@ function App() {
   //   "Sunflower",
   // ];
 
+
   // let t_fruits: string[] = [
   //   "Cherris",
   //   "Watermelon",
@@ -47,12 +56,15 @@ function App() {
   //   "Fig",
   //   "Plum",
   //   "Peach",
+
+  //   ];
+  //   const handleSlecetedItem = (item: string) => {
+  //     console.log(item);
+  //   };
+
   // ];
 
 
-  // const handleSlecetedItem = (item: string) => {
-  //   console.log(item);
-  // };
 
   let nameList: string[] = [
     "LyLy",
@@ -63,7 +75,10 @@ function App() {
     "Jessica",
   ];
 
+
+
   let navList: string[] = ["Home", "Link", "About"];
+
 
   const handleSlecetedItem = (item: string) => {
     console.log(item);
@@ -72,11 +87,18 @@ function App() {
   return (
     <>
 
+      <Card
+        items={nameList}
+        header="Baby girl's name"
+        style="list-group-item"
+        text="Some quick example text to build on the card title and make up the
+        bulk of the card's content."
+
+
       {/* <Cards /> */}
       {/* <ListGroups1
 
 
-  
         items={t_flowers}
         header="The flowers"
         style="list-group-item list-group-item-primary"
@@ -114,6 +136,7 @@ function App() {
         items={t_flowers}
         header="The flowers"
         style="list-group-item list-group-item-primary"
+
         onSlecetedItem={handleSlecetedItem}
       /> */}
 
