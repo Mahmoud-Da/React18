@@ -1,6 +1,6 @@
 import { useState } from "react";
 import girls from "../assets/girls.png";
-import girl1 from "../assets/girl1.png";
+// import girl1 from "../assets/girl1.png";
 const Cards = () => {
   const [selectedButton, setSelectedButtton] = useState(-1);
 
