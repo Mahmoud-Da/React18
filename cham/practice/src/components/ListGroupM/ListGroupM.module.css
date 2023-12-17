@@ -1,0 +1,8 @@
+.list-group {
+  list-style: disc;
+  padding: 15px;
+  color: rgb(235, 9, 255);
+}
+.selectedIndex {
+  color: rgb(84, 14, 14);
+}
