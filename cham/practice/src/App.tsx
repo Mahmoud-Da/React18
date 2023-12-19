@@ -1,15 +1,13 @@
-
 // import Cards from "./components/Cards";
 
-
-import Navbar from "./components/Navar";
-import Scrollspy from "./components/Scrollspy";
+// import Navbar from "./components/Navar";
+// import Scrollspy from "./components/Scrollspy";
 
 // import Alert from "./components/Alert";
 // import ListGroups1 from "./components/ListGroup1";
 // import ListGroups2 from "./components/ListGroup1";
 
-import ListGroupM from "./components/ListGroupM";
+// import ListGroupM from "./components/ListGroupM";
 
 // import ListGroupV from "./components/ListGroupV";
 
@@ -32,8 +30,6 @@ function App() {
 
 
 import Card from "./components/Card";
-
-
 
 function App() {
 
@@ -104,27 +100,27 @@ function App() {
         style="list-group-item list-group-item-primary"
         onSlecetedItem={handleSlecetedItem}
       />
+
       <ListGroups2
         items={t_fruits}
         header="The fruits"
         style="list-group-item list-group-item-warning"
         onSlecetedItem={handleSlecetedItem}
       />
+
       <Alert>
         Hello <span>Lily</span>
         <br></br>
         <span>My cat</span>
       </Alert> */}
 
-
       {/* <Scrollspy /> */}
-      <Navbar />
+      {/* <Navbar /> */}
 
-      <ListGroupM
+      {/* <ListGroupM
         items={t_fruits}
         header="The fruits"
-        style="list-group-item list-group-item-warning"
-
+        style="list-group-item list-group-item-warning" */}
 
       {/* <ListGroupV
         items={t_flowers}
@@ -140,10 +136,10 @@ function App() {
         onSlecetedItem={handleSlecetedItem}
       /> */}
 
+
       <Carousel />
-
-
       <Card
+
         items={nameList}
         navList={navList}
         header="Baby girl's name"
@@ -152,8 +148,7 @@ function App() {
        bulk of the card's content."
 
         onSlecetedItem={handleSlecetedItem}
-      />
-
+      /> */}
     </>
   );
 }
