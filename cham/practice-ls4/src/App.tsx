@@ -1,5 +1,6 @@
 import Button from "./components/Button";
-import FullName from "./components/Fullname";
+import FullName from "./components/FullName";
+import UpdateArray from "./components/UpdateArray";
 
 function App() {
   return (
@@ -8,6 +9,9 @@ function App() {
       <br />
       <br />
       <FullName />
+      <br />
+      <br />
+      <UpdateArray />
     </>
   );
 }
