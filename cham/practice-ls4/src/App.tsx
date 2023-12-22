@@ -1,6 +1,7 @@
 import Button from "./components/Button";
 import FullName from "./components/FullName";
 import UpdateArray from "./components/UpdateArray";
+import UpdateNastedArray from "./components/UpdateNastedArray";
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
       <br />
       <br />
       <UpdateArray />
+      <br />
+      <br />
+      <UpdateNastedArray />
     </>
   );
 }
