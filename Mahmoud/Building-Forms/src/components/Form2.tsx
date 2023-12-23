@@ -4,7 +4,7 @@ const Form2 = () => {
   {
     /* ex3 */
   }
-  const handleSbmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("Submitied");
   };
@@ -22,7 +22,7 @@ const Form2 = () => {
       > */}
 
       {/* ex3 */}
-      <form onSubmit={handleSbmit}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name

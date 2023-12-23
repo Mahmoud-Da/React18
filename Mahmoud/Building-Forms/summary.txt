@@ -88,5 +88,110 @@ const handleSbmit = (event: React.FormEvent) => {
     console.log("Submitied");
   };
 
+const handleSbmit = (event: React.FormEvent) => {
+event.preventDefault();
+console.log("Submitied");
+};
+
+PS:here we are reference a method not calling it
+onSubmit={handleSbmit}
+
+what is the difference between function call and reference
+Function Calling:
+onClick={this.clickedbutton()}
+Function Referencing:
+onClick={this.clickedbutton}
+
+crucial in the context of JavaScript and React.
+
+Function Calling:
+
+It's like telling the computer, "Hey, do this task right now!"
+In onClick={this.clickedbutton()}, you're asking the computer to run the clickedbutton function immediately, even before the button is clicked.
+Example:
+
+ex:
+onClick={this.clickedbutton()}
+
+Function Referencing:
+It's like saying, "Hey, when the button is clicked, go and do this task."
+In onClick={this.clickedbutton}, you're telling the computer to remember the clickedbutton task and do it later, only when the button is clicked.
+Example:
+
+ex:
+onClick={this.clickedbutton} // Remember the task, do it when the button is clicked
+
+So, when working with React and event handlers (like onClick), you usually want the second approach. You want to reference the function without the () to make sure the task (function) is performed only when the specific event (like a button click) happens.
+
 ex Form2 component
-*** 4- Accessing Input Fields ***
+
+## 4- Accessing Input Fields
+
+before we learned how to use state hook 'useState()'
+we have in React another building hook called useRef()
+we can use it to refrence a doom element
+
+ex1:
+first we define nameRef varible to refer name
+
+and we set the useRef to null
+
+then we call that const nameRef with input field using ref attribute
+then in handleSubmit we add 
+console.log(nameRef.current) => current return the dom elemnt that we refrence
+
+we can show the value 
+console.log(nameRef.current.value)
+we got error 'nameRef.current' is possibly 'null'
+
+if (nameRef.current !== null) {
+      console.log(nameRef.current.value);
+    }
+
+we got another error 
+Property 'value' does not exist on type 'never'.
+coz
+TS does`t know that we are refrencing input html element coz 
+using Ref hook we can using any kind of element in the DOM (button, list, etc...)
+
+so to tell the Type Script compiler that we refrencing an input html element 
+ const nameRef = useRef<HTMLInputElement>(null);
+
+now we repaets the same steps with age
+
+ex3:
+in realworld application when submitting aform we need to send the values (in object shape) 
+to the server to save that data
+so we define person object
+const person = { name: "", age: 0 };
+
+handleSubmit instead of loging the value we use 
+const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (nameRef.current !== null) {
+      person.name = nameRef.current.value;
+    }
+    if (ageRef.current !== null) {
+      person.age = ageRef.current.value;
+    }
+  };
+we got compilation error coz  age is defind as number but ageRef.current.value return string
+so we need to call parseInt() to convert the ageRef.current.value to number
+
+now we have the data
+{name: 'AboKarKar', age: 25}
+
+finaly
+why we inislaize every newRef to null?
+Ref.current refrence a DOM node so the inisital value that we passed
+as newRefer parameter will set the Ref.current property
+
+inisitally we create an newRefer object we don`t have access to the DOM node
+coz DOM is created afer the react renders our component
+
+so we don`t have a value to inisital to newRef
+in other hand we inisital newRef with null 
+newRef will have value if there is refrence and reset to null when the node removed from the screen
+
+so newRef must be newRef(null) or newRef(some inisital value) otherwise we will have undefined
+that why we should always refrence our newRef to null
