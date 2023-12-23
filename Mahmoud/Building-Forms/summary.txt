@@ -1,0 +1,92 @@
+
+*** 2-_Building_a_Form ***
+reinstall 
+bootstrap
+
+
+create Form component
+with form elemnet
+shortcut
+div.mb-3>label.form-label+input.form-contorl + press tap
+'>' => inside
+'+' => when add multi elements
+
+mb3(bootstrap class to add margin below and above the element)
+
+htmlfor attribute => we set the id in the input 
+so if the user hover on the input the lapel get focus
+
+ex: name id
+<label htmlFor="name" className="form-label"></label>
+<input id="name" type="text" className="form-contorl" />
+
+our implementation is not looking good so we add padding to our form
+we create index.css (for global styling)
+and impont it inside main.tsx
+
+div.mb-3>label.form-label+input[type=number].form-control
+type=number to let it only accept number
+
+ex Form1 component
+
+*** 3-_Handling_Form_Submission ***
+to handle form when submitting
+we use onSubmit event
+ex1 
+<form onSubmit={() => console.log("Submitied")}></form>
+
+when we submit we got 
+
+issue says:
+A form field has an id or name attribute that the browser's autofill recognizes. However, it doesn't have an autocomplete attribute assigned. This might prevent the browser from correctly autofilling the form.
+To fix this issue, provide an autocomplete attribute.
+
+the reason why
+by defualt when we submit an html form 
+that form post to the server so we got a full page reload
+ex2:
+to solve the problem we need to prevent
+first
+console.log("Submitied")
+then
+we add event and use preventDefault() method to prevent post to the srever
+(event) => {
+  event.preventDefault()
+}
+
+finaly we add console.log
+(event) => {
+      event.preventDefault();
+      console.log("Submitied")
+}
+
+but in real world application we call the server to save the data
+(we will study a bout it in the next section)
+
+best practice is to seprate into 
+ex3:
+const handleSbmit = (event) => {
+    event.preventDefault();
+    console.log("Submitied");
+  };
+
+but here we got typeScript error
+Parameter 'event' implicitly has an 'any' type
+
+to solve that we have on event to check it`s type before revove it 
+ <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          console.log("Submitied");
+        }}
+      >
+
+we found that the vent type is React.FormEvent
+
+const handleSbmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log("Submitied");
+  };
+
+ex Form2 component
+*** 4- Accessing Input Fields ***
