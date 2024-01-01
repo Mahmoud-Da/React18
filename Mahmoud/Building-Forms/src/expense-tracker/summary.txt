@@ -1,0 +1,229 @@
+1- we will start from the easiest approach
+creating ExpenseList.tsx
+
+2- we create table element
+table.table.table-bordered
+
+(table-bordered) class to give it nice border
+
+3- inside the table element we create thead inside it tr with 4 th elements
+thead>tr>th*4
+
+4- we specifiy our elements 
+Desciption
+Amount
+Category
+we leave the last th empty that where we will put the delete button
+ex: 
+<th>Desciption</th>
+<th>Amount</th>
+<th>Category</th>
+<th></th>
+
+5-
+under the thead element we create tbody element
+inside the tbody we want to render the expenses(fee: 経費)
+the data inside the tbody we want pass it them as props (not save the data inside a component)
+to be reuseble component 
+so... like always
+
+6-
+define interface to define the shape of our data
+interface Props {
+  expense: string[];
+}
+but expense will not be an array coz every expense will be diffrent object
+
+{**refresh what is object
+object: data field that has unique attributes and behavior
+ex: Person Object
+Each person object has unique attributes (name and age) 
+and behavior (greet() method and have_birthday() method).
+The objects person1 and person2 are instances of the Person class,and they each 
+have their own set of attributes and can perform the defined behaviors.}
+
+so.. we need to define the shape of expense seprately
+- we create Expense interface
+interface Expense {
+  id: number;
+  desciption: string;
+  amount: number;
+  category: string;
+}
+
+PS: normally category will be another object but now we want to make out project simple
+
+- we set expense inside Props interface to Expense[]
+interface Props {
+  expense: Expense[];
+}
+
+so finally we have:
+interface Expense {
+  id: number;
+  desciption: string;
+  amount: number;
+  category: string;
+}
+interface Props {
+  expense: Expense[];
+}
+
+next....
+
+
+7- we set the props 
+const ExpenseList = ({ expenses }: Props)
+
+then in the tbody section we map each expenses 
+
+{expenses.map((expense) => (<tr key={expense.id}></tr>))}
+
+inside the tr we create td*4
+each td we will render the Expense perperty
+<tr key={expense.id}>
+  <td>{expense.desciption}</td>
+  <td>{expense.amount}</td>
+  <td>{expense.category}</td>
+  <td></td>
+</tr>
+
+inside the last td we create td button
+button.btn.btn-outline-danger
+<button className="btn btn-outline-danger">Delete</button>
+
+8-
+create delete fuction
+inside Props interface we add it
+onDelete: (id: number) => void;
+
+then add it to props 
+const ExpenseList = ({ expenses, onDelete }: Props) 
+
+finally we handle it 
+<button
+  className="btn btn-outline-danger"
+  onClick={() => onDelete(expense.id)}
+>
+  Delete
+</button>
+
+9-
+we add tfoot element wiht td and 4 td
+tfoot>tr>td*4
+
+td:
+Total
+
+now to calculate the total dynamically using reduce method 
+in JS all arrays has reduce methods 
+it use to combine the arrays elements to somthing else
+
+**ex:
+// Simple array of numbers
+const numbers = [1, 2, 3, 4, 5];
+// Using reduce to find the sum of elements
+const sum = numbers.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue;
+}, 0);
+console.log("Sum:", sum);
+accumulator is the number that hold the total value
+
+now inside the second td
+{expenses.reduce((acc, expense) => acc + expense.amount, 0)}
+
+0 for inisital the value
+
+finally we use toFixed method to set the number of the decimal result
+{expenses
+  .reduce((acc, expense) => acc + expense.amount, 0)
+  .toFixed(2)}
+
+we add $ to see the amount in dollar
+${expenses
+  .reduce((acc, expense) => acc + expense.amount, 0)
+  .toFixed(2)}
+
+10- 
+add ExpenseList to our App.tsx fir testing
+<ExpenseList/>
+
+to add expenses and onDelete props
+
+- create dummy data
+const expenses = [
+    {
+      id: 1,
+      desciption: "aaa",
+      amount: 10,
+      category: "Utilities",
+    },
+    {
+      id: 2,
+      desciption: "bbb",
+      amount: 10,
+      category: "Utilities",
+    },
+    {
+      id: 3,
+      desciption: "ccc",
+      amount: 10,
+      category: "Utilities",
+    },
+    {
+      id: 4,
+      desciption: "ddd",
+      amount: 10,
+      category: "Utilities",
+    },
+  ];
+
+- to show the id of delete item
+onDelete={(id) => console.log("Deleted", id)}
+
+
+<ExpenseList
+    expenses={expenses}
+    onDelete={(id) => console.log("Deleted", id)}
+/>
+
+to implemente the delete functionality
+- we call useState as an argument we transform the const expenses value isnide useState
+const [expenses, setExpenses] = useState([
+    {
+      id: 1,
+      desciption: "aaa",
+      amount: 10,
+      category: "Utilities",
+    },
+    {
+      id: 2,
+      desciption: "bbb",
+      amount: 10,
+      category: "Utilities",
+    },
+    {
+      id: 3,
+      desciption: "ccc",
+      amount: 10,
+      category: "Utilities",
+    },
+    {
+      id: 4,
+      desciption: "ddd",
+      amount: 10,
+      category: "Utilities",
+    },
+  ]);
+
+- (id) => setExpenses(expenses.filter((e) => e.id !== id))
+<ExpenseList
+  expenses={expenses}
+  onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+/>
+
+last thing if don`t have any value we don`t want to render Total
+above null statment
+if (expenses.length === 0) return null;
+
+final component state Mahmoud/Building-Forms/src/expense-tracker/components/versions/ExpenseList_v1.tsx

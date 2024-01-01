@@ -468,3 +468,18 @@ const {
 
 2- in the button element we add disabled when is not valid
 <button disabled={!isValid} className="btn btn-primary" type="submit">
+
+*** 10-_Project-_Expense_Tracker ***
+show what we will build Expense_Tracker Project
+
+1- 
+normally we create expense-tracker inside the component folder to make each related file stick to each other
+but it`s better to create expense-tracker folder under src coz is a seprate project 
+big projects normmally seprate into multi folder same as market divide into multi sections
+
+
+2- 
+create component folder inside it
+
+
+3- see the summary inside expense-tracker folder
