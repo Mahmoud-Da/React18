@@ -1,5 +1,7 @@
 
 *** 2-_Building_a_Form ***
+ex Form1 component
+
 reinstall 
 bootstrap
 
@@ -27,9 +29,10 @@ and impont it inside main.tsx
 div.mb-3>label.form-label+input[type=number].form-control
 type=number to let it only accept number
 
-ex Form1 component
 
 *** 3-_Handling_Form_Submission ***
+ex Form2 component
+
 to handle form when submitting
 we use onSubmit event
 ex1 
@@ -94,7 +97,7 @@ console.log("Submitied");
 };
 
 PS:here we are reference a method not calling it
-onSubmit={handleSbmit}
+onSubmit={handleSubmit}
 
 what is the difference between function call and reference
 Function Calling:
@@ -123,9 +126,9 @@ onClick={this.clickedbutton} // Remember the task, do it when the button is clic
 
 So, when working with React and event handlers (like onClick), you usually want the second approach. You want to reference the function without the () to make sure the task (function) is performed only when the specific event (like a button click) happens.
 
-ex Form2 component
 
-## 4- Accessing Input Fields
+*** 4- Accessing Input Fields ***
+ex: Form3
 
 before we learned how to use state hook 'useState()'
 we have in React another building hook called useRef()
@@ -195,3 +198,273 @@ newRef will have value if there is refrence and reset to null when the node remo
 
 so newRef must be newRef(null) or newRef(some inisital value) otherwise we will have undefined
 that why we should always refrence our newRef to null
+
+*** 5-_Controlled_Components ***
+ex: Form4
+
+another way to have the input value of a form
+we can use the useState Hook
+
+1- (ex1)
+const [person, setPerson] = useState({
+    name: "",
+    age: 0,
+  });
+
+we craete person object
+we add onChange in input element
+<input id="name" type="text" className="form-control" />
+
+onChange works like 
+onChange={(event) => event.value.target}
+so here we call 
+
+onChange={(event) =>
+              setPerson({ ...person, name: event.target.value })
+            }
+
+repeat the same with age 
+onChange={(event) =>
+              setPerson({ ...person, age: event.target.value })
+            }
+we had a compilation error coz the return value is string and age is integer
+to fix that we use parseInt() 
+
+2- log the person inside handleSubmit
+
+PS:
+when using useState Hook so everyTime we update our value inside the form
+(the state updated) that`s why our react component will reRenderd
+
+for some cases it`s ok (some people said it`s better to use useRef always)
+but remember it`s depend on the situation 
+
+for Example: if the component is not big it`s ok to use state hook
+
+3-
+all input fields in the HTML having value propertyto maintain thier own state
+but in our implementation we have state called person
+so it`s possibe that our sources get out of sync 
+
+to solve the problem we should make React only return one value of state of input html
+
+so we set the value attribute of our input to the person state value
+value={person.name}
+
+so now input field always relays in person state value
+
+
+now we do the same thing with age 
+value={person.age}
+
+now if we refresh the page we will see the input value inisital to person age
+which is 0 
+
+if we want to remove it we can set age to empty string
+const [person, setPerson] = useState({
+    name: "",
+    age: "",
+  });
+
+
+*** 6-_Managing_Forms_with_React_Hook_Form ***
+ex: Form5
+
+
+as our form get complex manging the hook state  can be time consuming
+coz for every input field we need to set the onChange attribute we need to set the value
+
+here we can use react-hook-form (@7.43 same as course)
+
+then we import custome hook called useForm 
+import { useForm } from "react-hook-form";
+
+
+ex1
+we console Form hook to see what method we have
+
+const form = useForm();
+console.log(form);
+
+ex2
+see what happne when we use register
+const { register } = useForm();
+console.log(register("name"));
+
+in console we see this 
+{name: 'name', onChange: ƒ, onBlur: ƒ, ref: ƒ}
+name: "name"
+onBlur: async (event) => {…}
+onChange: async (event) => {…}
+ref: (ref) => {…}
+[[Prototype]]: Object
+
+
+in name field:
+we remove 
+onChange={(event) =>
+              setPerson({ ...person, name: event.target.value })
+            }
+            value={person.name}
+
+and add instead 
+{...register("name")}
+
+... to copy =>
+
+onBlur: async (event) => {…}
+onChange: async (event) => {…}
+ref: (ref) => {…}
+[[Prototype]]: Object
+
+
+same as age
+
+no we don`t need  persom object and handleSubmit
+so we remove it
+
+ex3:
+we have handleSubmit in the form hook 
+const { register, handleSubmit } = useForm();
+
+to use it 
+<form onSubmit={handleSubmit((date) => console.log(date))}>
+
+best practice to move handleSubmit((date) => console.log(date)) to seprate function
+onSubmit = (date) => console.log(date); now we have compilation error data type
+
+to solve that we hover  to <form onSubmit={handleSubmit((date) => console.log(date))}> 
+finaly
+const onSubmit = (date: FieldValues) => console.log(date);
+
+*** 7-_Applying_Validation ***
+ex: Form6
+
+we want to add valifation (rule) that at least more that 3 char
+
+ex:1
+{...(register("name"), { required: true, minLength: 3 })}
+
+if we submit with empty values we will get error
+to show the error message to the user
+
+const { register, handleSubmit, formState } = useForm();
+
+we use form state object
+
+// to see the formState object
+console.log(formState);
+
+// to see the error {in console we can see minlength error or required error}
+console.log(formState.errors);
+
+now to show the user the message
+ex:1_1
+
+formState.errors.name?.type
+
+?. is opitional chainig that`s we need it coz formState.errors can be empty
+nil.errors we will run error 
+
+ex: 1_2
+coz we will use formState.errors serveral times best practice  to use const {
+          register,
+          handleSubmit,
+        formState: { errors },
+        } = useForm();*
+
+now same thing with minLength
+
+finally to make the errro looks good we apply "text-danger"
+
+when we type errors. we can`t see the propertites of name and age only we can see the root
+to make our development enviroment better we create interface
+ex-4 
+
+
+
+*** 8-_Schema-based_Validation_with_Zod ***
+ex: Form7
+
+in our markup we have validation rules in the middle of it
+as our component get bigger and more complex our markup will be hard to read and maintain
+
+so is better to use Tichnique called Schema-based Validation
+
+which it allows as to set all the validation roles in one place we called Schema
+
+Validation lip
+Joi
+Yup
+Zod
+
+in this class i will use Zod (used lately) only the basic
+
+1-
+install zod 
+npm i zod@3.20.6
+
+import { z } from "zod";
+
+2-
+define z object
+we use schema as name
+
+3- 
+remove interface FormData
+use instead
+type FormData = z.infer<typeof schema>;
+
+if hover at FormData
+we can see it like interface
+
+4- we install 
+npm i @hookform/resolvers@2.9.11
+import { zodResolver } from "@hookform/resolvers/zod";
+
+5- 
+const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
+we pass resolver
+useForm<FormData>({ resolver: zodResolver(schema) });
+
+delete 
+, { required: true, minLength: 3 }
+
+and remain only one p
+
+change the condition 
+errors.name only 
+
+change the message to dynamically   (zod will take care of the error message based on the  schema we defind)
+
+same thing with age input
+
+6-
+now if we want to change the message
+
+when age we have this erros which hard for the user to undertand
+name: z.string().min(3, { message: "Name nust be at least 3 chars" }),
+
+Expected number, received string
+
+
+to learn more:
+https://zod.dev/
+
+
+*** 9-_Disabling_the_Submit_Button ***
+ex: Form8
+1- we add isValid to formState
+const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+2- in the button element we add disabled when is not valid
+<button disabled={!isValid} className="btn btn-primary" type="submit">
