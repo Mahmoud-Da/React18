@@ -1,5 +1,13 @@
+********
+STEP1
+********
+final result file
+create ExpenseList (versions/v1/ExpenseList.tsx)
+chnage App.tsx (versions/v1/App.tsx)
+
 1- we will start from the easiest approach
-creating ExpenseList.tsx
+we create components folder and inside it
+we creating ExpenseList.tsx
 
 2- we create table element
 table.table.table-bordered
@@ -227,3 +235,104 @@ above null statment
 if (expenses.length === 0) return null;
 
 final component state Mahmoud/Building-Forms/src/expense-tracker/components/versions/ExpenseList_v1.tsx
+
+
+********
+STEP2
+********
+final result file
+ExpenseList not changed same as versions/v1/ExpenseList_v1.tsx
+change App.tsx last version(versions/v2/App.tsx)
+craete ExpenseFilter.tsx last version(versions/v2/ExpenseFilter.tsx)
+
+
+Building ExpenseFilter
+
+for this mini project we want to only filter by category but we can also fliter by another parameters
+
+- inside components folder
+we creating ExpenseFilter.tsx
+
+- we return select.form-select
+- we romove the id and name attributes of select
+
+<select className="form-select"></select>
+
+- inside select element we create 4option element
+option*4
+
+All Categories
+Groceries
+Utilities
+Entertainment
+
+<select className="form-select">
+  <option value="">All Categories</option>
+  <option value="Groceries">Groceries</option>
+  <option value="Utilities">Utilities</option>
+  <option value="Entertainment">Entertainment</option>
+</select>
+
+- we want to maintain the act in App.tsx where we defined the data
+so we craete interface
+interface Props {
+  onSelectedCategory: (category: string) => void;
+}
+
+- add Props 
+const ExpenseFilter = ({ onSelectedCategory }: Props) => 
+
+- using onChange
+<select
+  className="form-select"
+  onChange={(event) => onSelectedCategory(event.target.value)}
+>
+
+-test our component until this point
+in App.tsx above ExpenseList we add ExpenseFilter
+
+- coz our ExpenseList and ExpenseFilter looks stick to each other we add
+.mb-3   (div with margin3)
+
+<div className="mb-3">
+  <ExpenseFilter
+    onSelectedCategory={(category) => console.log(category)}
+  />
+</div>
+<ExpenseList
+  expenses={expenses}
+  onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+/>
+
+- now to do filtering 
+in App.tsx we need another variable for representing the selected filter
+when that filter changeing the App component will rerendered and the list 
+of expense will be updated
+so..
+
+- create state variable 
+const [selectedCategory, setSelectedCategory] = useState("");
+
+- instead of log the category
+onSelectedCategory={(category) => console.log(category)}
+
+- we call setSelectedCategory on that category
+onSelectedCategory={(category) => setSelectedCategory(category)}
+
+- to show only the filterd expenses in the  ExpenseList instead of showing the expenses
+<ExpenseList
+  expenses={expenses}   <== here
+  onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+/>
+
+we create another variable we called visibleExpenses
+if selectedCategory truthy (has values) show the expenses where their Categories data = the selected Categories 
+const visibleExpenses = selectedCategory
+    ? expenses.filter((e) => e.category === selectedCategory)
+    : expenses;
+
+- finaly we passed that to our ExpenseList component
+<ExpenseList
+        expenses={visibleExpenses}
+        onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+      />
