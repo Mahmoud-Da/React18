@@ -336,3 +336,135 @@ const visibleExpenses = selectedCategory
         expenses={visibleExpenses}
         onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
       />
+
+
+********
+STEP3
+********
+final result file
+create ExpenseForm (versions/v3/ExpenseForm.tsx)
+change ExpenseFilter (versions/v3/ExpenseFilter.tsx)
+chnage App.tsx (versions/v3/App.tsx)
+
+
+- create ExpenseForm.tsx
+form>.mb-3>label.form-label+input.form-control
+
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="" className="form-label"></label>
+    <input type="text" className="form-control" />
+  </div>
+</form>
+
+- give the input an id called desciption and do the same thing to the htmlFor of label 
+finally set the label of label-element to Desciption
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="desciption" className="form-label">
+      Desciption
+    </label>
+    <input id="desciption" type="text" className="form-control" />
+  </div>
+</form>
+
+- under the div 
+we create
+.mb-3>label.form-label+input[type=number].form-control
+
+- give the input an id called amount and do the same thing to the htmlFor of label 
+finally set the label of label-element to Amount
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="desciption" className="form-label">
+      Desciption
+    </label>
+    <input id="desciption" type="text" className="form-control" />
+  </div>
+  <div className="mb-3">
+    <label htmlFor="amount" className="form-label">
+      Amount
+    </label>
+    <input id="amount" type="number" className="form-control" />
+  </div>
+</form>
+
+
+- last div will be category
+.mb-3>label.form-label+select.form-select
+
+- remove name attribute of select element and  
+- give the select an id called category and do the same thing to the htmlFor of label 
+finally set the label of label-element to Category
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="desciption" className="form-label">
+      Desciption
+    </label>
+    <input id="desciption" type="text" className="form-control" />
+  </div>
+  <div className="mb-3">
+    <label htmlFor="amount" className="form-label">
+      Amount
+    </label>
+    <input id="amount" type="number" className="form-control" />
+  </div>
+  <div className="mb-3">
+    <label htmlFor="category" className="form-label">
+      Category
+    </label>
+    <select id="category" className="form-select"></select>
+  </div>
+</form>
+
+- inside the select element we create option element 
+
+- now instead o writing all categories in hard code like ExpenseFilter(v2) 
+we define all our categories in single place so we can use them in multiple components
+so we go to App.tsx
+we define const before App component (under the import statments)
+but in real world application we will have our data from the server etc...
+
+const categories = ["Groceries", "Utilities", "Entertainment"];
+
+- now we export it to let another module (component) to use it 
+export const categories = ["Groceries", "Utilities", "Entertainment"];
+
+- we go to ExpenseFilter component and import it 
+import { categories } from "../../App";
+
+in ExpenseFilter.tsx
+we remove 
+<option value="Groceries">Groceries</option>
+<option value="Utilities">Utilities</option>
+<option value="Entertainment">Entertainment</option>
+
+and instead we render them dynamically
+under the <option value="">All Categories</option>
+{categories.map((category) => (
+  <option key={category} value={category}>
+    {category}
+  </option>
+))}
+
+- then we do the same thing inside the ExpenseForm.tsx (don`t forget to import categories)
+<select id="category" className="form-select">
+  <option value=""></option>
+</select>
+
+and result 
+<select id="category" className="form-select">
+  <option value=""></option>
+  {categories.map((category) => (
+    <option key={category} value={category}>
+      {category}
+    </option>
+  ))}
+</select>
+
+- under the last div we need to put a button 
+button.btn.btn-primary
+and set the label to Submit
+
+in App.tsx above the ExpenseFilter we add ExpenseForm
+- test out implementation until this point 
