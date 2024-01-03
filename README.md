@@ -40,3 +40,6 @@ ES7+ React/Redux/React-Native snippets
 
 shortcut: to create component shortcut
 rafce {react arrow function component export}
+
+Boot Strap Version
+bootstrap@5.2.3
