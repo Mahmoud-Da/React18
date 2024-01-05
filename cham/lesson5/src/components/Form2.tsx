@@ -1,6 +1,7 @@
 import React from "react";
 
 const Form2 = () => {
+  // handle event 処理
   const handleOnSubmit = (event: React.FormEvent) => {
     // サーバーがないから
     event.preventDefault();
@@ -24,7 +25,6 @@ const Form2 = () => {
   // a;
 
   //React はいつも　メソッドrefrence を利用する　例: onSubmit={handleOnSubmit}
-
   return (
     <>
       <form onSubmit={handleOnSubmit}>
