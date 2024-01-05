@@ -5,6 +5,7 @@ import UpdateArray from "./components/UpdateArray";
 import UpdateNastedArray from "./components/UpdateNastedArray";
 import Cart from "./components/Cart";
 import NavBar from "./components/NavBar";
+import UpdateObject from "./components/UpdateObject";
 function App() {
   const [cartItems, setCartItems] = useState([
     "NewYork",
@@ -35,6 +36,9 @@ function App() {
           setCartItems((cartItems) => [...cartItems.slice(0, -1)])
         }
       />
+      <br />
+      <br />
+      <UpdateObject />
     </>
   );
 }
