@@ -1,9 +1,9 @@
-import Form4 from "./components/Form4";
+import Form5_2 from "./components/Form5_2";
 
 function App() {
   return (
     <>
-      <Form4 />
+      <Form5_2 />
     </>
   );
 }

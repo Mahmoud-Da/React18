@@ -1,14 +1,16 @@
 import React, { useRef, useState } from "react";
 
-const Form4 = () => {
-  // Form3 + Form4 + Form5 結果同じですが、書き方違います。
-  // useStateの書き方
+const Form4_2 = () => {
+  const [isVisible, setIsVisible] = useState(false);
   const [person, setPerson] = useState({ name: "", age: 0 });
   const handleOnSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log(person);
   };
 
+  const handleClick = () => {
+    setIsVisible(!isVisible);
+  };
   return (
     <>
       <form onSubmit={handleOnSubmit}>
@@ -41,16 +43,13 @@ const Form4 = () => {
           />
         </div>
         <button className="btn btn-primary">Submit</button>
+        <button className="btn btn-primary" onClick={handleClick}>
+          Click
+        </button>
+        <p>{isVisible && person.name}</p>
       </form>
-      <h1>
-        {person.name},{person.age}{" "}
-      </h1>
     </>
   );
 };
 
-export default Form4;
-
-// 違い
-// useState; page reloadされる
-// useRef;page reloadされない
+export default Form4_2;
