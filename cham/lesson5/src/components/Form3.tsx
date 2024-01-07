@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 
 const Form3 = () => {
-  // Form3 + Form4 結果同じですが、書き方違います。
+  // Form3 + Form4 + Form5 結果同じですが、書き方違います。
   // useRefの書き方
   const nameRef = useRef<HTMLInputElement>(null);
   const ageRef = useRef<HTMLInputElement>(null);
