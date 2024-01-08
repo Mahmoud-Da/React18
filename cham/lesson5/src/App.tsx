@@ -1,9 +1,9 @@
-import Form6 from "./components/Form6";
+import Form7 from "./components/Form7";
 
 function App() {
   return (
     <>
-      <Form6 />
+      <Form7 />
     </>
   );
 }
