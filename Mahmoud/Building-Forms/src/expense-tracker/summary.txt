@@ -468,3 +468,175 @@ and set the label to Submit
 
 in App.tsx above the ExpenseFilter we add ExpenseForm
 - test out implementation until this point 
+
+********
+STEP3
+********
+Add Validations
+ExpenseList not changed same as versions/v4/ExpenseList.tsx
+change App.tsx last version(versions/v4/App.tsx)
+change ExpenseFilter.tsx last version(versions/v4/ExpenseFilter.tsx)
+change ExpenseForm.tsx last version(versions/v4/ExpenseForm.tsx)
+change ExpenseList.tsx last version(versions/v4/ExpenseList.tsx)
+create categories.ts
+
+in ExpenseForm
+- we remove import React from "react"; (we don`t need it)
+- to add validations we add zod
+import { z } from "zod";
+
+- create our schema by calling z.object
+
+category should make sure to be  Groceries or Utilities or Entertainment
+here we used z.enum (enum can be one of many values)
+
+z.object({
+  desciption: z.string().min(3).max(50),
+  amount: z.number().min(0.01).max(100_000),
+  category: z.enum(["Groceries", "Utilities", "Entertainment"]),
+});
+
+
+now instead of writing hard code enum  
+z.enum(["Groceries", "Utilities", "Entertainment"])
+
+we can use categories const that we aleardy defined in App.tsx
+z.object({
+  desciption: z.string().min(3).max(50),
+  amount: z.number().min(0.01).max(100_000),
+  category: z.enum(categories),
+});
+
+we got error:
+"No overload matches this call.
+  Overload 1 of 2, '(values: readonly [string, ...string[]])....,"
+
+reason:
+we can`t call value in enum that can be modified only array or readonly value
+export const categories = ["Groceries", "Utilities", "Entertainment"];
+we defined it as const we can`t modified by writing
+ex: categories = ["ex1"]
+but we still use push method to chage it
+ex: categories.push("a")
+
+to solve that:
+make sure that categories is not been able to modifiy so we use "as const" (TS feature)
+export const categories = ["Groceries", "Utilities", "Entertainment"] as const;
+
+now we can`t use categories.push("a");
+
+
+no we store the result in schema
+const schema = z.object({
+  desciption: z.string().min(3).max(50),
+  amount: z.number().min(0.01).max(100_000),
+  category: z.enum(categories),
+});
+
+next we use z.infer to create a TS type we called it ExpenseFormData
+type ExpenseFormData = z.infer<typeof schema>;
+
+- now we ready to pluge in useForm
+we in import useForm
+import { useForm } from "react-hook-form";
+then
+import { zodResolver } from "@hookform/resolvers/zod";
+
+- now inside the component we call the useForm hook
+and inside the <> we specifiy the type of useForm data
+useForm<ExpenseFormData>()
+
+then we set the resolver to zodResolver of the schema which we created
+useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+
+const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+
+- inside input of desciption and amount we add 
+{...register("desciption")}
+{...register("amount")}
+
+for select of categories
+{...register("category")}
+
+- add validations messsages
+after each input and select element we need to add paragraph dynamically
+{errors.desciption && (
+            <p className="text-danger">{errors.desciption.message}</p>
+          )}
+{errors.amount && (
+            <p className="text-danger">{errors.amount.message}</p>
+          )}
+{errors.category && (
+    <p className="text-danger">{errors.category.message}</p>
+  )}
+
+- now in console we have errors says:
+ExpenseForm.tsx:9 Uncaught (in promise) 
+ReferenceError: Cannot access 'categories' before initialization ExpenseForm.tsx:9 
+
+ass we see in the error message we got this error at ExpenseForm.tsx:9 
+
+the reason why:
+in the schema 
+category: z.enum(categories)
+
+we import categories from App.tsx
+
+in App.tsx we import ExpenseForm before create 
+const categories
+
+to solve that we move categories to another module then import it so it  
+becomes always in the right order
+
+now out side the component folder we add file and called category.ts
+category.ts is only data file where we import categories
+
+in App.tsx we move category to category.ts
+export const categories = ["Groceries", "Utilities", "Entertainment"] as const;
+
+inisde categories.ts
+we export categories as default
+const categories = ["Groceries", "Utilities", "Entertainment"] as const;
+
+export default categories;
+
+now we need to import it in 3 places one in App.tsx and in ExpenseFilter.tsx and ExpenseForm.tsx
+import categories from "../category"; {we don`t have to but it at first} 
+
+- now in ExpenseForm we add onSubmit
+<form onSubmit={handleSubmit((data) => console.log(data))}>
+
+- check is validations is working
+
+- now set the messsages of the errors 
+
+in Amount we have 
+Expected number, received string
+
+to fixed it 
+{...register("amount", { valueAsNumber: true })}
+
+now we have 
+Expected number, received nan
+
+so here we Customize this message
+.number({ invalid_type_error: "Amount is Required" })
+
+const schema = z.object({
+  desciption: z
+    .string()
+    .min(3, "Desciption must be at least 3 Charactors")
+    .max(50, "Desciption less than 50 Charactors"),
+  amount: z
+    .number({ invalid_type_error: "Amount is Required" })
+    .min(0.01, "Amount must be more than 0.01")
+    .max(100_000, "Amount must be less than 100000"),
+  category: z.enum(categories, {
+    errorMap: () => ({ message: "Category is Required" }),
+  }),
+});
+
