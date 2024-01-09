@@ -1,6 +1,6 @@
 import { FieldValues, useForm } from "react-hook-form";
 
-const Form7 = () => {
+const Form6_1 = () => {
   const {
     register,
     handleSubmit,
@@ -66,4 +66,4 @@ const Form7 = () => {
   );
 };
 
-export default Form7;
+export default Form6_1;

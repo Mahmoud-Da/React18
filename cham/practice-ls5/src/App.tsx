@@ -7,6 +7,7 @@ import Form5 from "./components/Form5";
 import Form5_2 from "./components/Form5_2";
 import Form6 from "./components/Form6";
 import Form6_1 from "./components/Form6_1";
+import Form7 from "./components/Form7";
 function App() {
   return (
     <>
@@ -20,7 +21,7 @@ function App() {
       <br />
       <br />
       <Form4 /> */}
-      <br />
+      {/* <br />
       <br />
       <Form4_2 />
       <br />
@@ -35,6 +36,9 @@ function App() {
       <br />
       <br />
       <Form6_1 />
+      <br />
+      <br /> */}
+      <Form7 />
     </>
   );
 }
