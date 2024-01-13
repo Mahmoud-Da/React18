@@ -1,4 +1,5 @@
 import { FieldValues, useForm } from "react-hook-form";
+import errorMap from "zod/lib/locales/en";
 
 const Form6 = () => {
   // Validation追加　(validate)
