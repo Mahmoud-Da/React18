@@ -9,6 +9,7 @@ import Form6 from "./components/Form6";
 import Form6_1 from "./components/Form6_1";
 import Form7 from "./components/Form7";
 import Form7_1 from "./components/Form7_1";
+import Form8 from "./components/Form8";
 function App() {
   return (
     <>
@@ -39,10 +40,13 @@ function App() {
       <Form6_1 />
       <br />
       <br /> */}
-      <Form7 />
+      {/* <Form7 />
       <br />
       <br />
-      <Form7_1 />
+      <Form7_1 /> */}
+      <br />
+      <br />
+      <Form8 />
     </>
   );
 }
