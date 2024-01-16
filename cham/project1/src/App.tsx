@@ -5,7 +5,12 @@ function App() {
   };
   return (
     <>
-      <Login onSubmit={handleLogin} />
+      <Login
+        header="Login"
+        email="Email Address"
+        password="Password"
+        onSubmit={handleLogin}
+      />
     </>
   );
 }

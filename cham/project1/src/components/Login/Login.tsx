@@ -1,39 +1,44 @@
 import React, { useState } from "react";
+import { IoLogoApple } from "react-icons/io5";
 import "./Login.css";
 
 interface LoginProps {
+  header: string;
+  email: string;
+  password: string;
   onSubmit: (email: string, password: string) => void;
 }
 
-const Login: React.FC<LoginProps> = ({ onSubmit }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Login: React.FC<LoginProps> = ({ header, email, password, onSubmit }) => {
+  const [inputEmail, setInputEmail] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit(email, password);
+    onSubmit(inputEmail, inputPassword);
   };
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <h1>Login</h1>
+      <form className="form" onSubmit={handleSubmit}>
+        <IoLogoApple className="logo" />
+        <h1 className="header">{header}</h1>
         <label>
-          Email Address
+          {email}
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={inputEmail}
+            onChange={(e) => setInputEmail(e.target.value)}
           />
         </label>
         <label>
-          Password
+          {password}
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={inputPassword}
+            onChange={(e) => setInputPassword(e.target.value)}
           />
         </label>
-        <button type="submit">Password</button>
+        <button type="submit">{header}</button>
       </form>
     </>
   );
