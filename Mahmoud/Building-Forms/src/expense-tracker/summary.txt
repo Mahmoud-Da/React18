@@ -470,7 +470,7 @@ in App.tsx above the ExpenseFilter we add ExpenseForm
 - test out implementation until this point 
 
 ********
-STEP3
+STEP4
 ********
 Add Validations
 ExpenseList not changed same as versions/v4/ExpenseList.tsx
@@ -640,3 +640,52 @@ const schema = z.object({
   }),
 });
 
+********
+STEP5
+********
+Adding the Expense
+
+- inside the ExpenseForm.tsx we create interface Props
+
+interface Props {
+  onSubmit: (data: ExpenseFormData) => void;
+}
+
+then we add it to 
+const ExpenseForm = ({ onSubmit }: Props)
+
+where we submit the form instead of using arrow fuction
+<form onSubmit={handleSubmit((data) => console.log(data))}>
+we change it to 
+ <form onSubmit={handleSubmit(onSubmit)}>
+
+then we got to App.tsx and hundle the onSubmit event 
+for now we console the data
+<ExpenseForm onSubmit={(data) => console.log(data)} />
+
+in console we got ex:
+{desciption: 'gad', amount: 45, category: 'Utilities'}
+
+no in App.tsx
+<ExpenseForm onSubmit={(data) => console.log(data)} />
+we change the name data to expense  and use simple logic for id
+onSubmit={(expense) =>
+            setExpenses([...expenses, { ...expense, id: expenses.length + 1 }])
+          }
+*in Real World Applications id genarated simply
+
+- one last thing to reset ourform after submit
+in ExpenseForm.tsx we add reset
+const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+
+then onSubmit
+we submit the data then reset the form 
+onSubmit={handleSubmit((data) => {
+          onSubmit(data);
+          reset();
+        })}
