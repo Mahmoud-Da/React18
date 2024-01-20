@@ -1,5 +1,13 @@
+********
+STEP1
+********
+final result file
+create ExpenseList (versions/v1/ExpenseList.tsx)
+chnage App.tsx (versions/v1/App.tsx)
+
 1- we will start from the easiest approach
-creating ExpenseList.tsx
+we create components folder and inside it
+we creating ExpenseList.tsx
 
 2- we create table element
 table.table.table-bordered
@@ -227,3 +235,457 @@ above null statment
 if (expenses.length === 0) return null;
 
 final component state Mahmoud/Building-Forms/src/expense-tracker/components/versions/ExpenseList_v1.tsx
+
+
+********
+STEP2
+********
+final result file
+ExpenseList not changed same as versions/v1/ExpenseList_v1.tsx
+change App.tsx last version(versions/v2/App.tsx)
+craete ExpenseFilter.tsx last version(versions/v2/ExpenseFilter.tsx)
+
+
+Building ExpenseFilter
+
+for this mini project we want to only filter by category but we can also fliter by another parameters
+
+- inside components folder
+we creating ExpenseFilter.tsx
+
+- we return select.form-select
+- we romove the id and name attributes of select
+
+<select className="form-select"></select>
+
+- inside select element we create 4option element
+option*4
+
+All Categories
+Groceries
+Utilities
+Entertainment
+
+<select className="form-select">
+  <option value="">All Categories</option>
+  <option value="Groceries">Groceries</option>
+  <option value="Utilities">Utilities</option>
+  <option value="Entertainment">Entertainment</option>
+</select>
+
+- we want to maintain the act in App.tsx where we defined the data
+so we craete interface
+interface Props {
+  onSelectedCategory: (category: string) => void;
+}
+
+- add Props 
+const ExpenseFilter = ({ onSelectedCategory }: Props) => 
+
+- using onChange
+<select
+  className="form-select"
+  onChange={(event) => onSelectedCategory(event.target.value)}
+>
+
+-test our component until this point
+in App.tsx above ExpenseList we add ExpenseFilter
+
+- coz our ExpenseList and ExpenseFilter looks stick to each other we add
+.mb-3   (div with margin3)
+
+<div className="mb-3">
+  <ExpenseFilter
+    onSelectedCategory={(category) => console.log(category)}
+  />
+</div>
+<ExpenseList
+  expenses={expenses}
+  onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+/>
+
+- now to do filtering 
+in App.tsx we need another variable for representing the selected filter
+when that filter changeing the App component will rerendered and the list 
+of expense will be updated
+so..
+
+- create state variable 
+const [selectedCategory, setSelectedCategory] = useState("");
+
+- instead of log the category
+onSelectedCategory={(category) => console.log(category)}
+
+- we call setSelectedCategory on that category
+onSelectedCategory={(category) => setSelectedCategory(category)}
+
+- to show only the filterd expenses in the  ExpenseList instead of showing the expenses
+<ExpenseList
+  expenses={expenses}   <== here
+  onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+/>
+
+we create another variable we called visibleExpenses
+if selectedCategory truthy (has values) show the expenses where their Categories data = the selected Categories 
+const visibleExpenses = selectedCategory
+    ? expenses.filter((e) => e.category === selectedCategory)
+    : expenses;
+
+- finaly we passed that to our ExpenseList component
+<ExpenseList
+        expenses={visibleExpenses}
+        onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+      />
+
+
+********
+STEP3
+********
+final result file
+create ExpenseForm (versions/v3/ExpenseForm.tsx)
+change ExpenseFilter (versions/v3/ExpenseFilter.tsx)
+chnage App.tsx (versions/v3/App.tsx)
+
+
+- create ExpenseForm.tsx
+form>.mb-3>label.form-label+input.form-control
+
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="" className="form-label"></label>
+    <input type="text" className="form-control" />
+  </div>
+</form>
+
+- give the input an id called desciption and do the same thing to the htmlFor of label 
+finally set the label of label-element to Desciption
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="desciption" className="form-label">
+      Desciption
+    </label>
+    <input id="desciption" type="text" className="form-control" />
+  </div>
+</form>
+
+- under the div 
+we create
+.mb-3>label.form-label+input[type=number].form-control
+
+- give the input an id called amount and do the same thing to the htmlFor of label 
+finally set the label of label-element to Amount
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="desciption" className="form-label">
+      Desciption
+    </label>
+    <input id="desciption" type="text" className="form-control" />
+  </div>
+  <div className="mb-3">
+    <label htmlFor="amount" className="form-label">
+      Amount
+    </label>
+    <input id="amount" type="number" className="form-control" />
+  </div>
+</form>
+
+
+- last div will be category
+.mb-3>label.form-label+select.form-select
+
+- remove name attribute of select element and  
+- give the select an id called category and do the same thing to the htmlFor of label 
+finally set the label of label-element to Category
+<form action="">
+  <div className="mb-3">
+    <label htmlFor="desciption" className="form-label">
+      Desciption
+    </label>
+    <input id="desciption" type="text" className="form-control" />
+  </div>
+  <div className="mb-3">
+    <label htmlFor="amount" className="form-label">
+      Amount
+    </label>
+    <input id="amount" type="number" className="form-control" />
+  </div>
+  <div className="mb-3">
+    <label htmlFor="category" className="form-label">
+      Category
+    </label>
+    <select id="category" className="form-select"></select>
+  </div>
+</form>
+
+- inside the select element we create option element 
+
+- now instead o writing all categories in hard code like ExpenseFilter(v2) 
+we define all our categories in single place so we can use them in multiple components
+so we go to App.tsx
+we define const before App component (under the import statments)
+but in real world application we will have our data from the server etc...
+
+const categories = ["Groceries", "Utilities", "Entertainment"];
+
+- now we export it to let another module (component) to use it 
+export const categories = ["Groceries", "Utilities", "Entertainment"];
+
+- we go to ExpenseFilter component and import it 
+import { categories } from "../../App";
+
+in ExpenseFilter.tsx
+we remove 
+<option value="Groceries">Groceries</option>
+<option value="Utilities">Utilities</option>
+<option value="Entertainment">Entertainment</option>
+
+and instead we render them dynamically
+under the <option value="">All Categories</option>
+{categories.map((category) => (
+  <option key={category} value={category}>
+    {category}
+  </option>
+))}
+
+- then we do the same thing inside the ExpenseForm.tsx (don`t forget to import categories)
+<select id="category" className="form-select">
+  <option value=""></option>
+</select>
+
+and result 
+<select id="category" className="form-select">
+  <option value=""></option>
+  {categories.map((category) => (
+    <option key={category} value={category}>
+      {category}
+    </option>
+  ))}
+</select>
+
+- under the last div we need to put a button 
+button.btn.btn-primary
+and set the label to Submit
+
+in App.tsx above the ExpenseFilter we add ExpenseForm
+- test out implementation until this point 
+
+********
+STEP4
+********
+Add Validations
+ExpenseList not changed same as versions/v4/ExpenseList.tsx
+change App.tsx last version(versions/v4/App.tsx)
+change ExpenseFilter.tsx last version(versions/v4/ExpenseFilter.tsx)
+change ExpenseForm.tsx last version(versions/v4/ExpenseForm.tsx)
+change ExpenseList.tsx last version(versions/v4/ExpenseList.tsx)
+create categories.ts
+
+in ExpenseForm
+- we remove import React from "react"; (we don`t need it)
+- to add validations we add zod
+import { z } from "zod";
+
+- create our schema by calling z.object
+
+category should make sure to be  Groceries or Utilities or Entertainment
+here we used z.enum (enum can be one of many values)
+
+z.object({
+  desciption: z.string().min(3).max(50),
+  amount: z.number().min(0.01).max(100_000),
+  category: z.enum(["Groceries", "Utilities", "Entertainment"]),
+});
+
+
+now instead of writing hard code enum  
+z.enum(["Groceries", "Utilities", "Entertainment"])
+
+we can use categories const that we aleardy defined in App.tsx
+z.object({
+  desciption: z.string().min(3).max(50),
+  amount: z.number().min(0.01).max(100_000),
+  category: z.enum(categories),
+});
+
+we got error:
+"No overload matches this call.
+  Overload 1 of 2, '(values: readonly [string, ...string[]])....,"
+
+reason:
+we can`t call value in enum that can be modified only array or readonly value
+export const categories = ["Groceries", "Utilities", "Entertainment"];
+we defined it as const we can`t modified by writing
+ex: categories = ["ex1"]
+but we still use push method to chage it
+ex: categories.push("a")
+
+to solve that:
+make sure that categories is not been able to modifiy so we use "as const" (TS feature)
+export const categories = ["Groceries", "Utilities", "Entertainment"] as const;
+
+now we can`t use categories.push("a");
+
+
+no we store the result in schema
+const schema = z.object({
+  desciption: z.string().min(3).max(50),
+  amount: z.number().min(0.01).max(100_000),
+  category: z.enum(categories),
+});
+
+next we use z.infer to create a TS type we called it ExpenseFormData
+type ExpenseFormData = z.infer<typeof schema>;
+
+- now we ready to pluge in useForm
+we in import useForm
+import { useForm } from "react-hook-form";
+then
+import { zodResolver } from "@hookform/resolvers/zod";
+
+- now inside the component we call the useForm hook
+and inside the <> we specifiy the type of useForm data
+useForm<ExpenseFormData>()
+
+then we set the resolver to zodResolver of the schema which we created
+useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+
+const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+
+- inside input of desciption and amount we add 
+{...register("desciption")}
+{...register("amount")}
+
+for select of categories
+{...register("category")}
+
+- add validations messsages
+after each input and select element we need to add paragraph dynamically
+{errors.desciption && (
+            <p className="text-danger">{errors.desciption.message}</p>
+          )}
+{errors.amount && (
+            <p className="text-danger">{errors.amount.message}</p>
+          )}
+{errors.category && (
+    <p className="text-danger">{errors.category.message}</p>
+  )}
+
+- now in console we have errors says:
+ExpenseForm.tsx:9 Uncaught (in promise) 
+ReferenceError: Cannot access 'categories' before initialization ExpenseForm.tsx:9 
+
+ass we see in the error message we got this error at ExpenseForm.tsx:9 
+
+the reason why:
+in the schema 
+category: z.enum(categories)
+
+we import categories from App.tsx
+
+in App.tsx we import ExpenseForm before create 
+const categories
+
+to solve that we move categories to another module then import it so it  
+becomes always in the right order
+
+now out side the component folder we add file and called category.ts
+category.ts is only data file where we import categories
+
+in App.tsx we move category to category.ts
+export const categories = ["Groceries", "Utilities", "Entertainment"] as const;
+
+inisde categories.ts
+we export categories as default
+const categories = ["Groceries", "Utilities", "Entertainment"] as const;
+
+export default categories;
+
+now we need to import it in 3 places one in App.tsx and in ExpenseFilter.tsx and ExpenseForm.tsx
+import categories from "../category"; {we don`t have to but it at first} 
+
+- now in ExpenseForm we add onSubmit
+<form onSubmit={handleSubmit((data) => console.log(data))}>
+
+- check is validations is working
+
+- now set the messsages of the errors 
+
+in Amount we have 
+Expected number, received string
+
+to fixed it 
+{...register("amount", { valueAsNumber: true })}
+
+now we have 
+Expected number, received nan
+
+so here we Customize this message
+.number({ invalid_type_error: "Amount is Required" })
+
+const schema = z.object({
+  desciption: z
+    .string()
+    .min(3, "Desciption must be at least 3 Charactors")
+    .max(50, "Desciption less than 50 Charactors"),
+  amount: z
+    .number({ invalid_type_error: "Amount is Required" })
+    .min(0.01, "Amount must be more than 0.01")
+    .max(100_000, "Amount must be less than 100000"),
+  category: z.enum(categories, {
+    errorMap: () => ({ message: "Category is Required" }),
+  }),
+});
+
+********
+STEP5
+********
+Adding the Expense
+
+- inside the ExpenseForm.tsx we create interface Props
+
+interface Props {
+  onSubmit: (data: ExpenseFormData) => void;
+}
+
+then we add it to 
+const ExpenseForm = ({ onSubmit }: Props)
+
+where we submit the form instead of using arrow fuction
+<form onSubmit={handleSubmit((data) => console.log(data))}>
+we change it to 
+ <form onSubmit={handleSubmit(onSubmit)}>
+
+then we got to App.tsx and hundle the onSubmit event 
+for now we console the data
+<ExpenseForm onSubmit={(data) => console.log(data)} />
+
+in console we got ex:
+{desciption: 'gad', amount: 45, category: 'Utilities'}
+
+no in App.tsx
+<ExpenseForm onSubmit={(data) => console.log(data)} />
+we change the name data to expense  and use simple logic for id
+onSubmit={(expense) =>
+            setExpenses([...expenses, { ...expense, id: expenses.length + 1 }])
+          }
+*in Real World Applications id genarated simply
+
+- one last thing to reset ourform after submit
+in ExpenseForm.tsx we add reset
+const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+
+then onSubmit
+we submit the data then reset the form 
+onSubmit={handleSubmit((data) => {
+          onSubmit(data);
+          reset();
+        })}
