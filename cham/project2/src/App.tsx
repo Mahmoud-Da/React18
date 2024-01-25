@@ -1,6 +1,7 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+
 import ExpenseList from "./components/ExpenseList";
+import ExpenseList1 from "./components/ExpenseList1";
 
 function App() {
   const [expenses, setExpenses] = useState([
@@ -29,11 +30,45 @@ function App() {
       category: "Utilities",
     },
   ]);
+
+  const [expenses1, setExpenses1] = useState([
+    {
+      id1: 1,
+      desciption1: "abc",
+      amount1: 28,
+      category1: "food",
+    },
+    {
+      id1: 2,
+      desciption1: "abc",
+      amount1: 35,
+      category1: "food",
+    },
+    {
+      id1: 3,
+      desciption1: "abc",
+      amount1: 23,
+      category1: "food",
+    },
+    {
+      id1: 4,
+      desciption1: "abc",
+      amount1: 14,
+      category1: "food",
+    },
+  ]);
   return (
     <>
       <ExpenseList
         expenses={expenses}
         onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+      />
+
+      <ExpenseList1
+        expenses1={expenses1}
+        onDelete1={(id1) =>
+          setExpenses1(expenses1.filter((a) => a.id1 !== id1))
+        }
       />
     </>
   );
