@@ -1,17 +1,33 @@
 import { useState } from "react";
 import ExpenseList from "./components/ExpenseList";
+import ExpenseFilter from "./components/ExpenseFilter";
 
 function App() {
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [expenses, setExpenese] = useState([
-    { id: 1, description: "first", amount: 10, category: "string" },
-    { id: 2, description: "Second", amount: 10, category: "string" },
-    { id: 3, description: "thrid", amount: 10, category: "string" },
-    { id: 4, description: "fourth", amount: 10, category: "string" },
+    { id: 1, desciption: "消しゴム", amount: 5, category: "Utilities" },
+    { id: 2, desciption: "ガゾリン代", amount: 4552, category: "Utilities" },
+    { id: 3, desciption: "大根", amount: 100, category: "Groceries" },
+    {
+      id: 4,
+      desciption: "野菜（飾り）",
+      amount: 500,
+      category: "Entertainment",
+    },
   ]);
+  const visibleExpense = selectedCategory
+    ? expenses.filter((e) => e.category === selectedCategory)
+    : expenses;
+
   return (
     <>
+      <div className="mb-3">
+        <ExpenseFilter
+          onSelectedCategory={(category) => setSelectedCategory(category)}
+        />
+      </div>
       <ExpenseList
-        expenses={expenses}
+        expenses={visibleExpense}
         onDelete={(id) => setExpenese(expenses.filter((e) => e.id !== id))}
       />
     </>

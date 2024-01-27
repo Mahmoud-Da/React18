@@ -1,8 +1,7 @@
 import React from "react";
-
 interface Expense {
   id: number;
-  description: string;
+  desciption: string;
   amount: number;
   category: string;
 }
@@ -11,22 +10,22 @@ interface Props {
   onDelete: (id: number) => void;
 }
 const ExpenseList = ({ expenses, onDelete }: Props) => {
+  if (expenses.length === 0) return null;
   return (
     <>
-      <table className="tabel table-bordered">
+      <table className="table table-bordered">
         <thead>
           <tr>
-            <th>Description</th>
+            <th>Desciption</th>
             <th>Amount</th>
             <th>Category</th>
             <th></th>
           </tr>
         </thead>
-
         <tbody>
           {expenses.map((expense) => (
             <tr key={expense.id}>
-              <td>{expense.description}</td>
+              <td>{expense.desciption}</td>
               <td>￥{expense.amount}</td>
               <td>{expense.category}</td>
               <td>
@@ -60,8 +59,3 @@ const ExpenseList = ({ expenses, onDelete }: Props) => {
 };
 
 export default ExpenseList;
-
-// Totalをまとめる際に
-// const sum = numbers.reduce((accumulator, currentValue) => {
-//   return accumulator + currentValue;
-// }, 0);
