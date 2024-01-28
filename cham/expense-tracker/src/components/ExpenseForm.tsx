@@ -16,17 +16,29 @@ const schema = z.object({
     errorMap: () => ({ message: "Categoryが必須です" }),
   }),
 });
+
 type ExpenseFormData = z.infer<typeof schema>;
-const ExpenseForm = () => {
+
+interface Props {
+  onSubmit: (data: ExpenseFormData) => void;
+}
+const ExpenseForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
 
   return (
     <>
-      <form action="" onSubmit={handleSubmit((data) => console.log(data))}>
+      <form
+        action=""
+        onSubmit={handleSubmit((data) => {
+          onSubmit(data);
+          reset();
+        })}
+      >
         <div className="mb-3">
           <label htmlFor="desciption" className="form-label">
             Desciption
@@ -46,7 +58,7 @@ const ExpenseForm = () => {
             Amount
           </label>
           <input
-            {...(register("amount"), { valueAsNumber: true })}
+            {...register("amount", { valueAsNumber: true })}
             id="amount"
             type="number"
             className="form-control"
