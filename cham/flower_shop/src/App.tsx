@@ -1,9 +1,10 @@
 import { useState } from "react";
-
+import { Navbar } from "react-bootstrap";
+import style from "../src/App.css";
 function App() {
   return (
     <>
-      <div>Flower shop</div>
+      <Navbar />
     </>
   );
 }
