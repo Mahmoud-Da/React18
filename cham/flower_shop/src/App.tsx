@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navbar } from "react-bootstrap";
+import Navbar from "../src/components/Navbar";
 import style from "../src/App.css";
 function App() {
   return (
