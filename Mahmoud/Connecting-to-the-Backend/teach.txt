@@ -1,0 +1,66 @@
+*** 2-_Understanding_the_Effect_Hook ***
+Reminder:
+- React component should be a Pure
+A pure function is one that always returns the same result given the same input. Pure
+functions should not modify objects outside of the function.
+
+- so to keep components pure
+we should keep changes out of the render phase
+
+So, the idea is that to keep components pure,
+we should avoid making changes to the data or behavior of the component during the render phase.
+Instead, we should handle those changes in a different part of the component's job,
+like before or after the render phase.
+This helps in maintaining a clear and organized structure in the code.
+
+            (component)
+props ---->    Pure    -----> JSX
+
+but somtimes we need
+*Store data in local storage
+*call the server to fetch/save data
+*Manually modify the DOM elements
+
+so where can we employ that?
+            (component)
+props ---->    Pure    -----> JSX
+                ?
+
+here we use the Effect hook
+useEffect()
+
+with useEffect hook we can tell React to excute a piece of code after a component is rendered
+ex:
+inside the Lesson1.tsx we add 
+inside div
+input.form-control
+
+and let say when the app start we want to put focus on this input field
+to do this:
+- use the Effect hook to take reference to this input field
+- first we create useRef and assign it to null
+const ref = useRef<HTMLInputElement>(null);
+- then we assign ref object to input field 
+<input ref={ref} type="text" className="form-control" />
+- in this code has nothing to do with return statement so we are changing the state of the DOM 
+  so we say this piece of code has a Side Effect (it change somthing outside this component)
+  and now our component is not Pure
+if (ref.current) ref.current.focus();
+- now to change it to Pure component we use the Effect hook
+to use Effect hook we create an arrow function and move the code which
+coz the outside effect to inside it
+useEffect(() => {
+    if (ref.current) ref.current.focus();
+  });
+
+PS: 
+- like State and Ref Hooks we can only call the Effect hook in the Top Level in our component
+in other word we can`t call it inside if statements or Loops
+
+- we can call the same Effect Hook to serve multi perposes (we can write multi use Effect in the same component)
+useEffect(() => {
+    document.title = "My App";
+  });
+
+- we have multi Effect hooks in our component React run them in order after each render.
+now backing to our application we can see that our input field is focused and our app title is called My App

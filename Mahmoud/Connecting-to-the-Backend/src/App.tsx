@@ -1,9 +1,9 @@
-import { useState } from "react";
+import Lesson1 from "./components/Understanding_the_Effect_Hook/lesson1";
 
 function App() {
   return (
     <>
-      <h1>Hello World</h1>
+      <Lesson1 />
     </>
   );
 }
