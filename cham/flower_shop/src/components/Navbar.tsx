@@ -1,7 +1,6 @@
 import React from "react";
 import Hana_shop from "../assets/image/Hana_shop.png";
 import "../Index.css";
-
 const Navbar = () => {
   return (
     <>
@@ -98,6 +97,11 @@ const Navbar = () => {
           </div>
         </nav>
       </header>
+      <footer>
+        <a href="#" id="top-text" className="back-to-top">
+          Top
+        </a>
+      </footer>
     </>
   );
 };

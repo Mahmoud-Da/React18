@@ -5,15 +5,18 @@
   --font-color: #faede7;
 }
 
-body {
+/* body {
   margin: 0;
   font-family: "Freestyle Script", sans-serif;
   font-size: 30px;
   font-weight: bold;
   color: var(--primary-color);
-}
+} */
 
 #header-font {
+  font-family: "Freestyle Script", sans-serif;
+  font-size: 30px;
+  font-weight: bold;
   color: var(--primary-color);
 }
 #pink-background {
@@ -44,7 +47,12 @@ body {
   transform: rotate(20deg);
 }
 
-#top-text-color {
+#top-text {
+  font-family: "Freestyle Script", sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  position: fixed;
+  bottom: 0;
   width: 100%;
   color: var(--primary-color);
 }
@@ -56,14 +64,14 @@ body {
 }
 
 .container {
-  width: 400px;
+  width: 500px;
   padding: 0 15px;
   margin: 50px 150px;
 }
 
 .top-warpper {
-  padding: 80px 0 200px 0;
-  background-image: url(./image/beautiful-floral-frame-with-copyspace.jpg);
+  padding: 10px 0 300px 0;
+  background-image: url(../src/assets/image/beautiful-floral-frame-with-copyspace.jpg);
   color: var(--theconday-color);
   background-size: cover;
 }
