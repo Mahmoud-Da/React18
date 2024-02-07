@@ -1,6 +1,7 @@
 import React from "react";
 import Hana_shop from "../assets/image/Hana_shop.png";
 import "../Index.css";
+import Home from "./Home";
 const Navbar = () => {
   return (
     <>
@@ -10,7 +11,7 @@ const Navbar = () => {
           className="navbar navbar-expand-lg navbar-light"
         >
           <div className="container-fluid">
-            <a className="shop-logo" href="./index.html">
+            <a className="shop-logo">
               <img src={Hana_shop} alt="" className="logo-size" />
             </a>
             <button
@@ -34,13 +35,12 @@ const Navbar = () => {
                     id="header-font"
                     className="nav-link active"
                     aria-current="page"
-                    href="./index.html"
                   >
                     Home
                   </a>
                 </li>
                 <li className="Areas-font">
-                  <a id="header-font" className="nav-link" href="./area.html">
+                  <a id="header-font" className="nav-link" href="#">
                     Area
                   </a>
                 </li>
