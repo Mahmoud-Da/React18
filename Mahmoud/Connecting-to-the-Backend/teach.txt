@@ -64,3 +64,163 @@ useEffect(() => {
 
 - we have multi Effect hooks in our component React run them in order after each render.
 now backing to our application we can see that our input field is focused and our app title is called My App
+
+
+
+*** 2-_Understanding_the_Effect_Hook ***
+Recap:
+the function that we pass to useEffect hook it excuted after each rendered
+
+but thier are a situations when we don`t want the that default behavior of Effect hook
+and have more control about when Effect hook should be excuted
+
+
+ex:
+ProductList component
+
+- in this component we declear state hook to store our product
+const [product, setProduct] = useState([]);
+
+- we use useEffect to fetch the data from the server (fetch the product from the server)
+we refer to the function which we pass inside the Effect hook as callback function (coz React will call this function back)
+to make it simple we will log ("Fetching product")
+
+useEffect(() => {
+    console.log("Fetching products");
+  });
+
+- then set the products to new product
+useEffect(() => {
+    console.log("Fetching product");
+    setProduct(["Clothing", "Household"]);
+  }); 
+
+- now we have a compliation error says:
+/Type 'string' is not assignable to type 'never'./
+
+the reason we see this erro coz we initialized  useState content with empty array so the TS compiler dosen`t know which kind of object
+we want to store inside this array (are we gonna store [strings, numbers, boolean, Date] and so...)
+to fix that 
+1- initialize it to "" empty string
+const [product, setProduct] = useState([""]);
+2- using angle brackets
+const [product, setProduct] = useState<string[]>([]);
+
+- now we call ProductList in the App.tsx
+now we can see in the browser console that we had too much erros (we end up with infinite loop)
+to see why we ended up with infinite loop 
+- we comment to see cleary by stoping the loop
+{/* <ProductList /> */} 
+
+why we have an infinite loop
+- in ProductList.tsx we can see in the function that we pass inside Effect hook (which render after each render) 
+but in the funciton that we pass it to Effect hook we updating the State hook which create another render
+and that means our Effect hook will excute one more time which make us end in infinite loop
+useEffect(() => {
+    console.log("Fetching product");
+    setProduct(["Clothing", "Household"]);
+  });
+
+- to solve that problem we should tell React to run Effect hook only one time the first time that our component rendered
+to do that
+useEffect has another argument which is optional and we pass empty array in this second argument we can add one or more variable which can be props
+If the second argument present (React.DependencyList), effect will only activate if the values in the list change. so passing empty array in this second argument
+is like saying "Hey React don`t activate this function again" (coz we set this function React.DependencyList to empty {effect activation to noun})
+
+
+useEffect(() => {
+    console.log("Fetching product");
+    setProduct(["Clothing", "Household"]);
+  }, []);
+
+
+- now after refresh the browser we don`t see errors anymore and we have 
+Fetching product
+Fetching product
+
+coz we have the strict mode in main.tsx (which is React feature to render our component two times
+only happen in the developer mode (not when relase our project to production))
+<React.StrictMode>
+    <App />
+</React.StrictMode>
+
+- now to take this example to the next level
+adding drop down list to display the categories when the user select a category 
+we want to the show the product in that category
+
+- in App.tsx
+above ProductList component
+we add 
+select.form-select>option*3
+
+result:
+<select className="form-select">
+  <option value=""></option>
+  <option value="Clothing">Clothing</option>
+  <option value="Household">Household</option>
+</select>
+
+- to keep track of the selected category in state variable
+so when the state is changed the product list we reRender
+so we create useState hook
+
+const [category, setCategory] = useState("");
+
+- next we need to handle the change event of this select element
+onChange={(event) => setCategory(event.target.value)}
+
+to check that the state is changed we go to devTool 
+and go to "Components" then we Click the state place element (App in this case)
+and we can see the all the hooks state
+
+- now we define the shape of our data (interface)
+shortcut: if our interface is simple Instead of writing 
+old: Instead of define interface
+interface Props {}
+const ProductList = ({ category }: Props) => {}
+
+shortcut:  we can wirte inline (but only if the interface is simple)
+const ProductList = ({ category }: { category: string })
+
+- now in ProductList
+we modify to
+console.log("Fetching product in", category);
+
+- now back to App.tsx we pass the category 
+<ProductList category={category} />
+
+- we got in our console
+Fetching product in 
+coz nothing is selected but if changed the droplist we still don`t see anything 
+coz the empty array that we pass it as secoud argument to useEffect
+to solve the bug in our code 
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  }, [category]);
+
+to Recap:
+the second argument of the Effect hook cases:
+1- without second argument
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  });
+
+=> React will excute our funciton after each render
+
+2- with empty second argument
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  }, []);
+
+=> React will excute our funciton only ones the first time our component rendered
+
+3- with second argument [oneValue, multiValues] (can be props or state variables)
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  }, [category]);
+
+=> React will excute our funciton every time that value is changed
