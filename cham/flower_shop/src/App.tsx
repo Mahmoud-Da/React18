@@ -8,13 +8,13 @@ import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        <Home />
-        <Order />
-        <Area />
-        <About_us />
-      </BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/area" element={<Area />} />
+        <Route path="/order" element={<Order />} />
+        <Route path="/about" element={<About_us />} />
+      </Routes>
     </>
   );
 }

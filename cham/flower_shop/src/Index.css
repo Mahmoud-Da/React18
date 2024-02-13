@@ -63,17 +63,17 @@
   object-fit: contain;
 }
 
-.container {
-  width: 500px;
-  padding: 0 15px;
-  margin: 50px 150px;
-}
-
-.top-warpper {
-  padding: 20px 0 550px 0;
+.top-warpper-home {
+  padding: 50px 0 500px 0;
   background-image: url(../src/assets/image/beautiful-floral-frame-with-copyspace.jpg);
   color: var(--theconday-color);
-  background-size: cover;
+  background-size: contain;
+}
+
+.container-home {
+  width: 500px;
+  padding: 0 15px;
+  margin: 80px 150px;
 }
 
 .container-Areas {
@@ -83,10 +83,10 @@
 }
 
 .top-warpper-Areas {
-  padding: 80px 0 200px 0;
+  padding: 50px 0 520px 0;
   background-image: url(../src/assets/image/pexels-ylanite-koppens-1883385.jpg);
   color: var(--theconday-color);
-  background-size: cover;
+  background-size: contain;
 }
 
 .fixed-img {
@@ -176,10 +176,10 @@
 }
 
 .order-body {
-  padding: 80px 0 200px 0;
-  background-image: url(./image/bnr_osonae.jpg);
+  padding: 50px 0 610px 0;
+  background-image: url(../src/assets/image/bnr_osonae.jpg);
   color: var(--primary-color);
-  background-size: cover;
+  background-size: contain;
 }
 
 .back-to-top {

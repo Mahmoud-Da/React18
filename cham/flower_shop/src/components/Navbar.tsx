@@ -2,6 +2,7 @@ import React from "react";
 import Hana_shop from "../assets/image/Hana_shop.png";
 import "../Index.css";
 import Home from "./Home";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <>
@@ -31,55 +32,29 @@ const Navbar = () => {
             >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="Home-font">
-                  <a
+                  <Link
                     id="header-font"
                     className="nav-link active"
                     aria-current="page"
+                    to="/home"
                   >
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li className="Areas-font">
-                  <a id="header-font" className="nav-link" href="#">
+                  <Link id="header-font" className="nav-link" to="/area">
                     Area
-                  </a>
+                  </Link>
                 </li>
                 <li className="Oders-font">
-                  <a id="header-font" className="nav-link" href="./order.html">
+                  <Link id="header-font" className="nav-link" to="/order">
                     Order
-                  </a>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="navbarDropdown"
-                  >
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Action
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Another action
-                      </a>
-                    </li>
-                    <li>
-                      <hr className="dropdown-divider" />
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Something else here
-                      </a>
-                    </li>
-                  </ul>
+                  </Link>
                 </li>
                 <li className="Aboutus-font me-2">
-                  <a
-                    id="header-font"
-                    className="nav-link"
-                    href="./about_us.html"
-                  >
+                  <Link id="header-font" className="nav-link" to="/about">
                     About us
-                  </a>
+                  </Link>
                 </li>
               </ul>
               <form className="Search-font d-flex">
