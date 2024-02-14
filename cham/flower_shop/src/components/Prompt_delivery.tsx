@@ -1,27 +1,26 @@
 import React from "react";
-import FINAL from "../assets/image/FINAL.webp";
 import { Link } from "react-router-dom";
-const About_us = () => {
+import Free_ship from "../assets/image/Free_ship.jpg";
+const Prompt_delivery = () => {
   return (
     <>
       <div className="top-warpper-Aboutus">
         <div className="container-Aboutus-Left">
-          <img id="image-Aboutus-Left" src={FINAL} />
+          <img id="image-Aboutus-Left" src={Free_ship} />
         </div>
         <div className="container-Aboutus">
-          <h1>Talented Florists:</h1>
+          <h1>Prompt Delivery(Free ship):</h1>
           <h2>
-            Our team of skilled and creative florists are dedicated to crafting
-            stunning arrangements that suit your specific preferences and
-            requirements.
+            We understand the importance of timely delivery, and our efficient
+            delivery service ensures your flowers reach their destination fresh
+            and beautiful.
           </h2>
         </div>
-
         <Link
           id="next"
           className="btn btn-outline-secondary"
           aria-current="page"
-          to="/personalized_touch"
+          to="/about"
         >
           Next
         </Link>
@@ -30,7 +29,7 @@ const About_us = () => {
           id="return"
           className="btn btn-outline-secondary"
           aria-current="page"
-          to="/prompt_delivery"
+          to="/personalized_touch"
         >
           Return
         </Link>
@@ -39,4 +38,4 @@ const About_us = () => {
   );
 };
 
-export default About_us;
+export default Prompt_delivery;
