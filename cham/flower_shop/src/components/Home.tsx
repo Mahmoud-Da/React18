@@ -2,8 +2,8 @@ import "../Index.css";
 const Home = () => {
   return (
     <>
-      <div className="top-warpper">
-        <div className="container">
+      <div className="top-warpper-home">
+        <div className="container-home">
           <h1>Welcome to Hana shop!</h1>
           <h2>
             At our flower shop, we are passionate about creating beautiful
