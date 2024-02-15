@@ -1,15 +1,19 @@
 import { useState } from "react";
-import Lesson1 from "./components/Understanding_the_Effect_Hook/Lesson1";
-import Lesson2 from "./components/Understanding_the_Effect_Hook/Lesson2";
-import ProductList from "./components/Understanding_the_Effect_Hook/ProductList";
+import Lesson1 from "./components/2-Understanding_the_Effect_Hook/Lesson1";
+import Lesson2 from "./components/2-Understanding_the_Effect_Hook/Lesson2";
+import ProductList from "./components/3-Effect_Dependencies/ProductList";
+import EffectClean from "./components/4-_Effect_Clean_Up/EffectClean";
+import FetchingData from "./components/5-_Fetching_Data/FetchingData";
 
 function App() {
   const [category, setCategory] = useState("");
   return (
     <>
+      <h4>2-Understanding_the_Effect_Hook</h4>
       <Lesson1 />
       <Lesson2 />
 
+      <h4>3-Effect_Dependencies</h4>
       <select
         className="form-select"
         onChange={(event) => setCategory(event.target.value)}
@@ -19,6 +23,12 @@ function App() {
         <option value="Household">Household</option>
       </select>
       <ProductList category={category} />
+
+      <h4>4-_Effect_Clean_Up</h4>
+      <EffectClean />
+
+      <h4>5-_Fetching_Data</h4>
+      <FetchingData />
     </>
   );
 }
