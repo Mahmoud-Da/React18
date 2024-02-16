@@ -1,0 +1,476 @@
+*** 2-_Understanding_the_Effect_Hook ***
+Reminder:
+- React component should be a Pure
+A pure function is one that always returns the same result given the same input. Pure
+functions should not modify objects outside of the function.
+
+- so to keep components pure
+we should keep changes out of the render phase
+
+So, the idea is that to keep components pure,
+we should avoid making changes to the data or behavior of the component during the render phase.
+Instead, we should handle those changes in a different part of the component's job,
+like before or after the render phase.
+This helps in maintaining a clear and organized structure in the code.
+
+            (component)
+props ---->    Pure    -----> JSX
+
+but somtimes we need
+*Store data in local storage
+*call the server to fetch/save data
+*Manually modify the DOM elements
+
+so where can we employ that?
+            (component)
+props ---->    Pure    -----> JSX
+                ?
+
+here we use the Effect hook
+useEffect()
+
+with useEffect hook we can tell React to excute a piece of code after a component is rendered
+ex:
+inside the Lesson1.tsx we add 
+inside div
+input.form-control
+
+and let say when the app start we want to put focus on this input field
+to do this:
+- use the Effect hook to take reference to this input field
+- first we create useRef and assign it to null
+const ref = useRef<HTMLInputElement>(null);
+- then we assign ref object to input field 
+<input ref={ref} type="text" className="form-control" />
+- in this code has nothing to do with return statement so we are changing the state of the DOM 
+  so we say this piece of code has a Side Effect (it change somthing outside this component)
+  and now our component is not Pure
+if (ref.current) ref.current.focus();
+- now to change it to Pure component we use the Effect hook
+to use Effect hook we create an arrow function and move the code which
+coz the outside effect to inside it
+useEffect(() => {
+    if (ref.current) ref.current.focus();
+  });
+
+PS: 
+- like State and Ref Hooks we can only call the Effect hook in the Top Level in our component
+in other word we can`t call it inside if statements or Loops
+
+- we can call the same Effect Hook to serve multi perposes (we can write multi use Effect in the same component)
+useEffect(() => {
+    document.title = "My App";
+  });
+
+- we have multi Effect hooks in our component React run them in order after each render.
+now backing to our application we can see that our input field is focused and our app title is called My App
+
+
+
+*** 3-_Effect_Dependencies ***
+Recap:
+the function that we pass to useEffect hook it excuted after each rendered
+
+but thier are a situations when we don`t want the that default behavior of Effect hook
+and have more control about when Effect hook should be excuted
+
+
+ex:
+ProductList component
+
+- in this component we declear state hook to store our product
+const [product, setProduct] = useState([]);
+
+- we use useEffect to fetch the data from the server (fetch the product from the server)
+we refer to the function which we pass inside the Effect hook as callback function (coz React will call this function back)
+to make it simple we will log ("Fetching product")
+
+useEffect(() => {
+    console.log("Fetching products");
+  });
+
+- then set the products to new product
+useEffect(() => {
+    console.log("Fetching product");
+    setProduct(["Clothing", "Household"]);
+  }); 
+
+- now we have a compliation error says:
+/Type 'string' is not assignable to type 'never'./
+
+the reason we see this erro coz we initialized  useState content with empty array so the TS compiler dosen`t know which kind of object
+we want to store inside this array (are we gonna store [strings, numbers, boolean, Date] and so...)
+to fix that 
+1- initialize it to "" empty string
+const [product, setProduct] = useState([""]);
+2- using angle brackets
+const [product, setProduct] = useState<string[]>([]);
+
+- now we call ProductList in the App.tsx
+now we can see in the browser console that we had too much erros (we end up with infinite loop)
+to see why we ended up with infinite loop 
+- we comment to see cleary by stoping the loop
+{/* <ProductList /> */} 
+
+why we have an infinite loop
+- in ProductList.tsx we can see in the function that we pass inside Effect hook (which render after each render) 
+but in the funciton that we pass it to Effect hook we updating the State hook which create another render
+and that means our Effect hook will excute one more time which make us end in infinite loop
+useEffect(() => {
+    console.log("Fetching product");
+    setProduct(["Clothing", "Household"]);
+  });
+
+- to solve that problem we should tell React to run Effect hook only one time the first time that our component rendered
+to do that
+useEffect has another argument which is optional and we pass empty array in this second argument we can add one or more variable which can be props
+If the second argument present (React.DependencyList), effect will only activate if the values in the list change. so passing empty array in this second argument
+is like saying "Hey React don`t activate this function again" (coz we set this function React.DependencyList to empty {effect activation to noun})
+
+
+useEffect(() => {
+    console.log("Fetching product");
+    setProduct(["Clothing", "Household"]);
+  }, []);
+
+
+- now after refresh the browser we don`t see errors anymore and we have 
+Fetching product
+Fetching product
+
+coz we have the strict mode in main.tsx (which is React feature to render our component two times
+only happen in the developer mode (not when relase our project to production))
+<React.StrictMode>
+    <App />
+</React.StrictMode>
+
+- now to take this example to the next level
+adding drop down list to display the categories when the user select a category 
+we want to the show the product in that category
+
+- in App.tsx
+above ProductList component
+we add 
+select.form-select>option*3
+
+result:
+<select className="form-select">
+  <option value=""></option>
+  <option value="Clothing">Clothing</option>
+  <option value="Household">Household</option>
+</select>
+
+- to keep track of the selected category in state variable
+so when the state is changed the product list we reRender
+so we create useState hook
+
+const [category, setCategory] = useState("");
+
+- next we need to handle the change event of this select element
+onChange={(event) => setCategory(event.target.value)}
+
+to check that the state is changed we go to devTool 
+and go to "Components" then we Click the state place element (App in this case)
+and we can see the all the hooks state
+
+- now we define the shape of our data (interface)
+shortcut: if our interface is simple Instead of writing 
+old: Instead of define interface
+interface Props {}
+const ProductList = ({ category }: Props) => {}
+
+shortcut:  we can wirte inline (but only if the interface is simple)
+const ProductList = ({ category }: { category: string })
+
+- now in ProductList
+we modify to
+console.log("Fetching product in", category);
+
+- now back to App.tsx we pass the category 
+<ProductList category={category} />
+
+- we got in our console
+Fetching product in 
+coz nothing is selected but if changed the droplist we still don`t see anything 
+coz the empty array that we pass it as secoud argument to useEffect
+to solve the bug in our code 
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  }, [category]);
+
+to Recap:
+the second argument of the Effect hook cases:
+1- without second argument
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  });
+
+=> React will excute our funciton after each render
+
+2- with empty second argument
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  }, []);
+
+=> React will excute our funciton only ones the first time our component rendered
+
+3- with second argument [oneValue, multiValues] (can be props or state variables)
+useEffect(() => {
+    console.log("Fetching product in", category);
+    setProduct(["Clothing", "Household"]);
+  }, [category]);
+
+=> React will excute our funciton every time that value is changed
+
+
+*** 4-_Effect_Clean_Up ***
+somtimes the code that we pass to the effect hook doesn`t need any cleanup
+for ex:
+useEffect(() => {
+    document.title = "My App";
+  });
+
+we only set the title of the document
+
+But what if this is was a chat component and here we are connecting to to chat server
+at some point we need to disconnect from chat server 
+ex: if user navigate away from the chat page we have to disconnect from the chat server
+
+How we can do this:
+in 4-_Effect_Clean_Up/EffectClean.tsx
+
+first we create connect constent to simulate connecting to chat server
+and another constent for disconnecting
+
+const connect = () => console.log("Connecting");
+const disconnect = () => console.log("Disconnecting");
+
+then we call it inside the an EffectHook 
+useEffect(() => {
+    connect();
+  });
+
+now to provide a cleaning code 
+useEffect(() => {
+    connect();
+    return () => disconnect();
+  });
+
+so the function that we pass to the EffectHook can optionaly return disconnect() to cleanning up
+cleaning up is not always necessary but if want to make a clean up this the way to do it
+Generally:
+the clean up function (disconnect) should stop what our Effect is doing (connect())
+another example:
+1 - if our EffectHook is (subscribing) somthing the cleanup function should do (unsubscribing()) 
+2 - if our  EffectHook is (hiding module)  the cleanup function should do (show module) 
+3- if our  EffectHook is (fetching data)  the cleanup function should do (abort fetching / ignore the result)
+
+now let`s see how that works
+in browser Dev-tool console we see three messages:
+Connecting
+Disconnecting
+Connecting
+
+what is happening:
+in developer mode with strict mode turn on React render each component twice
+the first time App component render the EffectClean component
+connecting shows on console
+but before React render our component the second time first it is going to remove the component from screen (the first render)
+that called unmounting
+
+like mounting paper in wall React mounting our component to screen and unmounting it when is no longer needed
+so 
+with strict mode enabled before React mount our component for second time React should unmounted first (the first render)
+that way
+Connecting => React mount the first component
+Disconnecting => React unmount the first component
+Connecting => React mount the second component
+
+
+*** 5-_Fetching_Data ***
+let`s see how can we fetch data from the server
+we will use a fake backend called json place holder
+https://jsonplaceholder.typicode.com/
+
+in this website we have multi endpoints for getting dummy data
+posts / commnet / albums and so on ....
+ex:
+/posts	100 posts
+/comments	500 comments
+/albums	100 albums
+/photos	5000 photos
+/todos	200 todos
+/users	10 users
+
+if click to user in this address we get a bunch of users where each user object
+has property like id, name and so on ..
+https://jsonplaceholder.typicode.com/users
+
+Sending HTTP REQUEST:
+now to send a request to the server
+we can use
+1- fetch()
+2- axios (library)
+
+we will use axois 
+npm i axios@1.3.4
+
+now to fetch user data from json place holder
+- import axios
+import axios from "axios";
+
+- declear stateHook to storing our users
+const [user, setUser] = useState([]);
+
+- call the server by using EffectHook
+useEffect(() => {
+    axios.get("https://jsonplaceholder.typicode.com/users");
+  });
+
+- because calling the server is not happening immediately (it waill take seconds or more)
+axios method return a promise 
+Promise: an object that holds the eventual result of failure of an asynchronous(long running ) operation
+
+all Promises has a method called then so we gonna used to print the response (res is shortcut for resoponse)
+useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then((res) => console.log(res));
+  });
+
+now if log the res.data 
+useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then((res) => console.log(res.data));
+  });
+we can see the data of user objects
+
+now if we want to print the user first name we don`t see auto compliation
+and without auto compliation we maybe could access invalid properties (and make bugs in our code ) 
+.then((res) => console.log(res.data[0].)); 
+
+to fix that we use TypeScript feature (interface) to define the shape of our user object
+form the console in dev tool we can see the user data shape
+
+PS: we can only write which data we are intersted in (the data we want to use )
+interface User {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  // and so
+}
+
+now we can write the shape of data that we want to fetch 
+axios.get<User[]>("endpoint")
+
+now we can show only the name 
+.then((res1) => console.log(res1.data[0].name));
+
+now to store the data 
+instead of using (res1) => console.log(res1.data[0].name)
+we use setUsers of state hook 
+.then((res) => setUsers(res.data));
+but we have compliation error coz 
+const [users, setUsers] = useState([]);
+we initialized users constent to empty array so the TS compiler doesn't know what kind of object 
+we are going to store 
+to fix that we set the type of state hook to user
+const [users, setUsers] = useState([]);
+
+finally (very importent )
+add empty [] as second argument of useEffect other wise we will endup 
+sendeing infinite number of request to the web causing crach the websiteuseEffect(() => {
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users")
+      .then((res) => setUsers(res.data));
+  }, []);
+
+last step
+we are going to render names using map method 
+<ul>
+  {users.map((user) => (
+    <li key={user.id}>{user.name}</li>
+  ))}
+</ul>
+
+*** 6-_Understanding_HTTP_Requests ***
+from the previous lesson we learn how to fetch the data
+(take the code from the previous lesson)
+
+as frontend developer is very importent to understand what is happening
+under the hood when calling the get method
+
+when we call get method axios send a HTTP Request to the server
+HTTP: (Hypertxt Transfer Protocol)
+a protocol to transfering data over the internet 
+
+when we visit a website
+1- Browser send a HTTP Request asking for some contant
+2- Then the Server response with a HTTP Response with HTML/CSS/JS than needed 
+to display website in our Browser
+
+          Request
+         ----->
+Browser          Server
+         <-----       
+         Response
+
+let`s see HTTP Request in Action
+in dev tool we go to the network tab we see too much requests
+now we will the that request which we send it by axios
+
+we filter by [Fetch/XHR]  XHR: (XMl Http Request)
+we will find two request of user (coz React Strict mode)
+
+now in user request we can see the status and size and time (how much take in our machine)
+and if we click in  user request we can see more details 
+
+- in Headrs tap
+we can see the header
+what is HEADER:
+every HTTP Request/Response have a two section
+1- HEADER: where we specify metadata (author, date created, date modified, and file size)
+2- BODY: where we get the data 
+
+- in Preview tap
+we can see the data that return from the server in formated way
+
+- in Response tap
+we can see the body of the resoponse of the server in plain text
+
+*** 7-_Handling_Errors ***
+we take the code from Understanding_HTTP_Requests
+we calling the server many things can go wrong (Network goes down, Server goes offline and so on ...)
+as a good developer we should anticipate(予想) error problems and handle errors properly
+in JS all promises has method called catch we can use for catching errors 
+
+now after the then method we call catch method  and give it a function 
+and that function will work if somthing goes wrong while fetching the data
+.catch((err) => console.log(err))
+to simulate an error we change the endpoint url by adding x before users
+
+back the browser console we got an AxiosError object
+in AxiosError object we can see 
+we have multi properties (code, config, messages , name, request, response and so on ...)
+
+now to take the application to the next level 
+instead of showing  error only inside the console we want to render it on screen
+first:
+we create stateHook 
+const [error, setError] = useState("");
+
+now instead of loging the error in console we use setError 
+.catch((err) => setError(err.message));
+
+in inside return statement
+p.text-danger
+
+<p className="text-danger">{error}</p>
+
+we want to render error dynamically if there only error 
+{error && <p className="text-danger">{error}</p>}
