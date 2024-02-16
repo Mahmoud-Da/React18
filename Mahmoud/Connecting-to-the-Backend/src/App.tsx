@@ -4,6 +4,8 @@ import Lesson2 from "./components/2-Understanding_the_Effect_Hook/Lesson2";
 import ProductList from "./components/3-Effect_Dependencies/ProductList";
 import EffectClean from "./components/4-_Effect_Clean_Up/EffectClean";
 import FetchingData from "./components/5-_Fetching_Data/FetchingData";
+import UnderstandingHttpRequests from "./components/6-_Understanding_HTTP_Requests/UnderstandingHttpRequests";
+import HandlingErrors from "./components/7-_Handling_Errors/HandlingErrors";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -24,11 +26,17 @@ function App() {
       </select>
       <ProductList category={category} />
 
-      <h4>4-_Effect_Clean_Up</h4>
+      <h4>4-Effect_Clean_Up</h4>
       <EffectClean />
 
-      <h4>5-_Fetching_Data</h4>
+      <h4>5-Fetching_Data</h4>
       <FetchingData />
+
+      <h4>6-Understanding_HTTP_Requests</h4>
+      <UnderstandingHttpRequests />
+
+      <h4>7-_Handling_Errors</h4>
+      <HandlingErrors />
     </>
   );
 }

@@ -397,3 +397,80 @@ we are going to render names using map method
     <li key={user.id}>{user.name}</li>
   ))}
 </ul>
+
+*** 6-_Understanding_HTTP_Requests ***
+from the previous lesson we learn how to fetch the data
+(take the code from the previous lesson)
+
+as frontend developer is very importent to understand what is happening
+under the hood when calling the get method
+
+when we call get method axios send a HTTP Request to the server
+HTTP: (Hypertxt Transfer Protocol)
+a protocol to transfering data over the internet 
+
+when we visit a website
+1- Browser send a HTTP Request asking for some contant
+2- Then the Server response with a HTTP Response with HTML/CSS/JS than needed 
+to display website in our Browser
+
+          Request
+         ----->
+Browser          Server
+         <-----       
+         Response
+
+let`s see HTTP Request in Action
+in dev tool we go to the network tab we see too much requests
+now we will the that request which we send it by axios
+
+we filter by [Fetch/XHR]  XHR: (XMl Http Request)
+we will find two request of user (coz React Strict mode)
+
+now in user request we can see the status and size and time (how much take in our machine)
+and if we click in  user request we can see more details 
+
+- in Headrs tap
+we can see the header
+what is HEADER:
+every HTTP Request/Response have a two section
+1- HEADER: where we specify metadata (author, date created, date modified, and file size)
+2- BODY: where we get the data 
+
+- in Preview tap
+we can see the data that return from the server in formated way
+
+- in Response tap
+we can see the body of the resoponse of the server in plain text
+
+*** 7-_Handling_Errors ***
+we take the code from Understanding_HTTP_Requests
+we calling the server many things can go wrong (Network goes down, Server goes offline and so on ...)
+as a good developer we should anticipate(予想) error problems and handle errors properly
+in JS all promises has method called catch we can use for catching errors 
+
+now after the then method we call catch method  and give it a function 
+and that function will work if somthing goes wrong while fetching the data
+.catch((err) => console.log(err))
+to simulate an error we change the endpoint url by adding x before users
+
+back the browser console we got an AxiosError object
+in AxiosError object we can see 
+we have multi properties (code, config, messages , name, request, response and so on ...)
+
+now to take the application to the next level 
+instead of showing  error only inside the console we want to render it on screen
+first:
+we create stateHook 
+const [error, setError] = useState("");
+
+now instead of loging the error in console we use setError 
+.catch((err) => setError(err.message));
+
+in inside return statement
+p.text-danger
+
+<p className="text-danger">{error}</p>
+
+we want to render error dynamically if there only error 
+{error && <p className="text-danger">{error}</p>}
