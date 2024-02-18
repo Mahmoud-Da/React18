@@ -37,5 +37,5 @@ export default Lesson2;
 
 // useEffect + useRef + useState loop(for/while文)の中できない
 
-// useEffect 一回だけ実行される（rendering終わってから）
+// useEffect rendering終わる度に実行される（rendering終わってから）
 // useEffect 同じcomponentで複数useEffect利用できる
