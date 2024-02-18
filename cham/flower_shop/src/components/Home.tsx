@@ -1,4 +1,3 @@
-import "../Index.css";
 const Home = () => {
   return (
     <>

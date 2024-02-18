@@ -20,7 +20,7 @@ const Prompt_delivery = () => {
           id="next"
           className="btn btn-outline-secondary"
           aria-current="page"
-          to="/about"
+          to="/end"
         >
           Next
         </Link>
