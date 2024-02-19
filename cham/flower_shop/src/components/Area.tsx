@@ -1,4 +1,3 @@
-import "../Index.css";
 import area from "../assets/image/area.png";
 const Area = () => {
   return (

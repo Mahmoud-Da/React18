@@ -1,7 +1,5 @@
 import React from "react";
 import Hana_shop from "../assets/image/Hana_shop.png";
-import "../Index.css";
-import Home from "./Home";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   return (

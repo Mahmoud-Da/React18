@@ -1,11 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import green_flowers from "../assets/image/green_flowers.webp";
 
 const End = () => {
   return (
     <>
       <div className="top-warpper-Aboutus">
         <div className="container-Aboutus-Right">
-          <img id="image-Aboutus-Right" src="./image/green-flowers.jpg.webp" />
+          <img id="image-Aboutus-Right" src={green_flowers} />
         </div>
         <div className="container-Aboutus1">
           <h2>
@@ -14,16 +16,23 @@ const End = () => {
             touch of beauty to your life's moments!
           </h2>
         </div>
-        <a
+        <Link
           id="next"
           className="btn btn-outline-secondary"
-          href="./about_us.html"
-        ></a>
-        <a
+          aria-current="page"
+          to="/about"
+        >
+          Next
+        </Link>
+
+        <Link
           id="return"
           className="btn btn-outline-secondary"
-          href="./about_us2.html"
-        ></a>
+          aria-current="page"
+          to="/prompt_delivery"
+        >
+          Return
+        </Link>
       </div>
     </>
   );
