@@ -589,3 +589,39 @@ this approch is not recommanded with useEffect coz
 - use as keyword
 
 *** 9-_Cancelling_a_Fetch_Request ***
+what if the user navigate away form the page while the user data is fetching we don`t want to stop 
+fetching the data
+
+so as best practice 
+when we fetching in the Effect we should provide a function for cancel the fetch request in case the data 
+is no longer needed 
+
+To do that
+- we create costant of instance of AportContoller()
+const controller = new AbortController();
+
+AbortController is class in modern browsers allows us to cancel the any operation may take a long time (fetch data, manipulate the DOM )
+
+- now we when we call axios get method we pass as signal as secound argument 
+axios
+  .get<User[]>("https://jsonplaceholder.typicode.com/xusers", {
+    signal: controller.signal,
+})
+
+- finally we return the clean up function 
+axios
+  .get<User[]>("https://jsonplaceholder.typicode.com/xusers", {
+    signal: controller.signal,
+  })
+  .then((res) => setUsers(res.data))
+  .catch((err) => setError(err.message));
+return () => controller.abort();
+
+- now to we romve the x form the endpoint url (previously we use it to simulate error)
+
+- we have "canceled" keyword rendered always in the screen
+to fix that 
+
+- in the Network map we can see that we multi Requests the first one is canceled coz (strict mode)
+it the same as user was in this page(component) and then went away 
+ 

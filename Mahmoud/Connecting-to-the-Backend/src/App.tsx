@@ -7,6 +7,7 @@ import FetchingData from "./components/5-_Fetching_Data/FetchingData";
 import UnderstandingHttpRequests from "./components/6-_Understanding_HTTP_Requests/UnderstandingHttpRequests";
 import HandlingErrors from "./components/7-_Handling_Errors/HandlingErrors";
 import WorkingWithAsyncAndAwait from "./components/8-_Working_with_Async_and_Await/WorkingWithAsyncAndAwait";
+import CancellingAFetchRequest from "./components/9-_Cancelling_a_Fetch_Request/CancellingAFetchRequest";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -41,6 +42,9 @@ function App() {
 
       <h4>8-_Working_with_Async_and_Await</h4>
       <WorkingWithAsyncAndAwait />
+
+      <h4>9-_Cancelling_a_Fetch_Request</h4>
+      <CancellingAFetchRequest />
     </>
   );
 }
