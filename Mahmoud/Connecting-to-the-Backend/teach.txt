@@ -474,3 +474,154 @@ p.text-danger
 
 we want to render error dynamically if there only error 
 {error && <p className="text-danger">{error}</p>}
+
+
+*** 8-_Working_with_Async_and_Await ***
+some people does`t like to use .then .catch approch when working with promises
+
+we can write the code (code from _Handling_Errors) in more linear way (direct way)
+
+get method return promise and if this promise is resolved it return response object (result)
+but what if the promise is rejected we get an error
+get -> promise -> result / error
+
+- now we will this code without then and catch methods
+{
+axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/xusers")
+      .then((res) => setUsers(res.data))
+      .catch((err) => setError(err.message));
+  }, []);
+
+in JS we have a method called await 
+if we put before the promise we will get the result 
+get -> promise -> result / error
+
+          ↓
+get -> await promise -> result / error
+
+useEffect(() => {
+    const res = await axios.get<User[]>(
+      "https://jsonplaceholder.typicode.com/xusers"
+    ); ....})
+
+we got error:
+'await' expressions are only allowed within async functions and at the top levels of modules.
+
+- to resolve that we have to mark useEffect function with async()
+
+useEffect(async () => {
+    const res = await axios.get<User[]>(
+      "https://jsonplaceholder.typicode.com/xusers"
+    )........});
+
+now we have another error:
+Argument of type '() => Promise<void>' is not assignable to parameter of type 'EffectCallback'.
+
+coz React dosen`t allow us to pass async function to the Effect hook 
+to resolve that 
+we define async inside the useEffect in function called ex: fetchUser
+const fetchUser = async () => {
+      
+    }
+- then move the const res to inside it 
+const fetchUser = async () => {
+      const res = await axios.get<User[]>(
+        "https://jsonplaceholder.typicode.com/xusers"
+      );
+    };
+
+- now we can add setUsers(res.data);
+
+const fetchUser = async () => {
+      const res = await axios.get<User[]>(
+        "https://jsonplaceholder.typicode.com/xusers"
+      );
+      setUsers(res.data);
+    };
+
+- then right after we called 
+const fetchUser = async () => {
+      const res = await axios.get<User[]>(
+        "https://jsonplaceholder.typicode.com/xusers"
+      );
+      setUsers(res.data);
+    };
+fetchUser();
+
+- but what if the promise is rejected we have to wrap res with try and catch  
+const res = await axios.get<User[]>(
+        "https://jsonplaceholder.typicode.com/xusers"
+      );
+
+- wrap it
+const fetchUser = async () => {
+      try {
+        const res = await axios.get<User[]>(
+          "https://jsonplaceholder.typicode.com/xusers"
+        );
+        setUsers(res.data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+- but in setError(err.message);
+we got error 
+'err' is of type 'unknown'.
+
+in TS we can`t do like 
+catch (err: AxiosError) {
+        setError(err.message);
+      }
+coz type annotation is not allowed in catch statement 
+
+- to go around this 
+error catch (err) {
+    setError((err as AxiosError).message);
+}
+
+as keyword: to tell the TS compiler the type of this object
+
+this approch is not recommanded with useEffect coz 
+- we create extra function 
+- wrap our code with try and catch 
+- use as keyword
+
+*** 9-_Cancelling_a_Fetch_Request ***
+what if the user navigate away form the page while the user data is fetching we don`t want to stop 
+fetching the data
+
+so as best practice 
+when we fetching in the Effect we should provide a function for cancel the fetch request in case the data 
+is no longer needed 
+
+To do that
+- we create costant of instance of AportContoller()
+const controller = new AbortController();
+
+AbortController is class in modern browsers allows us to cancel the any operation may take a long time (fetch data, manipulate the DOM )
+
+- now we when we call axios get method we pass as signal as secound argument 
+axios
+  .get<User[]>("https://jsonplaceholder.typicode.com/xusers", {
+    signal: controller.signal,
+})
+
+- finally we return the clean up function 
+axios
+  .get<User[]>("https://jsonplaceholder.typicode.com/xusers", {
+    signal: controller.signal,
+  })
+  .then((res) => setUsers(res.data))
+  .catch((err) => setError(err.message));
+return () => controller.abort();
+
+- now to we romve the x form the endpoint url (previously we use it to simulate error)
+
+- we have "canceled" keyword rendered always in the screen
+to fix that 
+
+- in the Network map we can see that we multi Requests the first one is canceled coz (strict mode)
+it the same as user was in this page(component) and then went away 
+ 
