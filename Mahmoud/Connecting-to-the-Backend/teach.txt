@@ -625,3 +625,54 @@ to fix that
 - in the Network map we can see that we multi Requests the first one is canceled coz (strict mode)
 it the same as user was in this page(component) and then went away 
  
+
+*** 10-_Showing_a_Loading_Indicator ***
+show Loading Indicator while fetching the data
+
+PS: first we take the same code as 9 Component
+
+- first we create Loading steate hook and initialized to false
+
+- now before calling the server we setLoading to true
+axios.get
+
+- but we can`t setLoading after the calling the server
+axios.get
+
+- coz calling the server is asynchronous(long running ) operation
+and asynchronous operation is non Blocking which means the calling server (code block)
+is not going to stop the excution of the code the compiler will continue reading the code 
+and will not wait until calling server to read the next line of code (show Loading is false)
+
+- what we want is after calling the server to set the Loading to false
+to do that we have two ways:
+1- we can do that in our callbaks so fist when fetching is successful
+.then((res) => {
+        setUsers(res.data);
+        setLoading(false);
+      })
+
+and when fetching not successful (error )
+.catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+        setLoading(false);
+      });
+PS: the order of this lines it does`t matter 
+coz React will apply all the updates the it will render the component (Effect Hook)
+this way is a little ugly coz we duplicated (setLoading(false))
+
+better way
+2- All promises has method called finally (we pass callback) 
+and finaly method will excuted when our promise is settled (where ever is resolved or not)
+with this way we can set isLoading only ones
+
+PS: finally method does`t work the React.StrictMode on so for,
+so on time being we should use the first way
+
+- now we show the Loader in our markup 
+after this line {error && <p className="text-danger">{error}</p>}
+we will add .spinner-border
+now we wanna render it only if isLoading true
+
+- to check our code in the Network tap  
