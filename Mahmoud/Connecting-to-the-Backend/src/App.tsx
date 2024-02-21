@@ -14,7 +14,7 @@ function App() {
   const [category, setCategory] = useState("");
   return (
     <>
-      {/* <h4>2-Understanding_the_Effect_Hook</h4>
+      <h4>2-Understanding_the_Effect_Hook</h4>
       <Lesson1 />
       <Lesson2 />
 
@@ -45,7 +45,7 @@ function App() {
       <WorkingWithAsyncAndAwait />
 
       <h4>9-_Cancelling_a_Fetch_Request</h4>
-      <CancellingAFetchRequest /> */}
+      <CancellingAFetchRequest />
 
       <h4>10-_Showing_a_Loading_Indicator</h4>
       <ShowingALoadingIndicator />
