@@ -675,4 +675,92 @@ after this line {error && <p className="text-danger">{error}</p>}
 we will add .spinner-border
 now we wanna render it only if isLoading true
 
-- to check our code in the Network tap  
+- to check our code in the Network tap  (set the network to 3G mode and refresh the page)
+
+*** 11-_Deleting_Data ***
+take the code from 10component
+
+
+- first we create delete button next to each user
+button.btn.btn-outline-danger
+
+<li key={user.id}>
+   {user.name} <button className="btn btn-outline-danger">Delete</button>
+</li>
+
+- when we save the code we got extra {user.name}{" "}
+{users.map((user) => (
+    <li key={user.id}>
+      {user.name}{" "}
+      <button className="btn btn-outline-danger">Delete</button>
+    </li>
+  ))}
+is necessary to but space between the user and the button coz when JSX/TSX compiled 
+React remove all the spaces between the JSX elements
+
+- to fix our markup looks (to make it list group)
+- first step
+<ul className="list-group">
+and for each li 
+<li key={user.id} className="list-group-item">
+
+- next step
+align the buttons to the left
+
+we change every li to flex container by add d-flex and justify-content-between
+<li key={user.id} className="list-group-item d-flex justify-content-between"
+
+- now we don`t need the extra {" "} so we remove it (coz we depend in the css to align our buttons)
+
+- now let`s employment delete functionality
+
+-- in the button section we add (the function we want to create)
+<button
+   className="btn btn-outline-danger"
+   onClick={() => deleteUser(user)}
+>
+-- create the deleteUser function
+**************************************************
+**************************************************
+to delete data from the server we have two approchs:
+1- Optimoitic Update (very fast) (when we assume that connecting to server well go will)
+- update the UI first
+- call the server to save the changes
+
+2- Pessimisitc Update (a little slow) (when we assume that connecting to server maybe is gonna fails)
+- call the server first 
+- update the UI (if the call is successful)
+
+PS:
+- when possible is better to use Optimoitic Update
+**************************************************
+**************************************************
+
+- now in our delte user we will use the Optimoitic Update
+- update the UI
+const deleteUser = (user: User) => {
+    setUsers(users.filter((u) => u.id !== user.id));
+  };
+
+- now we update the Server
+axios
+      .delete("https://jsonplaceholder.typicode.com/users" + user.id)
+now i return a proimse but we don`t want to do anything if the promise done (coz only delete data)
+so we don`t call then method instead we call immediately catch method to only check if erros happned
+
+now if errors happned we need to restore the UI to the originl state (all users)
+so in the top of the method we declear method called originlUsers
+const originalUsers = [...users];
+
+now if we catch an error 
+we set the user to the originlUsers
+.catch((err) => {
+    setError(err.message);
+    setUsers(originalUsers);
+});
+
+to test our code 
+- when we delete user we see request sends to the server to remove that user 
+- to test when there error 
+we simulate error by changing the endpoint URL 
+
