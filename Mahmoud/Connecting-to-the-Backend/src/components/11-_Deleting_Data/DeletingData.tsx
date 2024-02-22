@@ -21,17 +21,13 @@ const DeletingData = () => {
       })
       .then((res) => {
         setUsers(res.data);
-        // first way
         setLoading(false);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
-        // first way
         setLoading(false);
       });
-    // second way
-    // .finally(() => setLoading(false));
 
     return () => controller.abort();
   }, []);
