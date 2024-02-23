@@ -11,6 +11,7 @@ import CancellingAFetchRequest from "./components/9-_Cancelling_a_Fetch_Request/
 import ShowingALoadingIndicator from "./components/10-_Showing_a_Loading_Indicator/ShowingALoadingIndicator";
 import DeletingData from "./components/11-_Deleting_Data/DeletingData";
 import CreatingData from "./components/12-_Creating_Data/CreatingData";
+import UpdatingData from "./components/13-_Updating_Data/UpdatingData";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -57,6 +58,9 @@ function App() {
 
       <h4>12-_Creating_Data</h4>
       <CreatingData />
+
+      <h4>13-_Updating_Data</h4>
+      <UpdatingData />
     </>
   );
 }
