@@ -198,7 +198,7 @@ useEffect(() => {
     console.log("Fetching product in", category);
     setProduct(["Clothing", "Household"]);
   }, [category]);
-
+*******************************************************************
 to Recap:
 the second argument of the Effect hook cases:
 1- without second argument
@@ -224,7 +224,7 @@ useEffect(() => {
   }, [category]);
 
 => React will excute our funciton every time that value is changed
-
+**************************************************************************
 
 *** 4-_Effect_Clean_Up ***
 somtimes the code that we pass to the effect hook doesn`t need any cleanup
