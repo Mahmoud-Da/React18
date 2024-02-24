@@ -28,3 +28,8 @@ export default Lesson1;
 // Pureメソッド（清いメソッド）
 // メソッド：input + output
 // いつも同じinputちゃんと同じoutputを出す
+
+// => の時（Requestを送信）
+// <= の時（ Responseを受領）
+// Browser => Server
+// Browser <= Server

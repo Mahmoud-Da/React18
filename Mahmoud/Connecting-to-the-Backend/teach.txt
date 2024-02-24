@@ -289,6 +289,8 @@ Connecting => React mount the first component
 Disconnecting => React unmount the first component
 Connecting => React mount the second component
 
+Mounting occurs when a component is first added to the page,
+while rendering occurs when a component's state changes
 
 *** 5-_Fetching_Data ***
 let`s see how can we fetch data from the server
