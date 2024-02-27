@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import Lesson1 from "./components/Lesson1";
 import Lesson2 from "./components/Lesson2";
 import EffectDependencies from "./components/EffectDependencies";
+import EffectCleanUp from "./components/EffectCleanUp";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -10,7 +11,7 @@ function App() {
     <>
       {/* <Lesson1 />
       <Lesson2 /> */}
-      <select
+      {/* <select
         className="form-select"
         onChange={(event) => setCategory(event.target.value)}
       >
@@ -18,7 +19,8 @@ function App() {
         <option value="Clothing">Clothing</option>
         <option value="Household">Household</option>
       </select>
-      <EffectDependencies category={category} />
+      <EffectDependencies category={category} /> */}
+      <EffectCleanUp />
     </>
   );
 }
