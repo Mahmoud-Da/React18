@@ -892,3 +892,60 @@ we pass the updatedUser user as second argument
   setError(err.message);
   setUsers(originalUsers);
 });
+
+*** 14-_Extracting_a_Reusable_API_Client ***
+take the code form the previous (13)component 
+
+until this point our code is grown a little bit and we to improve it step by step
+we will fix it little by little during the next lessons 
+
+- the first issue is the deplication of our endpoint url we have repeated this 
+url in two many places
+to improve our code we are going to create a separate module where we can store our default settings
+for making http calles 
+
+- now in our src folder we add new folder we called services
+in this folder we are going to add basic modules that provides services for functionality for our application
+so the services folder is now about the UI it`s about functionality
+
+- inside the services folder we create a file called api-client.ts
+in this file we are going to create a new access client with custom configuration 
+
+- so first we import axios
+then we call axios.create and give it a configuration object
+in this object we set the baseURL to the url of our backend so we go back to our component
+and grap the url of the endpoint url except the user coz we want our client-api to be reuseble 
+perhaps in another component we need to have a another endpoint (user, post etc ...)
+
+axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+})
+
+- next baseURL we can optionaly set the header if it required coz some endpoints
+need to set the header in our backend we don`t need so i will comment it
+
+- finally we export it as default
+
+- now back to our component in the top we first we remove axios 
+import axios, { CanceledError } from "axios"; 
+
+- now we have CanceledError imported from axios and need to remove it 
+import { CanceledError } from "axios";
+
+to do that we remove it from our component (ExtractingAReusableApiClient.tsx) and instead inside the api-client.ts
+we import it inisde it 
+import axios, { CanceledError } from "axios";
+
+finally in the api-clinet.ts we export it as object
+export { CanceledError };
+
+- now we can remove this from the component
+import { CanceledError } from "axios";
+
+- and instead we add 
+import apiClient, { CanceledError } from "../../services/api-client";
+
+- now we change the reference axios to apiClient
+
+- now with this implementation our code is improved and we call apiClient everytime we want 
+to call the HTTP request

@@ -12,12 +12,13 @@ import ShowingALoadingIndicator from "./components/10-_Showing_a_Loading_Indicat
 import DeletingData from "./components/11-_Deleting_Data/DeletingData";
 import CreatingData from "./components/12-_Creating_Data/CreatingData";
 import UpdatingData from "./components/13-_Updating_Data/UpdatingData";
+import ExtractingAReusableApiClient from "./components/14-_Extracting_a_Reusable_API_Client/ExtractingAReusableApiClient";
 
 function App() {
   const [category, setCategory] = useState("");
   return (
     <>
-      <h4>2-Understanding_the_Effect_Hook</h4>
+      {/* <h4>2-Understanding_the_Effect_Hook</h4>
       <Lesson1 />
       <Lesson2 />
 
@@ -60,7 +61,10 @@ function App() {
       <CreatingData />
 
       <h4>13-_Updating_Data</h4>
-      <UpdatingData />
+      <UpdatingData /> */}
+
+      <h4>14-_Extracting_a_Reusable_API_Client</h4>
+      <ExtractingAReusableApiClient />
     </>
   );
 }
