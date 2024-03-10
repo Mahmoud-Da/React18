@@ -38,4 +38,4 @@ export default EffectDependencies;
 //   setProduct(["Clothing", "Household"]);
 // }, [category]);
 
-// 例2 []の場合は、一回だけrendering
+// 例2 []の場合は、一回目だけrendering
