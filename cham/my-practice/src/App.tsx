@@ -2,6 +2,7 @@ import { useState } from "react";
 import ColorBox from "./components/ColorBox";
 import TodoList from "./components/TodoList";
 import ArrayList from "./components/ArrayList";
+import UpdateArray from "./components/UpdateArray";
 
 function App() {
   const [items, setItems] = useState([
@@ -15,11 +16,14 @@ function App() {
       <h1>Hello Kitty</h1>
       <ColorBox />
       <TodoList />
-      <ArrayList
+      {/* <ArrayList
         itemLists={items.map(({ id, title }) => ({ [id]: title }))}
         onClear={() => setItems([])}
         removeOneItem={() => setItems((items) => [...items.slice(0, -1)])}
-      />
+      /> */}
+      <br />
+      <br />
+      <UpdateArray />
     </>
   );
 }
