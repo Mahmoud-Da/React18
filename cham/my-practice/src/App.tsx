@@ -3,6 +3,7 @@ import ColorBox from "./components/ColorBox";
 import TodoList from "./components/TodoList";
 import ArrayList from "./components/ArrayList";
 import UpdateArray from "./components/UpdateArray";
+import Form from "./components/Form";
 
 function App() {
   const [items, setItems] = useState([
@@ -24,6 +25,9 @@ function App() {
       <br />
       <br />
       <UpdateArray />
+      <br />
+      <br />
+      <Form />
     </>
   );
 }
