@@ -3,7 +3,7 @@ import ColorBox from "./components/ColorBox";
 import TodoList from "./components/TodoList";
 import ArrayList from "./components/ArrayList";
 import UpdateArray from "./components/UpdateArray";
-import Form from "./components/Form";
+import Form from "./components/Form/Form";
 
 function App() {
   const [items, setItems] = useState([
