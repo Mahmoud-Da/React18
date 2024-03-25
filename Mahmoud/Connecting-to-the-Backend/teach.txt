@@ -949,3 +949,147 @@ import apiClient, { CanceledError } from "../../services/api-client";
 
 - now with this implementation our code is improved and we call apiClient everytime we want 
 to call the HTTP request
+
+
+*** 15-_Extracting_the_User_Service ***
+- we take the same code in our last component 14
+- the next issue in our component a little bit concern with making HTTP Request
+for ex:
+we used AbortController()
+and get post put methods etc ...
+and for the endpoint 
+
+it`s look like (real world example) in resturant we have a chef not only response for cooking
+but also for shopping 
+but normally we want that chef to focus on it`s only own responsibility (only Cooking)
+
+the same thing is in our component it should only handle it`s primary responsibility which
+is returning some markup and handling user interactions at high level 
+
+*********************
+When we say that a React component should handle user interactions at a high level, it means that the component should be primarily responsible for managing the state, 
+responding to user inputs, and coordinating with other parts of the application. 
+The component should encapsulate its internal logic and expose a clean interface for the rest of the application to interact with.
+
+On the other hand, low-level details such as DOM manipulation or complex calculations may be delegated to other parts of the application or to child components. 
+This helps in creating more modular and maintainable code, as each component can focus on a specific responsibility.
+*********************
+
+- so to imporve our code we should extract all our logic around making HTTP Request into a separate services 
+this allow to make our code more modular and reuseble 
+
+- inside the services folder we create "user-service.ts"
+
+
+*********************
+PS:
+we used can Kebab case naming rule to name the ts file but we can also use camel notation(where ever you like)
+
+{Kebab case} examples:
+kebab-case
+descriptive-variable-name
+INTERESTING-TEXT-FILE
+naming-conventions-webpage
+
+{camel case} examples:
+camelCase
+youTube
+powerPoint
+
+{pascal case} examples:
+PascalCase
+UserService
+*********************
+
+- inside the user service first we import api client at the top
+import apiClient from "./api-client";
+
+- the we craete class and inside this class we going to create user, update user and so 
+then export instance of this class as default
+
+- now inside the UserService class we we add methods
+getAllUsers()
+here we grap controller constant from our component
+const controller = new AbortController();
+
+then we copy the place where we send get method 
+apiClient
+      .get<User[]>("/users", {
+        signal: controller.signal,
+      })
+      
+- we got error that User is not defined and coz we will write all the User get/post/put methods in 
+user-service.ts it`s better to move the User interface to user-service.ts
+
+now coz we need to use User interface also in component we need to export it from the module
+export interface User {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+}
+
+- now we import the User interface inside the component and also the userService
+import userService, { User } from "../../services/user-service";
+
+- by returnig apiClient form getAllUsers method 
+instead of calling apiClient in our component  we are going to call userService instead
+useEffect(() => {
+    setLoading(true);
+    userService....})
+
+- now simply we can use getAllUsers instead of
+apiClient
+      .get<User[]>("/users", {
+        signal: controller.signal,
+      })
+we change it to 
+userService
+      .getAllUsers()
+
+- now we have issue 
+return () => controller.abort();
+we can`t access controller in the component and in the same time we don`t want to export it from user-service module 
+(we don`t export the detals like TV`s remote control only have a button for simple user actions {like power on ,volume up, and so ...} )
+
+to fix that in user-servive.ts 
+instead of returing apiClient
+return apiClient.get<User[]>("/users", {
+      signal: controller.signal,
+    });
+we store api client in constant
+const request = apiClient.get<User[]>("/users", {
+      signal: controller.signal,
+    });
+  return { request, cancel: () => controller.abort() }; 
+
+now in the component file
+we set 
+userService
+      .getAllUsers()
+      .then((res) => {
+        setUsers(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+        setLoading(false);
+      });
+return () => controller.abort();
+to costant 
+    const { request, cancel } = userService.getAllUsers();
+    request
+      .then((res) => {
+        setUsers(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+        setLoading(false);
+      });
+
+    return () => cancel();
+
+exercise move all the other methods  (5:44)
