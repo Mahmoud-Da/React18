@@ -5,7 +5,9 @@ import ArrayList from "./components/ArrayList";
 import UpdateArray from "./components/UpdateArray";
 import Form from "./components/Form/Form";
 import Form2 from "./components/Form/Form2";
+import Form3_1 from "./components/Form/Form3_1";
 import Form3 from "./components/Form/Form3";
+
 
 function App() {
   const [items, setItems] = useState([
@@ -33,7 +35,9 @@ function App() {
       <br />
       <br />
       <Form2 />
-
+      <p>-------------------------------------------</p>
+      <br />
+      <Form3_1 />
       <br />
       <br />
       <Form3 />
