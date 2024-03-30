@@ -1,0 +1,29 @@
+- DOM: Document Object Modelの略で HTML や XML 文書を取り扱うための
+API「アプリケーション・プログラミング・インターフェース（Application Programming Interface）
+ソフトウェアやプログラム、Webサービスの間をつなぐインターフェースのこと」 です
+Browser上にあるHTMLコード
+
+- Rendering　(レンダリング):
+component's/web page ステータス（status）の変更する際に行う
+
+- Mount（マウント）: 
+初めてcomponent's/web pageをBrowserに載せる時
+
+- Develop モード:　（git develop）
+開発の時
+
+- Production モード： (git main)
+リリースの時（プロジェクトの最終版）
+
+- Fetch（フェッチ）: 
+更新
+ex: data Fetch
+データ更新
+
+***************　　***************
+Request (リクエスト): 命令送信
+ex: facebookにアクセスしたいの命令を送信
+
+Response (リスポンス): 結果の返却
+ex: facebookににアクセスさせました
+***************　　***************
