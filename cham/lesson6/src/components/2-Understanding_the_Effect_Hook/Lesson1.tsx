@@ -29,7 +29,5 @@ export default Lesson1;
 // メソッド：input + output
 // いつも同じinputちゃんと同じoutputを出す
 
-// => の時（Requestを送信）
-// <= の時（ Responseを受領）
-// Browser => Server
-// Browser <= Server
+// Browser => の時（Requestを送信）  => Server
+// Browser<= の時（ Responseを受領） <= Server

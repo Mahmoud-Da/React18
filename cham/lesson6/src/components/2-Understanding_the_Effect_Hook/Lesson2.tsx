@@ -6,6 +6,7 @@ const Lesson2 = () => {
   // side effect
   if (ref.current) ref.current.focus();
 
+  // input Element が自分のページが存在したら、周りに青くして
   // after rendering
   useEffect(() => {
     if (ref.current) ref.current.focus();
@@ -23,6 +24,7 @@ const Lesson2 = () => {
     <>
       <div>
         <input ref={ref} type="text" className="form-control" />
+        <input type="text" />
       </div>
     </>
   );

@@ -5,7 +5,7 @@ import EffectDependencies from "./components/3-Effect_Dependencies/EffectDepende
 import EffectCleanUp from "./components/4-_Effect_Clean_Up/EffectCleanUp";
 
 function App() {
-  // const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("");
   return (
     <>
       <h1>

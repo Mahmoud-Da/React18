@@ -1,0 +1,33 @@
+- DOM: Document Object Model
+Browser上にあるHTMLコード
+
+
+- Rendering:
+component's/web page ステータスの変更する際に行う
+
+- Mount: 
+初めてcomponent's/web pageをBrowserに載せる時
+
+- Develop モード:　（git develop）
+開発の時
+
+- Production モード： (git main)
+リリースの時（プロジェクトの最終版）
+
+- Fetch: 
+更新
+ex: data Fetch
+データ更新
+
+***************　　***************
+Request: 
+リクエスト　（命令送信）
+ex:
+facebookにアクセスしたいの命令を送信
+
+
+Response:
+リスポンス (結果の返却)
+ex:
+facebookににアクセスさせました
+***************　　***************

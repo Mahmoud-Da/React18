@@ -43,3 +43,7 @@ rafce {react arrow function component export}
 
 Boot Strap Version
 bootstrap@5.2.3
+
+fake backend:
+
+- https://jsonplaceholder.typicode.com/
