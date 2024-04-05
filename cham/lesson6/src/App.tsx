@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import Lesson2 from "./components/2-Understanding_the_Effect_Hook/Lesson2";
 import EffectDependencies from "./components/3-Effect_Dependencies/EffectDependencies";
 import EffectCleanUp from "./components/4-_Effect_Clean_Up/EffectCleanUp";
+import FetchData from "./components/5-_Fetching_Data/FetchData";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -23,9 +24,11 @@ function App() {
           <EffectDependencies category={category} />
         </div> */}
 
-        <div>
+        {/* <div>
           <EffectCleanUp />
-        </div>
+        </div> */}
+        <h4>Users</h4>
+        <FetchData />
       </h1>
     </>
   );
