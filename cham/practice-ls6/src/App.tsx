@@ -4,6 +4,7 @@ import Lesson1 from "./components/Lesson1";
 import Lesson2 from "./components/Lesson2";
 import EffectDependencies from "./components/EffectDependencies";
 import EffectCleanUp from "./components/EffectCleanUp";
+import FetchData from "./components/FetchData";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -20,7 +21,8 @@ function App() {
         <option value="Household">Household</option>
       </select>
       <EffectDependencies category={category} /> */}
-      <EffectCleanUp />
+      {/* <EffectCleanUp /> */}
+      <FetchData />
     </>
   );
 }
