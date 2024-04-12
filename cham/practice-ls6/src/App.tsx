@@ -5,6 +5,7 @@ import Lesson2 from "./components/Lesson2";
 import EffectDependencies from "./components/EffectDependencies";
 import EffectCleanUp from "./components/EffectCleanUp";
 import FetchData from "./components/FetchData";
+import FetchData1 from "./components/FetchData1";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -22,7 +23,8 @@ function App() {
       </select>
       <EffectDependencies category={category} /> */}
       {/* <EffectCleanUp /> */}
-      <FetchData />
+      {/* <FetchData /> */}
+      <FetchData1 />
     </>
   );
 }
