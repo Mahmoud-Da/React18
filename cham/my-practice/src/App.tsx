@@ -8,7 +8,9 @@ import Form2 from "./components/Form/Form2";
 import Form3_1 from "./components/Form/Form3_1";
 import Form3 from "./components/Form/Form3";
 import Form4 from "./components/Form/Form4";
+import UpdateObject from "./components/UpdateObject";
 import UpdateNastedArray from "./components/UpdateNastedArray";
+
 
 function App() {
   const [items, setItems] = useState([
@@ -31,6 +33,7 @@ function App() {
       <br />
       {/* <UpdateArray /> */}
       <br />
+      <UpdateObject />
       <br />
       {/* <Form /> */}
       {/* <br />
