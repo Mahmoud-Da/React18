@@ -4,6 +4,7 @@ import Lesson2 from "./components/2-Understanding_the_Effect_Hook/Lesson2";
 import EffectDependencies from "./components/3-Effect_Dependencies/EffectDependencies";
 import EffectCleanUp from "./components/4-_Effect_Clean_Up/EffectCleanUp";
 import FetchData from "./components/5-_Fetching_Data/FetchData";
+import UnderstandingHttpRequests from "./components/6-_Understanding_HTTP_Requests/UnderstandingHttpRequests";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -28,7 +29,9 @@ function App() {
           <EffectCleanUp />
         </div> */}
         <h4>Users</h4>
-        <FetchData />
+        {/* <FetchData /> */}
+
+        <UnderstandingHttpRequests />
       </h1>
     </>
   );
