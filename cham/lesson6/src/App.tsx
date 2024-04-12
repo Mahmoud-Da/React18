@@ -5,6 +5,7 @@ import EffectDependencies from "./components/3-Effect_Dependencies/EffectDepende
 import EffectCleanUp from "./components/4-_Effect_Clean_Up/EffectCleanUp";
 import FetchData from "./components/5-_Fetching_Data/FetchData";
 import UnderstandingHttpRequests from "./components/6-_Understanding_HTTP_Requests/UnderstandingHttpRequests";
+import HandlingErrors from "./components/7-_Handling_Errors/HandlingErrors";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -28,10 +29,12 @@ function App() {
         {/* <div>
           <EffectCleanUp />
         </div> */}
-        <h4>Users</h4>
+        {/* <h4>Users</h4> */}
         {/* <FetchData /> */}
 
-        <UnderstandingHttpRequests />
+        {/* <UnderstandingHttpRequests /> */}
+
+        <HandlingErrors />
       </h1>
     </>
   );

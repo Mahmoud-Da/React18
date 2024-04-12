@@ -25,7 +25,7 @@ const UnderstandingHttpRequests = () => {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr>
+            <tr key={user.id}>
               <th scope="row">{user.id}</th>
               <td>{user.name}</td>
               <td>{user.email}</td>
