@@ -6,6 +6,7 @@ import EffectDependencies from "./components/EffectDependencies";
 import EffectCleanUp from "./components/EffectCleanUp";
 import FetchData from "./components/FetchData";
 import FetchData1 from "./components/FetchData1";
+import UnderstandingHttpRequests from "./components/UnderstandingHttpRequests";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -24,7 +25,8 @@ function App() {
       <EffectDependencies category={category} /> */}
       {/* <EffectCleanUp /> */}
       {/* <FetchData /> */}
-      <FetchData1 />
+      {/* <FetchData1 /> */}
+      <UnderstandingHttpRequests />
     </>
   );
 }
