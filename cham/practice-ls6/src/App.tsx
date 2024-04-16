@@ -7,6 +7,7 @@ import EffectCleanUp from "./components/EffectCleanUp";
 import FetchData from "./components/FetchData";
 import FetchData1 from "./components/FetchData1";
 import UnderstandingHttpRequests from "./components/UnderstandingHttpRequests";
+import HandingErrors from "./components/HandingErrors";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -26,7 +27,8 @@ function App() {
       {/* <EffectCleanUp /> */}
       {/* <FetchData /> */}
       {/* <FetchData1 /> */}
-      <UnderstandingHttpRequests />
+      {/* <UnderstandingHttpRequests /> */}
+      <HandingErrors />
     </>
   );
 }
