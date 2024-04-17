@@ -8,6 +8,7 @@ import FetchData from "./components/FetchData";
 import FetchData1 from "./components/FetchData1";
 import UnderstandingHttpRequests from "./components/UnderstandingHttpRequests";
 import HandingErrors from "./components/HandingErrors";
+import WorkingWithAsyncAndAwait from "./components/WorkingWithAsyncAndAwait";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -28,7 +29,8 @@ function App() {
       {/* <FetchData /> */}
       {/* <FetchData1 /> */}
       {/* <UnderstandingHttpRequests /> */}
-      <HandingErrors />
+      {/* <HandingErrors /> */}
+      <WorkingWithAsyncAndAwait />
     </>
   );
 }
