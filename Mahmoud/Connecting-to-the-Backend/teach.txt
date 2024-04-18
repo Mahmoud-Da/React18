@@ -967,8 +967,8 @@ the same thing is in our component it should only handle it`s primary responsibi
 is returning some markup and handling user interactions at high level 
 
 *********************
-When we say that a React component should handle user interactions at a high level, it means that the component should be primarily responsible for managing the state, 
-responding to user inputs, and coordinating with other parts of the application. 
+When we say that a React component should handle user interactions at a high level, it means that the component should be primarily responsible
+for managing the state, responding to user inputs, and coordinating with other parts of the application. 
 The component should encapsulate its internal logic and expose a clean interface for the rest of the application to interact with.
 
 On the other hand, low-level details such as DOM manipulation or complex calculations may be delegated to other parts of the application or to child components. 
@@ -1092,4 +1092,20 @@ to costant
 
     return () => cancel();
 
-exercise move all the other methods  (5:44)
+exercise move all the other methods 
+
+- next we need to work on deleting user (move it user-service.ts)
+so next to getAllUsers() we create deleteUser() 
+we move the code from the component
+.delete("/users/" + user.id)
+-- we remove user
+-- then we return it (promise)
+return apiClient.delete("/users/" + id);
+-- finally in the component file we call the deleteUser()
+userService.deleteUser(user.id).catch((err) ...)
+
+
+the same technique we use with addUser and updateuser 
+
+with this changes we have better separation concern and our code modular so we can use 
+user-service anywhere we want in application

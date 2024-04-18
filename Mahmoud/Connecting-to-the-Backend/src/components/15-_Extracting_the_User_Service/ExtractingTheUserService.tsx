@@ -28,12 +28,10 @@ const ExtractingTheUserService = () => {
     const originalUsers = [...users];
     setUsers(users.filter((u) => u.id !== user.id));
 
-    apiClient
-      .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
-      .catch((err) => {
-        setError(err.message);
-        setUsers(originalUsers);
-      });
+    userService.deleteUser(user.id).catch((err) => {
+      setError(err.message);
+      setUsers(originalUsers);
+    });
   };
 
   const addUser = () => {
@@ -46,8 +44,8 @@ const ExtractingTheUserService = () => {
     };
     setUsers([newUser, ...users]);
 
-    apiClient
-      .post("https://jsonplaceholder.typicode.com/users", newUser)
+    userService
+      .createUser(newUser)
       // .then((res) => setUsers([res.data, ...users]))
       .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
       .catch((err) => {
@@ -60,15 +58,10 @@ const ExtractingTheUserService = () => {
     const originalUsers = [...users];
     const updatedUser = { ...user, name: user.name + "!" };
     setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
-    apiClient
-      .patch(
-        "https://jsonplaceholder.typicode.com/users/" + user.id,
-        updatedUser
-      )
-      .catch((err) => {
-        setError(err.message);
-        setUsers(originalUsers);
-      });
+    userService.updateUser(updatedUser).catch((err) => {
+      setError(err.message);
+      setUsers(originalUsers);
+    });
   };
   return (
     <>
