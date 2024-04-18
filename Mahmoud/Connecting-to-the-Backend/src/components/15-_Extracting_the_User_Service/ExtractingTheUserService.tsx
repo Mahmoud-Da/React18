@@ -1,5 +1,5 @@
-import apiClient, { CanceledError } from "../../services/api-client";
-import React, { useEffect, useState } from "react";
+import { CanceledError } from "../../services/api-client";
+import { useEffect, useState } from "react";
 import userService, { User } from "../../services/user-service";
 
 const ExtractingTheUserService = () => {
