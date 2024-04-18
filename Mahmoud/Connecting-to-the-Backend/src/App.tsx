@@ -14,6 +14,7 @@ import CreatingData from "./components/12-_Creating_Data/CreatingData";
 import UpdatingData from "./components/13-_Updating_Data/UpdatingData";
 import ExtractingAReusableApiClient from "./components/14-_Extracting_a_Reusable_API_Client/ExtractingAReusableApiClient";
 import ExtractingTheUserService from "./components/15-_Extracting_the_User_Service/ExtractingTheUserService";
+import CreatingAGenericHttpService from "./components/16-_Creating_a_Generic_HTTP_Service/CreatingAGenericHttpService";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -67,8 +68,11 @@ function App() {
       {/* <h4>14-_Extracting_a_Reusable_API_Client</h4>
       <ExtractingAReusableApiClient /> */}
 
-      <h4>15-_Extracting_the_User_Service</h4>
-      <ExtractingTheUserService />
+      {/* <h4>15-_Extracting_the_User_Service</h4>
+      <ExtractingTheUserService /> */}
+
+      <h4>16-_Creating_a_Generic_HTTP_Service</h4>
+      <CreatingAGenericHttpService />
     </>
   );
 }
