@@ -1187,3 +1187,37 @@ we go to user-service.ts
 here we have  setUsers(res.data); coz the compiler doesn`t know the type of data
 coz when we define getAll in our http-service we set the type to T
 to fix the issue we should set the type of getAll to User
+
+
+*** 17-_Creating_a_Custom_Data_Fetching_Hook ***
+imagine we have multi functionality in our component like drop list and input at the same time
+in this senario we don`t want to deplicate our hooks 
+so it`s better to create custom hook for that component
+
+to do that:
+- we craete hooks folder inside the src folder inside the hooks folder we create file we call it useUsers.ts
+ (PS: hooks should always start with use keyword ex: useState, useRef, useEffect)
+
+- in this useUser.ts we will define a simple arrow funciton and export it by defualt
+const useUsers = () => {};
+
+export default useUsers;
+
+- we go back to our component and we copy all the hooks code and paste it in useUsers 
+
+- we have errors all of them coz the missing import statements so we import them
+
+- in our useUser funciton we need to return our state variable so it can be used in our component
+so at the end we return our states hooks 
+return { users, error, isLoading };
+
+- then we call it in our component
+const { users, error, isLoading } = useUsers();
+
+- we still have errors for setUsers and etc so we need to return them and called them in the component
+useUsers.ts:
+return { users, error, isLoading, setUsers, setError };
+ComponentFile:
+const { users, error, isLoading, setUsers, setError } = useUsers();
+
+so using custome hooks we can share functionality accross different components
