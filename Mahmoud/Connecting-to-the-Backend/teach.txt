@@ -1111,3 +1111,113 @@ with this changes we have better separation concern and our code modular so we c
 user-service anywhere we want in application
 
 finally we don`t have to import apiClient coz we used in user-service so we remove it 
+
+
+*** 16-_Creating_a_Generic_HTTP_Service ***
+we take the same code from the previous component
+
+
+***************************************************************
+let`s we want to create the another service api for manging the posts in our application
+that class it should be identical (same consept) to user-service 
+so in that service api class we will have getAllPosts() addPost() deletePost() and so on ...
+and the implementation of our post service api will be the same as user service api 
+so the only differece will be the object and the endpoint that we send to the server 
+so we will use some TypeScript magic to create a generic HTTP Service class 
+***************************************************************
+
+- create http-service.ts inside the services class 
+- we copy all the code from user-service.ts to http-service.ts
+- we modify the code inside http-service.ts line by line anywhere we have reference to user
+we should either remove that reference or make generic 
+***************
+so ...
+- delete the User interface
+- rename UserService to HttpService (PS: we can use f2 to rename the all the places where we used variable name in one go)
+- rename getAllUsers to getAll to make it name more general
+- remove the User[] coz we don`t want the type to be specific and instead we use <T> generic type in both getAll() and  apiClient.get
+ex: 
+getAll<T>() {
+    const controller = new AbortController();
+
+    const request = apiClient.get<T[]>("/users", {
+      signal: controller.signal,
+    }); ... 
+  }
+
+- supply the endpoint here we have two options
+1- to pass the endpoint as parameter (the propblem with class we have to specify the endpint and that somthing we want to avoid)
+getAll<T>(endpoint: string)
+2- we pass the property to the Class itself using constructor (is funciton that called we create an instance of class )
+endpoint: string;
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+now we replace /users with this.endpoint
+
+- rename the deleteUser to delete and we change to endpoint to
+return apiClient.delete(this.endpoint + "/" + id);
+
+- rename createUser to create and rename user parameter for more generic name ex: entity 
+and we set the type to generic createUser<T>(entity: T)
+
+- same with update but here we have error with entity.id coz the compiler dosen`t know that the type T has id property
+return apiClient.patch(this.endpoint + "/" + entity.id, entity);
+to solve that we add interface called Entity
+interface Entity {
+  id: number;
+}
+then we extend  (extended means it should have <T> property + Entity property)
+ex: it update<T extends Entity>(entity: T)
+
+- export default new HttpService(); here we have error coz we should applay argument
+to avoid that we create funciton that export the instance of this class 
+const create = (endpoint: string) => new HttpService(endpoint);
+export default create;
+***************
+
+now with http-service endpoint we can generate generic service
+to do that:
+we go to user-service.ts
+
+- we remove all the UserService Class 
+- we import create form http-service.ts 
+- we export create with the endpoint as defualt export default create("/users");
+- we fix our component methods name 
+here we have  setUsers(res.data); coz the compiler doesn`t know the type of data
+coz when we define getAll in our http-service we set the type to T
+to fix the issue we should set the type of getAll to User
+
+
+*** 17-_Creating_a_Custom_Data_Fetching_Hook ***
+imagine we have multi functionality in our component like drop list and input at the same time
+in this senario we don`t want to deplicate our hooks 
+so it`s better to create custom hook for that component
+
+to do that:
+- we craete hooks folder inside the src folder inside the hooks folder we create file we call it useUsers.ts
+ (PS: hooks should always start with use keyword ex: useState, useRef, useEffect)
+
+- in this useUser.ts we will define a simple arrow funciton and export it by defualt
+const useUsers = () => {};
+
+export default useUsers;
+
+- we go back to our component and we copy all the hooks code and paste it in useUsers 
+
+- we have errors all of them coz the missing import statements so we import them
+
+- in our useUser funciton we need to return our state variable so it can be used in our component
+so at the end we return our states hooks 
+return { users, error, isLoading };
+
+- then we call it in our component
+const { users, error, isLoading } = useUsers();
+
+- we still have errors for setUsers and etc so we need to return them and called them in the component
+useUsers.ts:
+return { users, error, isLoading, setUsers, setError };
+ComponentFile:
+const { users, error, isLoading, setUsers, setError } = useUsers();
+
+so using custome hooks we can share functionality accross different components

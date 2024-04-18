@@ -1,34 +1,15 @@
 import { CanceledError } from "../../services/api-client";
 import { useEffect, useState } from "react";
-import userService, { User } from "../../services/user-service-old";
+import userService, { User } from "../../services/user-service";
+import useUsers from "../../hooks/useUsers";
 
-const ExtractingTheUserService = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    const { request, cancel } = userService.getAllUsers();
-    request
-      .then((res) => {
-        setUsers(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        if (err instanceof CanceledError) return;
-        setError(err.message);
-        setLoading(false);
-      });
-
-    return () => cancel();
-  }, []);
-
+const CreatingACustomDataFetchingHook = () => {
+  const { users, error, isLoading, setUsers, setError } = useUsers();
   const deleteUser = (user: User) => {
     const originalUsers = [...users];
     setUsers(users.filter((u) => u.id !== user.id));
 
-    userService.deleteUser(user.id).catch((err) => {
+    userService.delete(user.id).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
@@ -46,7 +27,6 @@ const ExtractingTheUserService = () => {
 
     userService
       .createUser(newUser)
-      // .then((res) => setUsers([res.data, ...users]))
       .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
       .catch((err) => {
         setError(err.message);
@@ -58,7 +38,7 @@ const ExtractingTheUserService = () => {
     const originalUsers = [...users];
     const updatedUser = { ...user, name: user.name + "!" };
     setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
-    userService.updateUser(updatedUser).catch((err) => {
+    userService.update(updatedUser).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
@@ -98,4 +78,4 @@ const ExtractingTheUserService = () => {
   );
 };
 
-export default ExtractingTheUserService;
+export default CreatingACustomDataFetchingHook;
