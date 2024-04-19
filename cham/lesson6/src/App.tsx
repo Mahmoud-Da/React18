@@ -7,6 +7,9 @@ import FetchData from "./components/5-_Fetching_Data/FetchData";
 import UnderstandingHttpRequests from "./components/6-_Understanding_HTTP_Requests/UnderstandingHttpRequests";
 import HandlingErrors from "./components/7-_Handling_Errors/HandlingErrors";
 import WorkingWithAsyncAndAwait from "./components/8-_Working_with_Async_and_Await/WorkingWithAsyncAndAwait";
+import CancellingAFetchRequest from "./components/9-_Cancelling_a_Fetch_Request/CancellingAFetchRequest";
+import ShowingALoadingIndicator from "./components/10-_Showing_a_Loading_Indicator/ShowingALoadingIndicator";
+import DeletingData from "./components/11-_Deleting_Data/DeletingData";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -36,7 +39,12 @@ function App() {
         {/* <UnderstandingHttpRequests /> */}
 
         {/* <HandlingErrors /> */}
-        <WorkingWithAsyncAndAwait />
+        {/* <WorkingWithAsyncAndAwait /> */}
+
+        {/* <CancellingAFetchRequest /> */}
+        {/* <ShowingALoadingIndicator /> */}
+
+        <DeletingData />
       </h1>
     </>
   );
