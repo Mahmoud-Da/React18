@@ -7,25 +7,32 @@ interface Photos {
   url: string;
 }
 
-const CancellingAFetchRequest = () => {
+const ShowingALoadingIndicator = () => {
   const [photos, setPhotos] = useState<Photos[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const controler = new AbortController();
+    setIsLoading(true);
     axios
       .get<Photos[]>("https://jsonplaceholder.typicode.com/photos", {
         signal: controler.signal,
       })
-      .then((res) => setPhotos(res.data))
+      .then((res) => {
+        setPhotos(res.data);
+        setIsLoading(false);
+      })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
+        setIsLoading(false);
       });
     return () => controler.abort();
   }, []);
   return (
     <>
-      <h2>CancellingAFetchRequest</h2>
+      <h2>ShowingALoadingIndicator</h2>
       <table className="table">
         <thead>
           <tr>
@@ -45,8 +52,9 @@ const CancellingAFetchRequest = () => {
         </tbody>
       </table>
       {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className="spinner-grow" role="status"></div>}
     </>
   );
 };
 
-export default CancellingAFetchRequest;
+export default ShowingALoadingIndicator;
