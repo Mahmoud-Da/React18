@@ -63,3 +63,6 @@ and we commnt our code  "install ChakraUI"
 
 to check our commit until this point we type
 git log --oneline 
+
+PS:to check the first three commit only 
+git log --oneline -n 3 
