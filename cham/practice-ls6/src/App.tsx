@@ -10,6 +10,7 @@ import UnderstandingHttpRequests from "./components/UnderstandingHttpRequests";
 import HandingErrors from "./components/HandingErrors";
 import WorkingWithAsyncAndAwait from "./components/WorkingWithAsyncAndAwait";
 import CancellingAFetchRequest from "./components/CancellingAFetchRequest";
+import ShowingALoadingIndicator from "./components/ShowingALoadingIndicator";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -32,7 +33,8 @@ function App() {
       {/* <UnderstandingHttpRequests /> */}
       {/* <HandingErrors /> */}
       {/* <WorkingWithAsyncAndAwait /> */}
-      <CancellingAFetchRequest />
+      {/* <CancellingAFetchRequest /> */}
+      <ShowingALoadingIndicator />
     </>
   );
 }
