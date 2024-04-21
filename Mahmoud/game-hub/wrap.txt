@@ -1,0 +1,65 @@
+*** 1-_What_Well_Build ***
+we will build a tiny versoin of Rawg Site
+https://rawg.io/
+
+when we build project or feature(method)
+first: Make it Work
+second: Refactor the code 
+third: Improve the code
+
+
+*** 3-_Setting_Up_the_Project
+we create React Project
+npm create vite@4.1.0
+
+we call the project: game-hub
+we use TS then inside this project file we install all the dependencies
+then run our project with npm run dev
+
+
+- we connect our project to gitHub
+1- initialize our project to  git repository
+git init 
+2- to add all the changes in our dirctory to staging 
+git add .
+to add our 
+3- we commit our changes 
+git commit -m "Initial commit"
+
+4- we go to GitHub to create that repository (check the instruction of gitHub)
+
+here we commit our code "create game-hub App"
+*** 4-_Installing_Chakra_UI ***
+there is too many libraries for styling UI (bootstrap, tailwind, chakraUI)
+for this project we will use ChakraUI
+
+https://v2.chakra-ui.com/
+
+PS: 
+1- to install it we press go started and chose the installion for Vite
+2- we will not do the optional things right now ex: Customizing theme (Optional)
+***********************************
+when we add 
+import { ChakraProvider } from "@chakra-ui/react";
+
+it`s better to orginze our import statment code 
+ex: 
+- import the React libraries first 
+- import the third libraries
+- import the local files 
+***********************************
+
+now after read the installion
+we check if ChakraUI is installed by adding a button 
+
+after remove everything in the App.tsx
+we add button (method: ChakraUI site)
+
+we see u ugly blue border around the button when we hover
+coz we havn`t remove the the code from the index.css (so we remove all the style the code inside it to fix that)
+
+until this point we check the git tree of of our chnages (always make sure to do that before commit to avoid commit unnecessary code )
+and we commnt our code  "install ChakraUI" 
+
+to check our commit until this point we type
+git log --oneline 
