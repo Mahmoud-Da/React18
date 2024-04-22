@@ -11,6 +11,7 @@ import HandingErrors from "./components/HandingErrors";
 import WorkingWithAsyncAndAwait from "./components/WorkingWithAsyncAndAwait";
 import CancellingAFetchRequest from "./components/CancellingAFetchRequest";
 import ShowingALoadingIndicator from "./components/ShowingALoadingIndicator";
+import DeletetingData from "./components/DeletetingData";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -34,7 +35,8 @@ function App() {
       {/* <HandingErrors /> */}
       {/* <WorkingWithAsyncAndAwait /> */}
       {/* <CancellingAFetchRequest /> */}
-      <ShowingALoadingIndicator />
+      {/* <ShowingALoadingIndicator /> */}
+      <DeletetingData />
     </>
   );
 }
