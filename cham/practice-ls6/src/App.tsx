@@ -12,6 +12,7 @@ import WorkingWithAsyncAndAwait from "./components/WorkingWithAsyncAndAwait";
 import CancellingAFetchRequest from "./components/CancellingAFetchRequest";
 import ShowingALoadingIndicator from "./components/ShowingALoadingIndicator";
 import DeletetingData from "./components/DeletetingData";
+import DeletetingData1 from "./components/DeletetingData1";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -36,7 +37,8 @@ function App() {
       {/* <WorkingWithAsyncAndAwait /> */}
       {/* <CancellingAFetchRequest /> */}
       {/* <ShowingALoadingIndicator /> */}
-      <DeletetingData />
+      {/* <DeletetingData /> */}
+      <DeletetingData1 />
     </>
   );
 }
