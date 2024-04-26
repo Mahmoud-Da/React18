@@ -20,6 +20,18 @@ const WorkingWithAsyncAndAwait = () => {
     } catch (error) {
       setError((error as AxiosError).message);
     }
+
+    // axoisを利用せずにの方法
+    // try {
+    //   const response = await fetch("https://jsonplaceholder.typicode.com/usersx");
+    //   if (!response.ok) {
+    //     throw new Error(`HTTP error! Status: ${response.status}`);
+    //   }
+    //   const dowloadedUsers = await response.json();
+    //   setUsers(dowloadedUsers);
+    // } catch (error) {
+    //   setError(error.message);
+    // }
   };
 
   useEffect(() => {
