@@ -13,6 +13,7 @@ import CancellingAFetchRequest from "./components/CancellingAFetchRequest";
 import ShowingALoadingIndicator from "./components/ShowingALoadingIndicator";
 import DeletetingData from "./components/DeletetingData";
 import DeletetingData1 from "./components/DeletetingData1";
+import CreatingData from "./components/CreatingData";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -38,7 +39,8 @@ function App() {
       {/* <CancellingAFetchRequest /> */}
       {/* <ShowingALoadingIndicator /> */}
       {/* <DeletetingData /> */}
-      <DeletetingData1 />
+      {/* <DeletetingData1 /> */}
+      <CreatingData />
     </>
   );
 }
