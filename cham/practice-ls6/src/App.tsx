@@ -14,6 +14,7 @@ import ShowingALoadingIndicator from "./components/ShowingALoadingIndicator";
 import DeletetingData from "./components/DeletetingData";
 import DeletetingData1 from "./components/DeletetingData1";
 import CreatingData from "./components/CreatingData";
+import UpdatingData from "./components/UpdatingData";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -40,7 +41,8 @@ function App() {
       {/* <ShowingALoadingIndicator /> */}
       {/* <DeletetingData /> */}
       {/* <DeletetingData1 /> */}
-      <CreatingData />
+      {/* <CreatingData /> */}
+      <UpdatingData />
     </>
   );
 }
