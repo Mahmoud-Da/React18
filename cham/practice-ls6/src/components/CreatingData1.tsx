@@ -34,8 +34,8 @@ const CreatingData1 = () => {
           {users.map((user) => (
             <tr key={user.id}>
               <th scope="col">{user.id}</th>
-              <td>user.name</td>
-              <td>user.email</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
             </tr>
           ))}
         </tbody>
