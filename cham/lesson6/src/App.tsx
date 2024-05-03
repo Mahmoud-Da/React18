@@ -12,6 +12,7 @@ import ShowingALoadingIndicator from "./components/10-_Showing_a_Loading_Indicat
 import DeletingData from "./components/11-_Deleting_Data/DeletingData";
 import CreatingData from "./components/12-_Creating_Data/CreatingData";
 import UpdatingData from "./components/13-_Updating_Data/UpdatingData";
+import ExtractingAReusableApiClient from "./components/14-_Extracting_a_Reusable_API_Client/ExtractingAReusableApiClient";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -50,7 +51,9 @@ function App() {
 
         {/* <CreatingData /> */}
 
-        <UpdatingData />
+        {/* <UpdatingData /> */}
+
+        <ExtractingAReusableApiClient />
       </h1>
     </>
   );
