@@ -66,3 +66,83 @@ git log --oneline
 
 PS:to check the first three commit only 
 git log --oneline -n 3 
+
+
+5-_Creating_a_Responsive_Layout
+we want to add navbar to the top and side panal to the left and the main area in the middle
+
+to do that we are going to use Grid component:
+first we remove the everything from the App component coz we don`t need it any more
+
+we use Grid component from the ChakraUI
+
+<Grid templateAreas={``}></Grid>
+
+PS: we used `` coz inside it we will add double string quotation　
+ex: `"" ""`
+
+now we want Nav on the top and side menu on the the left and main area
+like this 
+*********
+<Grid
+        templateAreas={`"nav nav" 
+                        "aside main"`}
+      ></Grid>
+*********
+
+now inside the Grid component we create GridItem and give an area from our four areas ()
+<GridItem area={"nav"} bg={"coral"}>
+          Nav
+</GridItem>
+
+and give it a bg (backgroud) color to see it
+
+we duplicate this component  with 3 times Nav  Aside with our four areas
+
+*********
+ <Grid templateAreas={`"nav nav" "aside main"`}>
+  <GridItem area={"nav"} bg={"coral"}>
+    Nav
+  </GridItem>
+  <GridItem area={"aside"} bg={"gold"}>
+    Aside
+  </GridItem>
+  <GridItem area={"main"} bg={"dodgerblue"}>
+    Main
+  </GridItem>
+</Grid>
+*********
+
+now on the mobile devices we want to hide the aside panal to do that 
+in the 
+*********
+templateAreas={`"nav nav" "aside main"`}
+*********
+
+we change string of templateAreas to object and inside it we can define the template area for each screen size
+PS: for better understaing visit Chakra UI then access to "Styled System" then click on "Responsive Styles" we can check the break points
+https://v2.chakra-ui.com/docs/styled-system/responsive-styles
+
+in our Project we will design our UI for two sizes normal and mobile
+*********
+templateAreas={{
+          base: `"nav" "main"`,
+          lg: `"nav nav" "aside main"`,
+        }}
+*********
+
+we check our layout on the Devtool 
+we see the aside template still there coz we still render it on the screen 
+
+to make sure that Aside GridItem only render on the base tamplate
+we should wrap it with Show component and give a property of "above"
+*********
+<Show above="lg">
+  <GridItem area={"aside"} bg={"gold"}>
+    Aside
+  </GridItem>
+</Show>
+*********
+
+here we commit our code 
+"Build a responsive layout"
