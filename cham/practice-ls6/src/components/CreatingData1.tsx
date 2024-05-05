@@ -1,24 +1,29 @@
-import axios from "axios";
+import axios, { CanceledError } from "axios";
 import React, { useEffect, useState } from "react";
 
-interface Users {
+interface Albums {
   id: number;
-  name: string;
-  email: string;
+  title: string;
 }
 
 const CreatingData1 = () => {
-  const [users, setUsers] = useState<Users[]>([]);
+  const [users, setUsers] = useState<Albums[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const controler = new AbortController();
     axios
-      .get<Users[]>("https://jsonplaceholder.typicode.com/users")
+      .get<Albums[]>("https://jsonplaceholder.typicode.com/albums")
       .then((res) => {
         setUsers(res.data);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
       });
-  });
+
+    return () => controler.abort();
+  }, []);
   return (
     <>
       <h2>CreatingData1</h2>
@@ -26,20 +31,19 @@ const CreatingData1 = () => {
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
+            <th scope="col">Title</th>
           </tr>
         </thead>
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
               <th scope="col">{user.id}</th>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
+              <td>{user.title}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      {error && <p className="text-danger">{error}</p>}
     </>
   );
 };
