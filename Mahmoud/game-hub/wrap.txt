@@ -1,0 +1,148 @@
+*** 1-_What_Well_Build ***
+we will build a tiny versoin of Rawg Site
+https://rawg.io/
+
+when we build project or feature(method)
+first: Make it Work
+second: Refactor the code 
+third: Improve the code
+
+
+*** 3-_Setting_Up_the_Project
+we create React Project
+npm create vite@4.1.0
+
+we call the project: game-hub
+we use TS then inside this project file we install all the dependencies
+then run our project with npm run dev
+
+
+- we connect our project to gitHub
+1- initialize our project to  git repository
+git init 
+2- to add all the changes in our dirctory to staging 
+git add .
+to add our 
+3- we commit our changes 
+git commit -m "Initial commit"
+
+4- we go to GitHub to create that repository (check the instruction of gitHub)
+
+here we commit our code "create game-hub App"
+*** 4-_Installing_Chakra_UI ***
+there is too many libraries for styling UI (bootstrap, tailwind, chakraUI)
+for this project we will use ChakraUI
+
+https://v2.chakra-ui.com/
+
+PS: 
+1- to install it we press go started and chose the installion for Vite
+2- we will not do the optional things right now ex: Customizing theme (Optional)
+***********************************
+when we add 
+import { ChakraProvider } from "@chakra-ui/react";
+
+it`s better to orginze our import statment code 
+ex: 
+- import the React libraries first 
+- import the third libraries
+- import the local files 
+***********************************
+
+now after read the installion
+we check if ChakraUI is installed by adding a button 
+
+after remove everything in the App.tsx
+we add button (method: ChakraUI site)
+
+we see u ugly blue border around the button when we hover
+coz we havn`t remove the the code from the index.css (so we remove all the style the code inside it to fix that)
+
+until this point we check the git tree of of our chnages (always make sure to do that before commit to avoid commit unnecessary code )
+and we commnt our code  "install ChakraUI" 
+
+to check our commit until this point we type
+git log --oneline 
+
+PS:to check the first three commit only 
+git log --oneline -n 3 
+
+
+5-_Creating_a_Responsive_Layout
+we want to add navbar to the top and side panal to the left and the main area in the middle
+
+to do that we are going to use Grid component:
+first we remove the everything from the App component coz we don`t need it any more
+
+we use Grid component from the ChakraUI
+
+<Grid templateAreas={``}></Grid>
+
+PS: we used `` coz inside it we will add double string quotation　
+ex: `"" ""`
+
+now we want Nav on the top and side menu on the the left and main area
+like this 
+*********
+<Grid
+        templateAreas={`"nav nav" 
+                        "aside main"`}
+      ></Grid>
+*********
+
+now inside the Grid component we create GridItem and give an area from our four areas ()
+<GridItem area={"nav"} bg={"coral"}>
+          Nav
+</GridItem>
+
+and give it a bg (backgroud) color to see it
+
+we duplicate this component  with 3 times Nav  Aside with our four areas
+
+*********
+ <Grid templateAreas={`"nav nav" "aside main"`}>
+  <GridItem area={"nav"} bg={"coral"}>
+    Nav
+  </GridItem>
+  <GridItem area={"aside"} bg={"gold"}>
+    Aside
+  </GridItem>
+  <GridItem area={"main"} bg={"dodgerblue"}>
+    Main
+  </GridItem>
+</Grid>
+*********
+
+now on the mobile devices we want to hide the aside panal to do that 
+in the 
+*********
+templateAreas={`"nav nav" "aside main"`}
+*********
+
+we change string of templateAreas to object and inside it we can define the template area for each screen size
+PS: for better understaing visit Chakra UI then access to "Styled System" then click on "Responsive Styles" we can check the break points
+https://v2.chakra-ui.com/docs/styled-system/responsive-styles
+
+in our Project we will design our UI for two sizes normal and mobile
+*********
+templateAreas={{
+          base: `"nav" "main"`,
+          lg: `"nav nav" "aside main"`,
+        }}
+*********
+
+we check our layout on the Devtool 
+we see the aside template still there coz we still render it on the screen 
+
+to make sure that Aside GridItem only render on the base tamplate
+we should wrap it with Show component and give a property of "above"
+*********
+<Show above="lg">
+  <GridItem area={"aside"} bg={"gold"}>
+    Aside
+  </GridItem>
+</Show>
+*********
+
+here we commit our code 
+"Build a responsive layout"

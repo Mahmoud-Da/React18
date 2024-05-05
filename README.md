@@ -47,3 +47,6 @@ bootstrap@5.2.3
 fake backend:
 
 - https://jsonplaceholder.typicode.com/
+
+ChakraUI:
+https://v2.chakra-ui.com/
