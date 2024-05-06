@@ -7,19 +7,42 @@ interface Albums {
 }
 
 const CreatingData1 = () => {
-  const [users, setUsers] = useState<Albums[]>([]);
+  const [albums, setAlbums] = useState<Albums[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  const addAlbum = () => {
+    const originalAlbums = [...albums];
+
+    const newAlbum: Albums = {
+      id: 0,
+      title: "mama",
+    };
+
+    setAlbums([newAlbum, ...albums]);
+
+    axios
+      .post("https://jsonplaceholder.typicode.com/albums", newAlbum)
+      .then(({ data: savedAlbums }) => setAlbums([savedAlbums, ...albums]))
+      .catch((err) => {
+        setError(err.message);
+        setAlbums(originalAlbums);
+      });
+  };
 
   useEffect(() => {
     const controler = new AbortController();
+    setLoading(true);
     axios
       .get<Albums[]>("https://jsonplaceholder.typicode.com/albums")
       .then((res) => {
-        setUsers(res.data);
+        setAlbums(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
+        setLoading(false);
       });
 
     return () => controler.abort();
@@ -35,15 +58,19 @@ const CreatingData1 = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <th scope="col">{user.id}</th>
-              <td>{user.title}</td>
+          <button className="btn btn-primary mb-3" onClick={addAlbum}>
+            Add
+          </button>
+          {albums.map((album) => (
+            <tr key={album.id}>
+              <th scope="col">{album.id}</th>
+              <td>{album.title}</td>
             </tr>
           ))}
         </tbody>
       </table>
       {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className=" spinner-border"></div>}
     </>
   );
 };
