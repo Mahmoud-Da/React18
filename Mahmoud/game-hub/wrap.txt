@@ -146,3 +146,59 @@ we should wrap it with Show component and give a property of "above"
 
 here we commit our code 
 "Build a responsive layout"
+
+
+*** 6-_Building_the_Navigation_Bar ***
+now we will wikr only on the basic layout for the navigation bar 
+this how we build a project start with simple functionality then we move to the next step 
+
+- we create components folder inside the src folder 
+inside it we create NavBar.tsx and we use rafce
+we remove unused import React statment
+
+- now we want to layout our items in this component horizontally 
+to do that we can use Component in ChakraUI called HStack (whcih means horizontal stack)
+
+- inside the HStach component we use Image component by typing Image we have two Image components
+we use the Image instance of ChakraUI
+*********************
+PS: to see that in options we type <Image munally 
+we have two instances one for normal interface and one is the Image of ChakaraUI
+*********************
+
+- we download the logo image from from GameHub Resources.zip and move the logo.webp to the assets
+ps: webp image are high optimize images for web 
+
+- in Image ChakaraUI Component we can`t use src={} with path intead we import the image as 
+JS module and use the imported object inside the src 
+********************* 
+import logo from "../assets/logo.webp";
+<Image src={logo}></Image>
+*********************
+
+- now we add our NavBar Component in the App.tsx 
+we change the NavBar word with NavBar Component
+
+- we check our code and we see that our logo is two big so we need to resize it using boxSize
+*********************
+<Image src={logo} boxSize="60px"></Image>
+*********************
+
+- we are using horizontal stack now if we add text in our navbar it should appear after our image
+to check that we add a Text component (instance of ChakaraUI)
+*********************
+<HStack>
+  <Image src={logo} boxSize="60px"></Image>
+  <Text>NavBar</Text>
+</HStack>
+*********************
+
+- now normally after building our layout component we remove the backgroud color coz we don`t need to check the layout
+anymore 
+so in the App.tsx we remove 
+*********************
+ bg={"coral"}
+ *********************
+
+now after review our code now we add commit to our repository
+"Build a NavBar"
