@@ -17,6 +17,7 @@ import CreatingData from "./components/CreatingData";
 import UpdatingData from "./components/UpdatingData";
 import CreatingData1 from "./components/CreatingData1";
 import DeletetingData2 from "./components/DeletetingData2";
+import UpdatingData1 from "./components/UpdatingData1";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -46,7 +47,8 @@ function App() {
       {/* <CreatingData /> */}
       {/* <UpdatingData /> */}
       {/* <CreatingData1 /> */}
-      <DeletetingData2 />
+      {/* <DeletetingData2 /> */}
+      <UpdatingData1 />
     </>
   );
 }
