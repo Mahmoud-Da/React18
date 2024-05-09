@@ -198,7 +198,46 @@ anymore
 so in the App.tsx we remove 
 *********************
  bg={"coral"}
- *********************
+*********************
 
 now after review our code now we add commit to our repository
 "Build a NavBar"
+
+
+*** 7-_Implementing_the_Dark_Mode ***
+in the documentation of the ChakaraUI we search for "color mode" in this page we can read how color 
+mode works in ChakaraUI to Implement the dark mode we have to do some steps we 
+don`t have to memorize it we can see it in the documentation.
+
+- in the src folder we create a file we called them.ts
+here we are going to customize our default them whcih come with ChakaraUI
+we copy all the code from the  and change the initialColorMode to dark 
+https://v2.chakra-ui.com/docs/styled-system/color-mode
+
+- we go to main.ts and import the them.ts
+first we import them 
+then we have to use it in two places 
+*********************
+import them from "../src/them";
+
+ChakraProvider theme={them}>   /=> first place
+<ColorModeScript /=> second place
+  initialColorMode={them.config.initialColorMode}
+></ColorModeScript>
+<App />
+*********************
+
+- now if we refresh our page the page is still light coz ChakaraUI stores the selecetd mode 
+in the local storge so it can remmeber it in the future sessions
+
+we can check that with dev tool and went to Application then Local Storage
+and delete the "light" key 
+
+- now if we refreshed the page we got black background 
+now we checked the Local Storage we can see it "dark" 
+
+here we commit our code 
+
+
+
+*********************
