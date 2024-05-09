@@ -146,3 +146,98 @@ we should wrap it with Show component and give a property of "above"
 
 here we commit our code 
 "Build a responsive layout"
+
+
+*** 6-_Building_the_Navigation_Bar ***
+now we will wikr only on the basic layout for the navigation bar 
+this how we build a project start with simple functionality then we move to the next step 
+
+- we create components folder inside the src folder 
+inside it we create NavBar.tsx and we use rafce
+we remove unused import React statment
+
+- now we want to layout our items in this component horizontally 
+to do that we can use Component in ChakraUI called HStack (whcih means horizontal stack)
+
+- inside the HStach component we use Image component by typing Image we have two Image components
+we use the Image instance of ChakraUI
+*********************
+PS: to see that in options we type <Image munally 
+we have two instances one for normal interface and one is the Image of ChakaraUI
+*********************
+
+- we download the logo image from from GameHub Resources.zip and move the logo.webp to the assets
+ps: webp image are high optimize images for web 
+
+- in Image ChakaraUI Component we can`t use src={} with path intead we import the image as 
+JS module and use the imported object inside the src 
+********************* 
+import logo from "../assets/logo.webp";
+<Image src={logo}></Image>
+*********************
+
+- now we add our NavBar Component in the App.tsx 
+we change the NavBar word with NavBar Component
+
+- we check our code and we see that our logo is two big so we need to resize it using boxSize
+*********************
+<Image src={logo} boxSize="60px"></Image>
+*********************
+
+- we are using horizontal stack now if we add text in our navbar it should appear after our image
+to check that we add a Text component (instance of ChakaraUI)
+*********************
+<HStack>
+  <Image src={logo} boxSize="60px"></Image>
+  <Text>NavBar</Text>
+</HStack>
+*********************
+
+- now normally after building our layout component we remove the backgroud color coz we don`t need to check the layout
+anymore 
+so in the App.tsx we remove 
+*********************
+ bg={"coral"}
+*********************
+
+now after review our code now we add commit to our repository
+"Build a NavBar"
+
+
+*** 7-_Implementing_the_Dark_Mode ***
+in the documentation of the ChakaraUI we search for "color mode" in this page we can read how color 
+mode works in ChakaraUI to Implement the dark mode we have to do some steps we 
+don`t have to memorize it we can see it in the documentation.
+
+- in the src folder we create a file we called them.ts
+here we are going to customize our default them whcih come with ChakaraUI
+we copy all the code from the  and change the initialColorMode to dark 
+https://v2.chakra-ui.com/docs/styled-system/color-mode
+
+- we go to main.ts and import the them.ts
+first we import them 
+then we have to use it in two places 
+*********************
+import them from "../src/them";
+
+ChakraProvider theme={them}>   /=> first place
+<ColorModeScript /=> second place
+  initialColorMode={them.config.initialColorMode}
+></ColorModeScript>
+<App />
+*********************
+
+- now if we refresh our page the page is still light coz ChakaraUI stores the selecetd mode 
+in the local storge so it can remmeber it in the future sessions
+
+we can check that with dev tool and went to Application then Local Storage
+and delete the "light" key 
+
+- now if we refreshed the page we got black background 
+now we checked the Local Storage we can see it "dark" 
+
+here we commit our code 
+
+
+
+*********************
