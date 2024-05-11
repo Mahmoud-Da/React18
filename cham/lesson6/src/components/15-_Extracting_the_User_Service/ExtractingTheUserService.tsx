@@ -1,24 +1,16 @@
 import apiClient, { CanceledError } from "../../services/api-client";
 import { useEffect, useState } from "react";
+import UserService, { User } from "../../services/user-service";
 
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-}
-const ExtractingAReusableApiClient = () => {
+const ExtractingTheUserService = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
     setLoading(true);
-    apiClient
-      .get<User[]>("/users", {
-        signal: controller.signal,
-      })
+    const { request, cancel } = UserService.getAllUsers();
+    request
       .then((res) => {
         setUsers(res.data);
         setLoading(false);
@@ -29,14 +21,14 @@ const ExtractingAReusableApiClient = () => {
         setLoading(false);
       });
 
-    return () => controller.abort();
+    return () => cancel();
   }, []);
 
   const deleteUser = (user: User) => {
     const originalUsers = [...users];
     setUsers(users.filter((u) => u.id !== user.id));
 
-    apiClient.delete("/users/" + user.id).catch((err) => {
+    UserService.deleteUser(user.id).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
@@ -52,9 +44,7 @@ const ExtractingAReusableApiClient = () => {
     };
     setUsers([newUser, ...users]);
 
-    apiClient
-      .post("/users", newUser)
-      // .then((res) => setUsers([res.data, ...users]))
+    UserService.createUser(newUser)
       .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
       .catch((err) => {
         setError(err.message);
@@ -66,7 +56,8 @@ const ExtractingAReusableApiClient = () => {
     const originalUsers = [...users];
     const updatedUser = { ...user, name: user.name + "!" };
     setUsers(users.map((u) => (u.id === user.id ? updatedUser : u)));
-    apiClient.patch("/users/" + user.id, updatedUser).catch((err) => {
+
+    UserService.updateUser(updatedUser).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
@@ -106,4 +97,4 @@ const ExtractingAReusableApiClient = () => {
   );
 };
 
-export default ExtractingAReusableApiClient;
+export default ExtractingTheUserService;

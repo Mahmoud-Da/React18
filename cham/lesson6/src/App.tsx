@@ -13,6 +13,7 @@ import DeletingData from "./components/11-_Deleting_Data/DeletingData";
 import CreatingData from "./components/12-_Creating_Data/CreatingData";
 import UpdatingData from "./components/13-_Updating_Data/UpdatingData";
 import ExtractingAReusableApiClient from "./components/14-_Extracting_a_Reusable_API_Client/ExtractingAReusableApiClient";
+import ExtractingTheUserService from "./components/15-_Extracting_the_User_Service/ExtractingTheUserService";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -53,7 +54,9 @@ function App() {
 
         {/* <UpdatingData /> */}
 
-        <ExtractingAReusableApiClient />
+        {/* <ExtractingAReusableApiClient /> */}
+
+        <ExtractingTheUserService />
       </h1>
     </>
   );
