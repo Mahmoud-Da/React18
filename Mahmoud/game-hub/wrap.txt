@@ -209,20 +209,20 @@ in the documentation of the ChakaraUI we search for "color mode" in this page we
 mode works in ChakaraUI to Implement the dark mode we have to do some steps we 
 don`t have to memorize it we can see it in the documentation.
 
-- in the src folder we create a file we called them.ts
-here we are going to customize our default them whcih come with ChakaraUI
+- in the src folder we create a file we called theme.ts
+here we are going to customize our default theme whcih come with ChakaraUI
 we copy all the code from the  and change the initialColorMode to dark 
 https://v2.chakra-ui.com/docs/styled-system/color-mode
 
-- we go to main.ts and import the them.ts
-first we import them 
+- we go to main.ts and import the theme.ts
+first we import theme
 then we have to use it in two places 
 *********************
-import them from "../src/them";
+import theme from "../src/them";
 
-ChakraProvider theme={them}>   /=> first place
+ChakraProvider theme={theme}>   /=> first place
 <ColorModeScript /=> second place
-  initialColorMode={them.config.initialColorMode}
+  initialColorMode={theme.config.initialColorMode}
 ></ColorModeScript>
 <App />
 *********************
@@ -241,3 +241,103 @@ here we commit our code
 
 
 *********************
+
+
+*** 8-_Building_the_Color_Mode_Switch ***
+
+now we will create switch button to change the color mode between light and dark modes
+
+now in the component folder we create ColorModeSwitch.tsx 
+inside it we create horizontal stack component coz we need the label to be next to it
+ex:
+○ Change Mode
+
+***********************
+<HStack>
+  <Switch></Switch>
+  <Text>Dark Mode</Text>
+</HStack>
+***********************
+
+to work with color mode we have to use custom Hook that defined in ChakaraUI 
+
+first we search on google 
+useColorMode 
+and in documentation
+
+https://v2.chakra-ui.com/docs/styled-system/color-mode#changing-color-mode
+
+so according to the documentation:
+- first we import useColorMode hook from the ChakaraUI
+- then we called useColorMode  and Destructuring (分割代入) toggleColorMode and colorMode
+***********************
+Destructuring object 分割代入は、中カッコ{}に取り出したいプロパティを指定することで、
+プロパティ名と同じ名前の変数が作れます。次の分割代入のサンプルコードは、
+上のプロパティアクセサーを使ったコードと同等の処理になります。
+
+const item = { price: 100 };
+const { price } = item;
+// 上は const price = item.price; と同等の処理
+
+複数のプロパティを取り出す
+
+分割代入は、複数のプロパティを一度に取り出すこともできます。その場合、取り出したいプロパティを中カッコに列挙します。
+
+const obj = { a: 1, b: 2 };
+const { a, b } = obj;
+
+引用+詳細：
+https://typescriptbook.jp/reference/values-types-variables/object/destructuring-assignment-from-objects
+***********************
+
+- then we modify the switch component 
+***********************
+<Switch
+  isChecked={colorMode == "dark"}
+  onChange={toggleColorMode}
+></Switch>
+***********************
+
+
+- now we add the ColorModeSwitch component to our Nav component
+and replace the 
+***********************
+<Text>NavBar</Text>
+***********************
+with 
+***********************
+<ColorModeSwitch />
+***********************
+finally we remove unused components
+
+- and we test our code until this point 
+
+now we don`t need the background color of Aside and Main Grid so we remove their bg  
+***********************
+bg={"gold"}
+bg={"dodgerblue"}
+***********************
+
+- to make our switch button look more beautiful we add colorScheme to Switch Component
+***********************
+<Switch
+  colorScheme="green"
+  isChecked={colorMode == "dark"}
+  onChange={toggleColorMode}
+></Switch>
+***********************
+
+- finally we want to push the switch button the right side to do that 
+we go to our NavBar component this work exacly like flex container 
+***********************
+<HStack justifyContent={"space-between"}>
+***********************
+
+- now our button is close to the right side but it so close to the edge of the screen
+so we need to apply some padding to the HStach component
+***********************
+<HStack justifyContent={"space-between"} padding="10px">
+***********************
+
+now we review our code and commit it to our repository
+"Build the color mode switch"
