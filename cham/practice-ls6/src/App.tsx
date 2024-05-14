@@ -20,6 +20,8 @@ import DeletetingData2 from "./components/DeletetingData2";
 import UpdatingData1 from "./components/UpdatingData1";
 import UpdatingData2 from "./components/UpdatingData2";
 import ExtractingTheUserService from "./components/ExtractingTheUserService";
+import ExtractingAReusableApiClient from "./components/ExtractingAReusableApiClient";
+
 
 function App() {
   const [category, setCategory] = useState("");
@@ -53,6 +55,8 @@ function App() {
       {/* <UpdatingData1 /> */}
       {/* <UpdatingData2 /> */}
       <ExtractingTheUserService />
+      <ExtractingAReusableApiClient />
+
     </>
   );
 }
