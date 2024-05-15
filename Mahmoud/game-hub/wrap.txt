@@ -341,3 +341,166 @@ so we need to apply some padding to the HStach component
 
 now we review our code and commit it to our repository
 "Build the color mode switch"
+
+*** 9-_Fetching_the_Games ***
+now we will fetch the game from rawg.io 
+
+- first sign up
+- get API KEY 
+
+- install axios for sending api requests
+
+- now we need to create axios instance with custom configration, in that configration we will 
+include that API-KEY whcih we copied 
+
+- inside the src we create services folder 
+inside we create api-client.ts 
+
+- inside the api-client first we import axios on the top then we call the create method to 
+create axios instance with custom configration inside we create params object and set the key to the API-Key from 
+the rawg.io
+***********************
+import axios from "axios";
+
+axios.create({
+  params: {
+    key: "API-KEY",
+  },
+});
+***********************
+
+- with this configration our API-Key will be included in every HTTP request we send
+
+- to we set the baseURL:
+first we go to the https://api.rawg.io/docs/
+we have multi endpoints 
+we go to the games -> get a list of games 
+if we scrol down we can see the object that come back from the server (respone)
+***********************
+{
+"count": 0,
+"next": "http://example.com",
+"previous": "http://example.com",
+"results": [
+{}
+]
+}
+***********************
+if we click on GET/games we can see the full URL 
+https://api.rawg.io/api/games
+to use as baseURL we need remove the games so we have 
+https://api.rawg.io/api
+
+- now we need to export as default object
+***********************
+import axios from "axios";
+
+export default axios.create({
+  baseURL: "https://api.rawg.io/api/games",
+  params: {
+    key: "c7b18323a47d40c394ea5b019646b1f5",
+  },
+});
+***********************
+
+- now we create a new component called GameGrid
+- in this component we state hook to store our games object (data from the server)
+***********************
+const [games, setGames] = useState();
+***********************
+
+- then we need to store error of we had errors during fetching the game 
+***********************
+const [error, setError] = useState();
+***********************
+
+- then we should use Effect hool to send fetch request to the server/backend
+and inside we need to use apiClient so we import it from api-client.ts
+
+***********************
+import apiClient from "../services/api-client";
+***********************
+
+- now inside the useEffect we sent get request to ("/games") and if the responese goes well 
+
+***********************
+useEffect(() => {
+    apiClient.get("/games").then((res) => setGames());
+  });
+***********************
+
+- we need to define the interface to grap the Response objects (count, next, previous, results)
+in this project we will not care a bout the (next, previous) at this point only we need number and results
+
+***********************
+interface FetchGamesResponse {
+  count: number;
+  results;
+}
+***********************
+
+- now lets see what data we have in the response
+in https://api.rawg.io/docs/#operation/games_list if press on results 
+we can see the data like [id, slug, name, and so...]
+for now we only want to grap the [id, name ] later we will add another properties when we need them 
+so we are not write code we will not use right now 
+***********************
+interface Game {
+  id: number;
+  name: string;
+}
+***********************
+- withthat we can see we set the results to type Game Array
+
+***********************
+interface FetchGamesResponse {
+  count: number;
+  results: Game[];
+}
+***********************
+
+- now when we send get request to server we use <> to provide  generic type argument that is FetchGamesResponse
+with we can know the shape of res object {AxiosResponse<FetchGamesResponse,}, so if type setGames(res.) we can see 
+the property of the response that comes with axios here we need to access data property so we read the body
+of the responese setGames(res.data.) and here we can see the property that comes with the API so we have [count and results]
+***********************
+useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results));
+  });
+***********************
+
+- now we compilation error coz we set the useState of games to empty Array
+so we have to tell the TS compiler that it`s game Array
+
+***********************
+const [games, setGames] = useState<Game[]>([]);
+***********************
+
+- now what if we got an error, so by using catch method we setError to err.message 
+***********************
+useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results))
+      .catch((err) => setError(err.message));
+  });
+***********************
+
+- now to check id our implomantaion is currect we render the games names 
+
+***********************
+<ul>
+  {games.map((game) => (
+    <li key={game.id}>{game.name}</li>
+  ))}
+</ul>
+***********************
+
+- in the App.tsx we instead we change Main with GameGrid
+TODO: set the API-Key
+
+- now what if we have an error 
+we need to render it on the top of our markup
+
