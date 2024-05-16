@@ -517,3 +517,122 @@ we need to render it on the top of our markup
 
 
 *** 10-_Creating_a_Custom_Hook_for_Fetching_Games ***
+now in our GameGrid Component we are working with the backend ex:
+we have get method an later we have to use controler abort
+so our component knows about backend and frondend as the same time
+we need to make our component only responsible for our frontend (return markup and handle events) 
+
+here we have two options:
+1- move the logic that has HTTP request (get) to servise (ex: service/games-service.ts)
+like we do in the previous section.
+
+2- the next option is to move all the entire logic (all useStates and useEffect) to custom hook 
+
+so we can create custom hook not for only specific handling but also to moduler our code and make it more useble
+so we will create custom Hook for fetching the games 
+
+- inside the src folder we create hooks folder 
+
+- inside the hooks folder we create useGames.ts
+
+first we create variables called useGames and export it
+-------------------code----------------------
+const useGames = () => {
+  
+};
+
+export default useGames;
+-------------------code----------------------
+
+-  now we move all the hooks from the GameGrid.tsx to our custom hook 
+-------------------code----------------------
+const useGames = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results))
+      .catch((err) => setError(err.message));
+  }, []);
+};
+
+export default useGames;
+-------------------code----------------------
+
+- now we will resolve the errors 
+- first we move the Game and FetchGamesResponse interface to our custom hook and export them 
+- then we move the useState/useEffect import statment and apiClient to the custom hook 
+- finally we have to return the error and games object to use them in our component
+
+-------------------code----------------------
+import { useEffect, useState } from "react";
+import apiClient from "../services/api-client";
+
+export interface Game {
+  id: number;
+  name: string;
+}
+export interface FetchGamesResponse {
+  count: number;
+  results: Game[];
+}
+
+const useGames = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results))
+      .catch((err) => setError(err.message));
+  }, []);
+
+  return { games, error };
+};
+
+export default useGames;
+-------------------code----------------------
+
+- now we go back to our component and clean some code 
+- first we remove unnecessary import statment
+- we import useGames hook and retrun games, and error objects
+
+-------------------code----------------------
+const { games, error } = useGames();
+-------------------code----------------------
+
+- now our component is cleaner and don`t know anything a bout HTTP request and only returning markup
+
+- next step to handle out cancelation 
+-------------------code----------------------
+1- const contoller = new AbortController();
+2- ("/games", { signal: contoller.signal })
+3- return () => contoller.abort();
+-------------------code----------------------
+
+- now in our markup we see canceled as the top 
+*********************
+canceled
+
+Grand Theft Auto V
+The Witcher 3: Wild Hunt
+Portal 2
+Counter-Strik
+*********************
+
+to fix it 
+-------------------code----------------------
+.catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+      })
+-------------------code----------------------
+
+- now if we refreshed our Browser we can see in the Network tab that we have two requests to the games api
+ the first one canceled coz our react unmount our component at the first time coz the strict mode
+
+- now we commit our code untile this point
+"Create a custom hook to fetch the games"
