@@ -1,6 +1,7 @@
 import apiClient from "./api-client";
 
-interface Users {
+export interface Users {
+
   id: number;
   name: string;
   email: string;

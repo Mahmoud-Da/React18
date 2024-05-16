@@ -38,7 +38,7 @@ https://v2.chakra-ui.com/
 PS: 
 1- to install it we press go started and chose the installion for Vite
 2- we will not do the optional things right now ex: Customizing theme (Optional)
-***********************************
+-------------------code----------------------
 when we add 
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -47,7 +47,7 @@ ex:
 - import the React libraries first 
 - import the third libraries
 - import the local files 
-***********************************
+-------------------code----------------------
 
 now after read the installion
 we check if ChakraUI is installed by adding a button 
@@ -83,12 +83,12 @@ ex: `"" ""`
 
 now we want Nav on the top and side menu on the the left and main area
 like this 
-*********
+-------------------code----------------------
 <Grid
         templateAreas={`"nav nav" 
                         "aside main"`}
       ></Grid>
-*********
+-------------------code----------------------
 
 now inside the Grid component we create GridItem and give an area from our four areas ()
 <GridItem area={"nav"} bg={"coral"}>
@@ -99,7 +99,7 @@ and give it a bg (backgroud) color to see it
 
 we duplicate this component  with 3 times Nav  Aside with our four areas
 
-*********
+-------------------code----------------------
  <Grid templateAreas={`"nav nav" "aside main"`}>
   <GridItem area={"nav"} bg={"coral"}>
     Nav
@@ -111,38 +111,38 @@ we duplicate this component  with 3 times Nav  Aside with our four areas
     Main
   </GridItem>
 </Grid>
-*********
+-------------------code----------------------
 
 now on the mobile devices we want to hide the aside panal to do that 
 in the 
-*********
+-------------------code----------------------
 templateAreas={`"nav nav" "aside main"`}
-*********
+-------------------code----------------------
 
 we change string of templateAreas to object and inside it we can define the template area for each screen size
 PS: for better understaing visit Chakra UI then access to "Styled System" then click on "Responsive Styles" we can check the break points
 https://v2.chakra-ui.com/docs/styled-system/responsive-styles
 
 in our Project we will design our UI for two sizes normal and mobile
-*********
+-------------------code----------------------
 templateAreas={{
           base: `"nav" "main"`,
           lg: `"nav nav" "aside main"`,
         }}
-*********
+-------------------code----------------------
 
 we check our layout on the Devtool 
 we see the aside template still there coz we still render it on the screen 
 
 to make sure that Aside GridItem only render on the base tamplate
 we should wrap it with Show component and give a property of "above"
-*********
+-------------------code----------------------
 <Show above="lg">
   <GridItem area={"aside"} bg={"gold"}>
     Aside
   </GridItem>
 </Show>
-*********
+-------------------code----------------------
 
 here we commit our code 
 "Build a responsive layout"
@@ -171,34 +171,34 @@ ps: webp image are high optimize images for web
 
 - in Image ChakaraUI Component we can`t use src={} with path intead we import the image as 
 JS module and use the imported object inside the src 
-********************* 
+-------------------code---------------------- 
 import logo from "../assets/logo.webp";
 <Image src={logo}></Image>
-*********************
+-------------------code----------------------
 
 - now we add our NavBar Component in the App.tsx 
 we change the NavBar word with NavBar Component
 
 - we check our code and we see that our logo is two big so we need to resize it using boxSize
-*********************
+-------------------code----------------------
 <Image src={logo} boxSize="60px"></Image>
-*********************
+-------------------code----------------------
 
 - we are using horizontal stack now if we add text in our navbar it should appear after our image
 to check that we add a Text component (instance of ChakaraUI)
-*********************
+-------------------code----------------------
 <HStack>
   <Image src={logo} boxSize="60px"></Image>
   <Text>NavBar</Text>
 </HStack>
-*********************
+-------------------code----------------------
 
 - now normally after building our layout component we remove the backgroud color coz we don`t need to check the layout
 anymore 
 so in the App.tsx we remove 
-*********************
+-------------------code----------------------
  bg={"coral"}
-*********************
+-------------------code----------------------
 
 now after review our code now we add commit to our repository
 "Build a NavBar"
@@ -209,23 +209,23 @@ in the documentation of the ChakaraUI we search for "color mode" in this page we
 mode works in ChakaraUI to Implement the dark mode we have to do some steps we 
 don`t have to memorize it we can see it in the documentation.
 
-- in the src folder we create a file we called them.ts
-here we are going to customize our default them whcih come with ChakaraUI
+- in the src folder we create a file we called theme.ts
+here we are going to customize our default theme whcih come with ChakaraUI
 we copy all the code from the  and change the initialColorMode to dark 
 https://v2.chakra-ui.com/docs/styled-system/color-mode
 
-- we go to main.ts and import the them.ts
-first we import them 
+- we go to main.ts and import the theme.ts
+first we import theme
 then we have to use it in two places 
-*********************
-import them from "../src/them";
+-------------------code----------------------
+import theme from "../src/them";
 
-ChakraProvider theme={them}>   /=> first place
+ChakraProvider theme={theme}>   /=> first place
 <ColorModeScript /=> second place
-  initialColorMode={them.config.initialColorMode}
+  initialColorMode={theme.config.initialColorMode}
 ></ColorModeScript>
 <App />
-*********************
+-------------------code----------------------
 
 - now if we refresh our page the page is still light coz ChakaraUI stores the selecetd mode 
 in the local storge so it can remmeber it in the future sessions
@@ -240,4 +240,399 @@ here we commit our code
 
 
 
+
+
+*** 8-_Building_the_Color_Mode_Switch ***
+
+now we will create switch button to change the color mode between light and dark modes
+
+now in the component folder we create ColorModeSwitch.tsx 
+inside it we create horizontal stack component coz we need the label to be next to it
+ex:
+○ Change Mode
+
+-------------------code----------------------
+<HStack>
+  <Switch></Switch>
+  <Text>Dark Mode</Text>
+</HStack>
+-------------------code----------------------
+
+to work with color mode we have to use custom Hook that defined in ChakaraUI 
+
+first we search on google 
+useColorMode 
+and in documentation
+
+https://v2.chakra-ui.com/docs/styled-system/color-mode#changing-color-mode
+
+so according to the documentation:
+- first we import useColorMode hook from the ChakaraUI
+- then we called useColorMode  and Destructuring (分割代入) toggleColorMode and colorMode
+-------------------code----------------------
+Destructuring object 分割代入は、中カッコ{}に取り出したいプロパティを指定することで、
+プロパティ名と同じ名前の変数が作れます。次の分割代入のサンプルコードは、
+上のプロパティアクセサーを使ったコードと同等の処理になります。
+
+const item = { price: 100 };
+const { price } = item;
+// 上は const price = item.price; と同等の処理
+
+複数のプロパティを取り出す
+
+分割代入は、複数のプロパティを一度に取り出すこともできます。その場合、取り出したいプロパティを中カッコに列挙します。
+
+const obj = { a: 1, b: 2 };
+const { a, b } = obj;
+
+引用+詳細：
+https://typescriptbook.jp/reference/values-types-variables/object/destructuring-assignment-from-objects
+-------------------code----------------------
+
+- then we modify the switch component 
+-------------------code----------------------
+<Switch
+  isChecked={colorMode == "dark"}
+  onChange={toggleColorMode}
+></Switch>
+-------------------code----------------------
+
+
+- now we add the ColorModeSwitch component to our Nav component
+and replace the 
+-------------------code----------------------
+<Text>NavBar</Text>
+-------------------code----------------------
+with 
+-------------------code----------------------
+<ColorModeSwitch />
+-------------------code----------------------
+finally we remove unused components
+
+- and we test our code until this point 
+
+now we don`t need the background color of Aside and Main Grid so we remove their bg  
+-------------------code----------------------
+bg={"gold"}
+bg={"dodgerblue"}
+-------------------code----------------------
+
+- to make our switch button look more beautiful we add colorScheme to Switch Component
+-------------------code----------------------
+<Switch
+  colorScheme="green"
+  isChecked={colorMode == "dark"}
+  onChange={toggleColorMode}
+></Switch>
+-------------------code----------------------
+
+- finally we want to push the switch button the right side to do that 
+we go to our NavBar component this work exacly like flex container 
+-------------------code----------------------
+<HStack justifyContent={"space-between"}>
+-------------------code----------------------
+
+- now our button is close to the right side but it so close to the edge of the screen
+so we need to apply some padding to the HStach component
+-------------------code----------------------
+<HStack justifyContent={"space-between"} padding="10px">
+-------------------code----------------------
+
+now we review our code and commit it to our repository
+"Build the color mode switch"
+
+*** 9-_Fetching_the_Games ***
+now we will fetch the game from rawg.io 
+
+- first sign up
+- get API KEY 
+
+- install axios for sending api requests
+
+- now we need to create axios instance with custom configration, in that configration we will 
+include that API-KEY whcih we copied 
+
+- inside the src we create services folder 
+inside we create api-client.ts 
+
+- inside the api-client first we import axios on the top then we call the create method to 
+create axios instance with custom configration inside we create params object and set the key to the API-Key from 
+the rawg.io
+-------------------code----------------------
+import axios from "axios";
+
+axios.create({
+  params: {
+    key: "API-KEY",
+  },
+});
+-------------------code----------------------
+
+- with this configration our API-Key will be included in every HTTP request we send
+
+- to we set the baseURL:
+first we go to the https://api.rawg.io/docs/
+we have multi endpoints 
+we go to the games -> get a list of games 
+if we scrol down we can see the object that come back from the server (respone)
+-------------------code----------------------
+{
+"count": 0,
+"next": "http://example.com",
+"previous": "http://example.com",
+"results": [
+{}
+]
+}
+-------------------code----------------------
+if we click on GET/games we can see the full URL 
+https://api.rawg.io/api/games
+to use as baseURL we need remove the games so we have 
+https://api.rawg.io/api
+
+- now we need to export as default object
+-------------------code----------------------
+import axios from "axios";
+
+export default axios.create({
+  baseURL: "https://api.rawg.io/api/games",
+  params: {
+    key: "c7b18323a47d40c394ea5b019646b1f5",
+  },
+});
+-------------------code----------------------
+
+- now we create a new component called GameGrid
+- in this component we state hook to store our games object (data from the server)
+-------------------code----------------------
+const [games, setGames] = useState();
+-------------------code----------------------
+
+- then we need to store error of we had errors during fetching the game 
+-------------------code----------------------
+const [error, setError] = useState();
+-------------------code----------------------
+
+- then we should use Effect hool to send fetch request to the server/backend
+and inside we need to use apiClient so we import it from api-client.ts
+
+-------------------code----------------------
+import apiClient from "../services/api-client";
+-------------------code----------------------
+
+- now inside the useEffect we sent get request to ("/games") and if the responese goes well 
+
+-------------------code----------------------
+useEffect(() => {
+    apiClient.get("/games").then((res) => setGames());
+  });
+-------------------code----------------------
+
+- we need to define the interface to grap the Response objects (count, next, previous, results)
+in this project we will not care a bout the (next, previous) at this point only we need number and results
+
+-------------------code----------------------
+interface FetchGamesResponse {
+  count: number;
+  results;
+}
+-------------------code----------------------
+
+- now lets see what data we have in the response
+in https://api.rawg.io/docs/#operation/games_list if press on results 
+we can see the data like [id, slug, name, and so...]
+for now we only want to grap the [id, name ] later we will add another properties when we need them 
+so we are not write code we will not use right now 
+-------------------code----------------------
+interface Game {
+  id: number;
+  name: string;
+}
+-------------------code----------------------
+- withthat we can see we set the results to type Game Array
+
+-------------------code----------------------
+interface FetchGamesResponse {
+  count: number;
+  results: Game[];
+}
+-------------------code----------------------
+
+- now when we send get request to server we use <> to provide  generic type argument that is FetchGamesResponse
+with we can know the shape of res object {AxiosResponse<FetchGamesResponse,}, so if type setGames(res.) we can see 
+the property of the response that comes with axios here we need to access data property so we read the body
+of the responese setGames(res.data.) and here we can see the property that comes with the API so we have [count and results]
+-------------------code----------------------
+useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results));
+  });
+-------------------code----------------------
+
+- now we compilation error coz we set the useState of games to empty Array
+so we have to tell the TS compiler that it`s game Array
+
+-------------------code----------------------
+const [games, setGames] = useState<Game[]>([]);
+-------------------code----------------------
+
+- now what if we got an error, so by using catch method we setError to err.message 
+-------------------code----------------------
+useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results))
+      .catch((err) => setError(err.message));
+  });
+-------------------code----------------------
+
+- now to check id our implomantaion is currect we render the games names 
+
+-------------------code----------------------
+<ul>
+  {games.map((game) => (
+    <li key={game.id}>{game.name}</li>
+  ))}
+</ul>
+-------------------code----------------------
+
+- in the App.tsx we instead we change Main with GameGrid
+
+
+- now what if we have an error 
+we need to render it on the top of our markup
+-------------------code----------------------
+{error && <Text>{error}</Text>}
+-------------------code----------------------
+
+- we simulate error our test our error rendering error 
+-------------------code----------------------
+.get<FetchGamesResponse>("/xgames") 
+-------------------code----------------------
+
+- until this point now we commit our code 
+"Fetching Games from the server"
+
+
+
+*** 10-_Creating_a_Custom_Hook_for_Fetching_Games ***
+now in our GameGrid Component we are working with the backend ex:
+we have get method an later we have to use controler abort
+so our component knows about backend and frondend as the same time
+we need to make our component only responsible for our frontend (return markup and handle events) 
+
+here we have two options:
+1- move the logic that has HTTP request (get) to servise (ex: service/games-service.ts)
+like we do in the previous section.
+
+2- the next option is to move all the entire logic (all useStates and useEffect) to custom hook 
+
+so we can create custom hook not for only specific handling but also to moduler our code and make it more useble
+so we will create custom Hook for fetching the games 
+
+- inside the src folder we create hooks folder 
+
+- inside the hooks folder we create useGames.ts
+
+first we create variables called useGames and export it
+-------------------code----------------------
+const useGames = () => {
+  
+};
+
+export default useGames;
+-------------------code----------------------
+
+-  now we move all the hooks from the GameGrid.tsx to our custom hook 
+-------------------code----------------------
+const useGames = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results))
+      .catch((err) => setError(err.message));
+  }, []);
+};
+
+export default useGames;
+-------------------code----------------------
+
+- now we will resolve the errors 
+- first we move the Game and FetchGamesResponse interface to our custom hook and export them 
+- then we move the useState/useEffect import statment and apiClient to the custom hook 
+- finally we have to return the error and games object to use them in our component
+
+-------------------code----------------------
+import { useEffect, useState } from "react";
+import apiClient from "../services/api-client";
+
+export interface Game {
+  id: number;
+  name: string;
+}
+export interface FetchGamesResponse {
+  count: number;
+  results: Game[];
+}
+
+const useGames = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    apiClient
+      .get<FetchGamesResponse>("/games")
+      .then((res) => setGames(res.data.results))
+      .catch((err) => setError(err.message));
+  }, []);
+
+  return { games, error };
+};
+
+export default useGames;
+-------------------code----------------------
+
+- now we go back to our component and clean some code 
+- first we remove unnecessary import statment
+- we import useGames hook and retrun games, and error objects
+
+-------------------code----------------------
+const { games, error } = useGames();
+-------------------code----------------------
+
+- now our component is cleaner and don`t know anything a bout HTTP request and only returning markup
+
+- next step to handle out cancelation 
+-------------------code----------------------
+1- const contoller = new AbortController();
+2- ("/games", { signal: contoller.signal })
+3- return () => contoller.abort();
+-------------------code----------------------
+
+- now in our markup we see canceled as the top 
 *********************
+canceled
+
+Grand Theft Auto V
+The Witcher 3: Wild Hunt
+Portal 2
+Counter-Strik
+*********************
+
+to fix it 
+-------------------code----------------------
+.catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+      })
+-------------------code----------------------
+
+- now if we refreshed our Browser we can see in the Network tab that we have two requests to the games api
+ the first one canceled coz our react unmount our component at the first time coz the strict mode
+
+- now we commit our code untile this point
+"Create a custom hook to fetch the games"
