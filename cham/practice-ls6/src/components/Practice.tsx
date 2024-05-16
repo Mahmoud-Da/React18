@@ -10,17 +10,35 @@ interface Users {
 const Practice = () => {
   const [users, setUsers] = useState<Users[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  const deleteUser = (user: Users) => {
+    const originalUsers = [...users];
+    setUsers(users.filter((u) => (u.id! = user.id)));
+
+    axios
+      .delete("https://jsonplaceholder.typicode.com/users" + user.id)
+      .catch((err) => {
+        setError(err);
+        setUsers(originalUsers);
+      });
+  };
 
   useEffect(() => {
     const controller = new AbortController();
+    setLoading(true);
     axios
       .get<Users[]>("https://jsonplaceholder.typicode.com/users", {
         signal: controller.signal,
       })
-      .then((res) => setUsers(res.data))
+      .then((res) => {
+        setUsers(res.data);
+        setLoading(false);
+      })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
+        setLoading(false);
       });
     return () => controller.abort();
   }, []);
@@ -41,11 +59,18 @@ const Practice = () => {
               <th scope="row">{user.id}</th>
               <td>{user.name}</td>
               <td>{user.email}</td>
+              <button
+                className="btn btn-outline-danger"
+                onClick={() => deleteUser(user)}
+              >
+                DEL
+              </button>
             </tr>
           ))}
         </tbody>
       </table>
       {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className="spinner-border"></div>}
     </>
   );
 };
