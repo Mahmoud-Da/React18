@@ -636,3 +636,137 @@ to fix it
 
 - now we commit our code untile this point
 "Create a custom hook to fetch the games"
+
+
+*** 11-_Building_Game_Cards ***
+
+next step is replace the ● the points with Game cards
+- we create GameCard.tsx 
+
+- next we should pass a game object as props for this component
+
+interface
+-------------------code----------------------
+interface Props {
+  game: Game;
+}
+-------------------code----------------------
+
+PS: but we need to import Game interface form our custom hook
+-------------------code---------------------- 
+import { Game } from "../hooks/useGames";
+-------------------code----------------------
+
+PS: importing interface from custom hook is kind ugly but we will fix it later
+
+- after creating Props we are going to pass Props as argument
+and we will return Card Component (import from Chakra UI ) and inside it Image component from ChakaraUI either.
+
+-------------------code----------------------
+import { Game } from "../hooks/useGames";
+import { Card, Image } from "@chakra-ui/react";
+
+interface Props {
+  game: Game;
+}
+
+const GameCard = () => {
+  return (
+    <>
+      <Card>
+        <Image />
+      </Card>
+    </>
+  );
+};
+
+export default GameCard;
+-------------------code----------------------
+
+- now to set the src of image we back to the rog documentation 
+https://api.rawg.io/docs/
+
+- if we access Get a list of games then press the result we can see background_image and this is
+what we will add to our interface
+
+- so in useGames.ts we go to the interface Game and add background_image
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+}
+-------------------code----------------------
+
+- now in our GameCard component we can set the image src to 
+-------------------code----------------------
+<>
+  <Card>
+    <Image src={game.background_image} />
+  </Card>
+</>
+-------------------code----------------------
+
+- next to it we add CardBody then inside it we add Heading with game.name 
+-------------------code----------------------
+<Card>
+  <Image src={game.background_image} />
+  <CardBody>
+    <Heading>{game.name}</Heading>
+  </CardBody>
+</Card>
+-------------------code----------------------
+
+- so we built the shape of our component then we will improve our code little by little
+
+- now we will test our code until this point 
+- so inside the GameGrid component
+we replace <ul> with SimpleGrid and add columns 3 with spacing of 10
+then replace the <li> code with our GameCard and set the key and the game props
+
+-------------------code----------------------
+<SimpleGrid columns={3} spacing={10}>
+  {games.map((game) => (
+    <GameCard key={game.id} game={game} />
+  ))}
+</SimpleGrid>
+-------------------code----------------------
+
+- the first thing we want to fix is the border-radius and fix the sharp border of the card 
+
+- to fix the radius 
+-------------------code----------------------
+<Card borderRadius={10}>
+-------------------code----------------------
+
+- now our bottom radius is fixed but not the top border coz the background_image is bigger 
+than it`s container to fix this we need to set the overflow to hidden it just basic css 
+-------------------code----------------------
+<Card borderRadius={10} overflow="hidden">
+-------------------code----------------------
+
+- next we will fix our heading size is a little big  
+PS: we can see the size in ChakaraUI documentation
+-------------------code----------------------
+<Heading fontSize="2xl">{game.name}</Heading>
+-------------------code----------------------
+
+- next thig to do is the columns number in small devices we don`t want always to render 3 columns 
+instead we want two columns on tablet and one column for mobile devices and 3 for large devices
+to do that 
+-------------------code----------------------
+<SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 5 }} spacing={10}>
+-------------------code----------------------
+now we test our code 
+
+in small devices we can see our card is so close to the edge to we add 10px for padding
+-------------------code----------------------
+<SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        padding="10px"
+        spacing={10}
+      >
+-------------------code----------------------
+
+- now our code works fine so we commit our code to git 
+"Building Game Card"
