@@ -770,3 +770,270 @@ in small devices we can see our card is so close to the edge to we add 10px for 
 
 - now our code works fine so we commit our code to git 
 "Building Game Card"
+
+*** 12-_Displaying_Platform_Icons ***
+- next we will display the games icons 
+
+by using the dev tool [Network -> press the request -> preview] we check the request result and we can see 
+every game has platform objects called first called parent_platform and the second platforms
+
+ex: 
+parent_platform: we have only one object that present playstaion switch PC
+platforms: for diffrent versoin of playstaion ex: ps4, ps5 
+
+in this object we have  parent_platforms which has array with platform object which has platform property which has property object
+
+it`s called "design smells"  
+which means:
+These smells are the symptoms of a poor design. They should be cleaned up as soon as possible to stop them from spreading to other code.
+
+-------------------code----------------------
+parent_platforms: 
+[{platform: {id: 1, name: "PC", slug: "pc"}},…]
+0: {platform: {id: 1, name: "PC", slug: "pc"}}
+platform: {id: 1, name: "PC", slug: "pc"}
+id: 1
+name: "PC"
+slug: "pc"
+-------------------code----------------------
+
+but in this cases we have to deal with it.
+
+now in our project the first thing we are add the platform_parent property to our Game interface
+shortcut cmd + t or ctrl + t we can search class, fuctions, component, interface any Symbol in our project
+
+now inside the useGame.ts we add 
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms:
+}
+-------------------code----------------------
+
+but to set the type of parent_platforms we have to define another interface 
+so we define platform interface 
+
+-------------------code----------------------
+interface Platfrom {
+  id: number;
+  name: string;
+  slug: string;
+}
+-------------------code----------------------
+now the tricky part is that the type of  parent_platforms: is not Platfrom[];
+
+it`s array of object where each object has property called platform (coz we had design smells )
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms: { platform: Platfrom }[];
+}
+-------------------code----------------------
+
+now we are going to render it step by step 
+-------------------code----------------------
+<Heading fontSize="2xl">{game.name}</Heading>
+{game.parent_platforms.map((platform) => platform.platform.name)}
+-------------------code----------------------
+platform.platform.name to too ugly so we destruct (文割代入) platform
+then we add it between Text component of ChakaraUI
+-------------------code----------------------
+{game.parent_platforms.map(({ platform }) => (
+            <Text>platform.name</Text>
+          ))}
+-------------------code----------------------
+
+now the next step is to render ths icons and for that we are going to user React Icon librariy
+in the terminl we install 
+-------------------code----------------------
+npm i react-icons@4.7.1
+-------------------code----------------------
+
+to render the icon we need mapping between the platform name and the icon we don`t we want to mapping the icon in the same CardComponent 
+component coz CardComponent is only related to the card implomantaion not the icons
+
+so we will move all the logic of rendering the platform to seperate component
+
+so in component folder we create component we called PlatfromIconList.tsx 
+
+first we create Props to access the platforms
+-------------------code----------------------
+interface Props {
+  platform: Platfrom[];
+}
+-------------------code----------------------
+
+and now we need to export it from useGame.ts
+
+after add Props to our Component we will test it intergation by add this code to it 
+-------------------code----------------------
+{game.parent_platforms.map(({ platform }) => (
+            <Text>{platform.name}</Text>
+          ))}
+-------------------code----------------------
+
+
+-------------------code----------------------
+const PlatfromIconList = ({ platform }: Props) => {
+  return (
+    <>
+      {game.parent_platforms.map(({ platform }) => (
+        <Text>{platform.name}</Text>
+      ))}
+    </>
+  );
+};
+-------------------code----------------------
+
+now we don`t need  game.parent_platforms coz we maping only the platform so need either for destructuring
+and import Text from ChakraUI we fix it 
+
+-------------------code----------------------
+const PlatfromIconList = ({ platform }: Props) => {
+  return (
+    <>
+      {platform.map((platform) => (
+        <Text>{platform.name}</Text>
+      ))}
+    </>
+  );
+};
+-------------------code----------------------
+
+no in the GameCard we use our PlatfromIconList Component
+-------------------code----------------------
+<PlatfromIconList
+  platform={game.parent_platforms.map((p) => p.platform)}
+/>
+-------------------code----------------------
+
+now we check if our code is workicg until this point 
+
+now the last step is chage the platform labels {pc, Playstaion, ...} with icons  
+
+now inside the PlatfromIconList we will import icons from React Icons libraries
+-------------------code----------------------
+import {
+  FaWindows,
+  FaPlaystation,
+  FaXbox,
+  FaApple,
+  FaLinux,
+  FaAndroid,
+} from "react-icons/fa";
+import { MdPhoneIphone } from "react-icons/md";
+import { SiNintendo } from "react-icons/si";
+import { BsGlobe } from "react-icons/bs";
+-------------------code----------------------
+
+now we have to map our names to icons we are not using if statment coz it`s ugly instead we are going to use
+mapping object
+
+now every platform has name and slug property 
+for playstaion as example we have id: 2, name: "PlayStaion", slug: "playstaion"  the slug is more relayable coz is like id
+names may changes 
+
+-------------------code----------------------
+const iconMap = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: SiNintendo,
+    mac: FaApple,
+    linux: FaLinux,
+    android: FaAndroid,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+  };
+  -------------------code----------------------
+
+now we replace 
+-------------------code----------------------
+<Text>{platform.name}</Text>
+with 
+
+<Icon as={iconMap[platform.slug]}></Icon>
+-------------------code----------------------
+
+now we error Type error 
+Element implicitly has an 'any' type because expression of type 'string' can't be used to index type
+
+now instead of writing the type of each Element
+-------------------code----------------------
+  const iconMap: {ps: string,  ....} = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: SiNintendo,
+    mac: FaApple,
+    linux: FaLinux,
+    android: FaAndroid,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+  };
+-------------------code----------------------
+
+shortcut way we grap the object inside arary [] and set all of them to same type
+-------------------code----------------------
+const iconMap: { [key: string] } = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: SiNintendo,
+    mac: FaApple,
+    linux: FaLinux,
+    android: FaAndroid,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+  };
+-------------------code----------------------
+
+that`s means each key of iconMap is stirng 
+now to fix the error we set 
+-------------------code----------------------
+const iconMap: { [key: string]: IconType } = {
+  pc: FaWindows,
+  playstation: FaPlaystation,
+  xbox: FaXbox,
+  nintendo: SiNintendo,
+  mac: FaApple,
+  linux: FaLinux,
+  android: FaAndroid,
+  ios: MdPhoneIphone,
+  web: BsGlobe,
+};
+-------------------code----------------------
+
+last thing we want to render the Icons horizontally so we add HStack
+-------------------code----------------------
+<HStack>
+  {platform.map((platform) => (
+    <Icon as={iconMap[platform.slug]}></Icon>
+  ))}
+</HStack>
+-------------------code----------------------
+
+now we test our code
+
+we can see our icons is same color as the name of the Game which coz visual noise so we want to make our 
+icons is darker to clean our interface 
+-------------------code----------------------
+<Icon as={iconMap[platform.slug]} color="gray.500"></Icon>
+-------------------code----------------------
+
+PS: to check the color of ChakaraUI we can go to ChakraUI doc => styled-system => theme
+
+now the next thing we want to improve is the space between the Game name and the icon currently they are too close
+
+-------------------code----------------------
+<HStack marginY={1}>
+-------------------code----------------------
+
+PS: marginY={1}> => result is them.space * 1  {the default chakara UI them space is 4px}
+but sometimes we have to handle spece manually so we use marginY="10 px" for example
+
+now we commit our code "Displaying platform icons"
