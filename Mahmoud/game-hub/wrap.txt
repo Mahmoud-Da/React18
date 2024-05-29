@@ -1037,3 +1037,94 @@ PS: marginY={1}> => result is them.space * 1  {the default chakara UI them space
 but sometimes we have to handle spece manually so we use marginY="10 px" for example
 
 now we commit our code "Displaying platform icons"
+
+
+*** 13-_Displaying_Critic_Score ***
+
+next we add path that contains the Score game metacritic (review)  (number between 0 to 100 )
+the patch color dependent on the score high score should be green , medium score should be yellow 
+now we don`t want to add this logic inside our game card component instead we will seperate it to another component
+
+
+- we go to useGames.ts and add metacritic to our interface
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms: { platform: Platfrom }[];
+  metacritic: number;
+}
+-------------------code----------------------
+
+- next we create new component called CriticScore.tsx 
+
+inside it we need prop to recive the score 
+-------------------code----------------------
+interface Props {
+  score: number;
+}
+-------------------code----------------------
+
+- to render the score we will use Badge component that defined in ChakaraUI
+-------------------code----------------------
+const CriticScore = ({ score }: Props) => {
+  return (
+    <>
+      <Badge>{score}</Badge>
+    </>
+  );
+};
+-------------------code----------------------
+
+now we check if it`s working 
+
+- next we want to move the patch to the right next to game platform 
+so we should grap the two component PlatfromIconList and CriticScore inisde horizontal stack
+
+- next we justifyContent to space between (which means the space that left put between this elements)
+-------------------code----------------------
+
+<HStack justifyContent="space-between">
+  <PlatfromIconList
+    platform={game.parent_platforms.map((p) => p.platform)}
+  />
+  <CriticScore score={game.metacritic} />
+</HStack>
+
+-------------------code----------------------
+
+- next we need to improve the local veiw of this patch 
+we make it larger and add some horizontal padding and make the border more circle
+-------------------code----------------------
+
+<>
+  <Badge fontSize="14px" paddingX={2} borderRadius="4px">
+    {score}
+  </Badge>
+</>
+-------------------code----------------------
+
+- next we apply color if high score it will be green medium will be yellow otherwise still gray
+let color = score > 75 ? "green" : score > 60 ? "yellow" : "";
+-------------------code----------------------
+let color = score > 75 ? "green" : score > 60 ? "yellow" : "";
+
+return (
+  <>
+  <Badge
+    colorScheme={color}
+    fontSize="14px"
+    paddingX={2}
+    borderRadius="4px"
+  >
+    {score}
+  </Badge>
+</>
+)
+-------------------code----------------------
+
+Ps: "colorScheme" is to give color to everything related to the Component backgroud and so
+while "color" only give color to the number  
+
+now we commit our code "Displaying Critic Score"
