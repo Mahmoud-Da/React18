@@ -1128,3 +1128,113 @@ Ps: "colorScheme" is to give color to everything related to the Component backgr
 while "color" only give color to the number  
 
 now we commit our code "Displaying Critic Score"
+
+*** 14-_Getting_Optimized_Images ***
+
+- the image that we have until this point are actually very big (size) so for the Users of slow connection loading
+this images will take a long time.
+
+- so we will optimize the image size to get faster load
+
+we go to dev tool => Network =>  and filter by image by tap at img 
+
+we chose an image and with right click we copy the image url  and we paste it on new tab
+-------------------code----------------------
+https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+-------------------code----------------------
+we can see the image is big so no need to download big image to put inside a small game card 
+
+rawg.io support crop images so 
+after media keyword we cans set the size dimensions 
+ex: and add crop/600/400 after media 
+-------------------code----------------------
+https://media.rawg.io/media/crop/600/400/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+-------------------code----------------------
+
+- to render optimized images by make our image smaller we need to add crop/600/400 to the image url that we take fromt the api 
+we don`t want to optimized images in our GameCard component instead of that we will do it seperately 
+
+so we need service to modify the image url so inside the service folder we create image-url.ts
+
+first we define the getCroppedImageUrl method that take the image url and return a smaller image url
+then we export it 
+-------------------code----------------------
+const getCroppedImageUrl = (url: string) => {
+
+};
+
+export default getCroppedImageUrl;
+-------------------code----------------------
+
+- next we should find the index of media keyword (coz we want to add the crop after it) and save inside 
+variable we called index
+-------------------code----------------------
+const index = url.indexOf("media/");
+-------------------code----------------------
+
+now to insert the crop parameter after media we are gonna use the slice method 
+first we want to grap all the char from the begining until the media keyword
+-------------------code----------------------
+url.slice(0, index);
+-------------------code----------------------
+
+- now coz we want the crop parameter after media we add the length of the media to the index 
+-------------------code----------------------
+const index = url.indexOf("media/") + "media/".length;
+url.slice(0, index);
+-------------------code----------------------
+
+- now coz we used "media/" twice it`s better to put in in constant we called target 
+-------------------code----------------------
+const getCroppedImageUrl = (url: string) => {
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  url.slice(0, index);
+};
+-------------------code----------------------
+
+- until this point we got the char from the url until "media" keyword
+
+now we add "crop/600/400/"
+-------------------code----------------------
+url.slice(0, index) + "crop/600/400/" ;
+-------------------code----------------------
+
+- then we should add the rest of the url to our new url 
+-------------------code----------------------
+url.slice(0, index) + "crop/600/400/" + url.slice(index);
+-------------------code----------------------
+
+in otherword:
+our orl url:
+https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+
+
+url.slice(0, index) => "https://media.rawg.io/media/"
+url.slice(0, index) + "crop/600/400/" => "https://media.rawg.io/media/rop/600/400"
+url.slice(index) => "/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg"
+
+result:
+https://media.rawg.io/media/crop/600/400/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+
+- finally we return it 
+-------------------code----------------------
+const getCroppedImageUrl = (url: string) => {
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+};
+
+export default getCroppedImageUrl;
+-------------------code----------------------
+
+now we to test our implomantaion we go to the GameCard.tsx and apply our method 
+-------------------code----------------------
+<Image src={getCroppedImageUrl(game.background_image)} />
+-------------------code----------------------
+
+from Dev tool => Network => img 
+then copy the url of an image and check if it smaller 
+
+now we commit our code
+"Get optimized images"
