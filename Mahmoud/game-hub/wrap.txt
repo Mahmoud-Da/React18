@@ -1251,3 +1251,142 @@ then copy the url of an image and check if it smaller
 
 now we commit our code
 "Get optimized images"
+
+*** 15-_Improving_User_Experience_with_Loading_Skeletons ***
+
+we will add loading skeletons to our page so while we wait for backend until showing the games we are going
+to show loading skeletons
+
+first we need to track the loading state in our useGame.ts hook 
+so we insilize a value to false and called isLoading 
+-------------------code----------------------
+const [isLoading, setLoading] = useState(false);
+-------------------code----------------------
+
+- first we set it setLoading to false before calling the api calling to true
+- then set off when there the result comes or if an error happens
+- finally we return isLoading 
+-------------------code----------------------
+const useGames = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  setLoading(true);
+  useEffect(() => {
+    const contoller = new AbortController();
+    apiClient
+      .get<FetchGamesResponse>("/games", { signal: contoller.signal })
+      .then((res) => {
+        setGames(res.data.results);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+        setLoading(false);
+      });
+
+    return () => contoller.abort();
+  }, []);
+
+  return { games, error, isLoading };
+};
+-------------------code----------------------
+
+- now to render a skeletons we should render a seperate component
+that component is gonna looks like game card but it`s not a game card 
+
+- in otherword: 
+we are going to render game card when we have an object from backend otherwise w will render skeletons (empty card) 
+while we are waiting 
+
+- so we create component for the empty card we called GameCardSkeleton.tsx
+
+- now in our GameCardSkeleton.tsx we will render Card at first but we will not render an image instead
+we will render a skeletons
+-------------------code----------------------
+return (
+    <>
+      <Card>
+        <Skeleton height="200px" />
+      </Card>
+    </>
+  );
+-------------------code----------------------
+
+- then we add CardBody as the same shape of our game card
+-------------------code----------------------
+return (
+    <>
+      <Card>
+        <Skeleton height="200px" />
+        <CardBody>
+          <SkeletonText />
+        </CardBody>
+      </Card>
+    </>
+  );
+-------------------code----------------------
+
+- now our skeleton is ready and we will useit in our GameGrid.tsx
+first we add iseLoading
+-------------------code---------------------
+const { games, error, isLoading } = useGames();
+-------------------code---------------------
+
+now to render a skeleton we need an array with 6 item (otherword we render 6 skeletons (empty card) while loading)
+so we create an array with 6 elements or any number you like (for me 15)
+-------------------code---------------------
+const skeletons = [1, 2, 3, 4, 5, 6];
+-------------------code---------------------
+
+after creating array of 6 elements we need to render this 6 item as 6 skeletons of the isLoading is true
+-------------------code---------------------
+{isLoading &&
+          skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)}
+-------------------code---------------------
+
+- now we test our code and we can see we have a layout issue coz our skeletons
+doesn`t have same width as our cards so we will try to make the width our card component
+as the same here we try 250px
+in our GameCard and GameCardSkeleton
+GameCard
+-------------------code---------------------
+<Card width="250px">
+-------------------code---------------------
+GameCardSkeleton
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+
+- now we have an issue we declure two related width 250px not dynamicaly in too places 
+so if our styles in the future change and need to change the width we have to remmber to chnage it 
+in tow places 
+so we should fix this issue (but later) after finish deploying 
+first we make our code workds then we refactor it
+
+- now we test our code and we can see that the loading skeletons border not the same 
+radius as the game card to fix that 
+
+as we we can see  are diffrent so we should apply the same styles to each other
+GameCard
+-------------------code---------------------
+<Card width="250px">
+-------------------code---------------------
+GameCardSkeleton
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+
+we fix to it 
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+GameCardSkeleton
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+
+now we done in and commit our code coz it`s working next step we will fix the duplicattion issus
+"Show Loading skeleton"
