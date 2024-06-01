@@ -370,6 +370,19 @@ axios.create({
 
 - with this configration our API-Key will be included in every HTTP request we send
 
+*********************************
+our API KEY should not pushed to the git hub so we should pass at environment variable
+to do that:
+1- create .env file in the root of the project 
+2- add .env to .gitignore
+3- we pass the Key as VITE_SOME_NAME
+ps: we shuold start with VITE
+ex: VITE_API_KEY
+4- we call it using 
+import.meta.env.VITE_API_KEY
+
+*********************************
+
 - to we set the baseURL:
 first we go to the https://api.rawg.io/docs/
 we have multi endpoints 
