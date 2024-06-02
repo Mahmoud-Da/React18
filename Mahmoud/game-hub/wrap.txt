@@ -1390,3 +1390,167 @@ GameCardSkeleton
 
 now we done in and commit our code coz it`s working next step we will fix the duplicattion issus
 "Show Loading skeleton"
+
+*** 16-_Refactor-_Removing_Duplicated_Styles ***
+
+to remove the duplicattion styles from the previous lesson we should create  
+another component that going to be the container of all the cards 
+then we will apply the styles (duplicated styles) to our component
+
+- so we create a component we called GameCardContainer.tsx 
+- in this component we will return a Box component (from ChakaraUI)  and give the common styles 
+from GameCard and GameCardSkeleton components
+
+with that we single place where we defined the the styled of card 
+-------------------code---------------------
+const GameCardContainer = () => {
+  return <Box width="250px" borderRadius={10} overflow="hidden"></Box>;
+};
+-------------------code---------------------
+
+now we remove the styles remove form GameCard and GameCardSkeleton
+
+- next we should pass GameCard and GameCardSkeleton as child component to GameCardContainer
+to do that we define an interface of children and called it inside the Box component
+-------------------code---------------------
+interface Props {
+  children: ReactNode;
+}
+
+const GameCardContainer = ({ children }: Props) => {
+  return (
+    <Box width="250px" borderRadius={10} overflow="hidden">
+      {children}
+    </Box>
+  );
+};
+-------------------code---------------------
+
+- finally in the GameGrid where we call GameCard and GameCardSkeleton we grap them with GameCardContainer
+
+
+-------------------code---------------------
+{isLoading &&
+  skeletons.map((skeleton) => (
+    <GameCardContainer>
+      <GameCardSkeleton key={skeleton} />
+    </GameCardContainer>
+  ))}
+{games.map((game) => (
+  <GameCardContainer>
+    <GameCard key={game.id} game={game} />
+  </GameCardContainer>
+))}
+-------------------code---------------------
+
+now we commit our code 
+"Refactor: remove duplicated styles"
+
+*** 17-_Fetching_the_Genres ***
+now we will start to build the aside panal to display the Game genre when the user 
+select a specific genre the games will be filter by that genre 
+
+we will build it step by step the first step is to fetch the genre 
+
+- we create a component we called GenreList.tsx
+
+- now to fetch the genre we create a custom hood that similar to the one that we created to fetch the games
+in the hooks folder we create another hook we called useGenres.ts
+
+simply we create constant called useGenres and export by default
+-------------------code---------------------
+const useGenres = () => {};
+
+export default useGenres;
+-------------------code---------------------
+now this hooks will be similar to useGames so we copy the function code from useGames
+and paste it 
+
+now in this case we will have duplication coz these two hooks will be similar
+so for now we will make it work then we will remove the duplications
+
+now to fix the error in our copied code 
+first we import hooks like useState then instead of Game[] interface we create Genre interface
+
+so first to create the interface of Genre we go back to the documentation of rog
+to see the responese of Genre request
+
+https://api.rawg.io/docs/
+
+we go to the endpoint genres 
+in the Responeses section we see 
+count
+next
+previous
+result 
+and similar to the games endpoint
+
+in the result we can see all the properties
+
+for the simplicity we use only id and name 
+
+-------------------code---------------------
+ interface Genre {
+  id: number;
+  name: string;
+}
+-------------------code---------------------
+
+now we change the name of the interface to Genre[] then we fix the variables name 
+by using rename shortcut shift+2 (custome)  (f2 for fow windows) we rename the all the variable faster
+
+-------------------code---------------------
+const [genres, setGanres] = useState<Genre[]>([]);
+-------------------code---------------------
+
+- next we define FetchGemresResponse interface and the same as useGames we add count and result 
+-------------------code---------------------
+interface FetchGemresResponse {
+  count: number;
+  results: Genre[];
+}
+-------------------code---------------------
+
+and finally change the endpoint to genres
+-------------------code---------------------
+.get<FetchGemresResponse>("/genres", { signal: contoller.signal })
+-------------------code---------------------
+
+- PS we rename by using f2 vsCode by default changed this return 
+from 
+-------------------code---------------------
+return { games , error, isLoading };
+-------------------code---------------------
+
+to
+-------------------code---------------------
+return { games: genres, error, isLoading };
+-------------------code---------------------
+
+so we remove the extra games coz we don`t need it 
+-------------------code---------------------
+return { genres, error, isLoading };
+-------------------code---------------------
+
+now to test our hook in our GenreList we call our useGenre hook then we render like
+list 
+
+-------------------code---------------------
+const GenreList = () => {
+  const { genres } = useGenres();
+  return (
+    <>
+      <ul>
+        {genres.map((genre) => (
+          <li key={genre.id}>{genre.name}</li>
+        ))}
+      </ul>
+    </>
+  );
+};
+-------------------code---------------------
+
+finally we add GenreList component to App.tsx in the Aside section
+
+now we will commit our code and next we will refactor our code 
+"Fetch the genres"
