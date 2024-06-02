@@ -1390,3 +1390,58 @@ GameCardSkeleton
 
 now we done in and commit our code coz it`s working next step we will fix the duplicattion issus
 "Show Loading skeleton"
+
+*** 16-_Refactor-_Removing_Duplicated_Styles ***
+
+to remove the duplicattion styles from the previous lesson we should create  
+another component that going to be the container of all the cards 
+then we will apply the styles (duplicated styles) to our component
+
+- so we create a component we called GameCardContainer.tsx 
+- in this component we will return a Box component (from ChakaraUI)  and give the common styles 
+from GameCard and GameCardSkeleton components
+
+with that we single place where we defined the the styled of card 
+-------------------code---------------------
+const GameCardContainer = () => {
+  return <Box width="250px" borderRadius={10} overflow="hidden"></Box>;
+};
+-------------------code---------------------
+
+now we remove the styles remove form GameCard and GameCardSkeleton
+
+- next we should pass GameCard and GameCardSkeleton as child component to GameCardContainer
+to do that we define an interface of children and called it inside the Box component
+-------------------code---------------------
+interface Props {
+  children: ReactNode;
+}
+
+const GameCardContainer = ({ children }: Props) => {
+  return (
+    <Box width="250px" borderRadius={10} overflow="hidden">
+      {children}
+    </Box>
+  );
+};
+-------------------code---------------------
+
+- finally in the GameGrid where we call GameCard and GameCardSkeleton we grap them with GameCardContainer
+
+
+-------------------code---------------------
+{isLoading &&
+  skeletons.map((skeleton) => (
+    <GameCardContainer>
+      <GameCardSkeleton key={skeleton} />
+    </GameCardContainer>
+  ))}
+{games.map((game) => (
+  <GameCardContainer>
+    <GameCard key={game.id} game={game} />
+  </GameCardContainer>
+))}
+-------------------code---------------------
+
+now we commit our code 
+"Refactor: remove duplicated styles"
