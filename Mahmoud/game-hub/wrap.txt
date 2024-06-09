@@ -1808,3 +1808,42 @@ now we check our layout in all devices
 
 and commit our code 
 "Displaying the Genres"
+
+*** 20-_Showing_a_Spinner ***
+now we want to add a spinner while waiting to our genre data to fetch from the server 
+
+- in our GenreList we grape isLoading from useGenres hook
+-------------------code---------------------
+const { data, isLoading } = useGenres();
+-------------------code---------------------
+
+- now we say if is loading we a want to return a spinner 
+that is all what we want to do 
+-------------------code---------------------
+const { data, isLoading } = useGenres();
+
+if (isLoading) return <Spinner />;
+return (
+  <></>
+)
+-------------------code---------------------
+
+- now what if we had an error, we don`t want to throw too many diffrent errors on diffrent parts on the page
+that way too much conforntint, so we want only to return null 
+-------------------code---------------------
+const { data, isLoading, error } = useGenres();
+
+if (error) return null;
+
+if (isLoading) return <Spinner />;
+
+return (
+  <></>
+)
+-------------------code---------------------
+
+- now we simulate error by change the endpoint to "/genresX" and test our code 
+
+now we commit our code 
+"Show a spinner while fetching the genre"
+
