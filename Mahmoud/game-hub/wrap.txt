@@ -1678,3 +1678,133 @@ const { data, error, isLoading } = useGames();
 - now we test our code and commit our changes 
 "Creating a generic data function hook"
 
+*** 19- Displaying the Genres ***
+now we are going to show the genres for each genre we have an image and label 
+
+now to get the image we got the Network tap we go to genre endpoint and we can see
+property called image_background and we need to add to genre interface 
+
+- by typing cmd + t we move to genre interface and add image_background
+-------------------code---------------------
+export interface Genre {
+  id: number;
+  name: string;
+  image_background: string;
+}
+-------------------code---------------------
+
+- then in GenreList component we reolace ul with List component from ChakaraUI to render a list item
+without bullet points and replace at the same time li with ListItem 
+-------------------code---------------------
+<List>
+  {data.map((genre) => (
+    <ListItem key={genre.id}>{genre.name}</ListItem>
+  ))}
+</List>
+-------------------code---------------------
+
+- next we need to render the name and image of the genre horizontal so we add inside the ListItem 
+component a HStack element 
+-------------------code---------------------
+<List>
+  {data.map((genre) => (
+    <ListItem key={genre.id}>
+      <HStack>
+        
+      </HStack>
+    </ListItem>
+  ))}
+</List>
+-------------------code---------------------
+
+- now inside the HStach we add Image Component of the ChakaraUI and it should be small so we 
+set the boxSize to 32px and we want to apply radius at the same time so we set the borderRadius to 8 px
+and finally we set the src to the image (but same as image we don`t want to render the full size of the image 
+so we use the getCroppedImageUrl method that we created to take the small sized image)
+
+-------------------code---------------------
+<HStack>
+  <Image
+    boxSize="32px"
+    borderRadius={8}
+    src={getCroppedImageUrl(genre.image_background)}
+  />
+</HStack>
+-------------------code---------------------
+
+- after the image we add a Text component to render the genre name 
+-------------------code---------------------
+<HStack>
+  <Image
+    boxSize="32px"
+    borderRadius={8}
+    src={getCroppedImageUrl(genre.image_background)}
+  />
+  <Text>{genre.name}</Text>
+</HStack>
+-------------------code---------------------
+
+- now we check if our rendering done successfully 
+
+- now we need to improve our few things
+
+- first we need to apply a vertical padding to each list item 
+so they`re not too close to each other 
+-------------------code---------------------
+<ListItem key={genre.id} paddingY="5px">
+-------------------code---------------------
+
+- next we want to increase the size of the font of the genere name
+-------------------code---------------------
+<Text fontSize="lg">{genre.name}</Text>
+-------------------code---------------------
+
+- our genere are so close to the edge of the screen so we will add a horizontal padding 
+in this case is better to apply the padding to the aside layout of App.tsx so 
+in future if we add another component other than List we have to remmber to add either to that component
+-------------------code---------------------
+<GridItem area={"aside"} paddingX="5px">
+-------------------code---------------------
+
+- next we want to apply a fixed width to the columns so if we have more read estate on the screen
+our game grid stretchs and takes up the available space 
+to define the width to our component we set the templateColumns to object coz we have two diffrent sernarios
+where we have base(we have single columns) and lg(where we have multi columns) screen 
+for base we will set the width to 1fr which means one fraction so our columns scratches and takes up
+all the available space on lg devices we will have two columns one 200px and one 1fr
+-------------------code---------------------
+<Grid
+  templateAreas={{
+    base: `"nav" "main"`,
+    lg: `"nav nav" "aside main"`,
+  }}
+  templateColumns={{
+    base: "1fr",
+    lg: "200px 1fr",
+  }}
+>
+-------------------code---------------------
+
+
+- finally to make our game take 100% of the screen we remove the fixed width from GameCardContainer
+(by that we fix the skeleton layout either)
+-------------------code---------------------
+<Box borderRadius={10} overflow="hidden">
+  {children}
+</Box>
+-------------------code---------------------
+
+- now we can see the space between cards are too wide to fix that we go to GameGrid component and
+reduce the space to 3 
+-------------------code---------------------
+<SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        padding="10px"
+        spacing={3}
+      >
+-------------------code---------------------
+
+now we check our layout in all devices 
+
+and commit our code 
+"Displaying the Genres"
