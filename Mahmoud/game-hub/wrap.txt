@@ -1554,3 +1554,127 @@ finally we add GenreList component to App.tsx in the Aside section
 
 now we will commit our code and next we will refactor our code 
 "Fetch the genres"
+
+*** 18-_Creating_a_Generic_Data_Fetching_Hook ***
+
+our hooks until this point are identical, to avoid the duplication we will create a Generic Data Fetching Hook 
+now in our hooks folder we create useData.ts
+
+- now we take all the code from useGenre and copied inside the useData.ts
+
+- now we are going to modify this code line by line
+everywhere that we have reference to genre we should remove that reference or make it generic
+
+- so first we delete the Genre interface
+
+- interface FetchGemresResponse we will come to it later coz fetching the responese
+is similar in each Games hook and Genre hook 
+
+PS: use f2 (shift + 2 my custom shortcut) to rename the rename all the variables at same time in the file
+- next we should rename the function of useGenre to useData 
+
+- rename the genres and setGanres to data and setData
+
+- change the Genre[] with generic type parameter <T>
+-------------------code---------------------
+const useData = () => {
+  const [data, setData] = useState<Genre[]>([]);
+
+  ... }
+-------------------code---------------------
+
+- error and loading no need to change coz we need to use it both the custom hooks 
+
+- now we when get the data we don`t want to use FetchGemresResponse interface instead we need a generic interface
+so we rename it to FetchResponse and change the results type to T[] and that means we have to generic type parameter <T>
+to the interface
+-------------------code---------------------
+interface FetchResponse<T> {
+  count: number;
+  results: T[];
+}
+-------------------code---------------------
+
+- now we have a compilation error says:
+"Generic type 'FetchResponse<T>' requires 1 type argument(s)."
+
+coz we defined FetchResponse as interface take <T> as parameter so we need add parameter to it
+-------------------code---------------------
+.get<FetchResponse<T>>("/genres", { signal: contoller.signal })
+-------------------code---------------------
+
+so this <T> is the same <T> that we had passed to our entire hook 
+-------------------code---------------------
+const useData = <T>() =>
+-------------------code---------------------
+
+- next we need to get rid of the genre endpoint "/genres" to do that we give the hook
+a parameter called endpoint with type string and use it when we get the data 
+-------------------code---------------------
+const useData = <T>(endpoint: string)
+
+
+.get<FetchResponse<T>>(endpoint, { signal: contoller.signal })
+-------------------code---------------------
+
+- the final part that we don`t want to return genres but only data 
+-------------------code---------------------
+return { data, error, isLoading };
+-------------------code---------------------
+
+
+- now we done with this hook and let test it in the Genre custom hook
+
+so in GenreList 
+instead of calling useGenres we call useData and pass Genre as generic type parameter and "/genres" as endpoint parameter
+-------------------code---------------------
+const { genres } = useData<Genre>("/genres");
+-------------------code---------------------
+
+we got error coz we need to export Genre interface from Genre hook 
+then we need to rename genres to data (vs code has sometimes problem const { genres: data } = useData<Genre>("/genres");)
+so we fix it manually
+-------------------code---------------------
+const { data } = useData<Genre>("/genres");
+-------------------code---------------------
+
+- now we test our code until point 
+
+
+- our code works finally but we have refactor problem 
+our we need to pass "/genres" as endpoint inside GenreList but early we said we need to split backend code from the frontend 
+to fix that we got to Genre.ts 
+
+- we don`t need FetchGemresResponse so we remove it
+
+- remove all the code from inside the useGenre coz we already imploment it inside Data hook 
+and instead we pass Genre as  generic type parameter and "/genres" as endpoint parameter
+-------------------code---------------------
+const useGenres = () => useData<Genre>("/genres");
+-------------------code---------------------
+
+- with that we hide the backend detail inside the useGenres hook 
+
+- we remove all unused import statement using cmd+. 
+
+- now in the GenreList component we replace useData with useGenre
+-------------------code---------------------
+const { data } = useGenres();
+-------------------code---------------------
+
+- finally we removed all unused import statement using cmd+.
+
+- and test if our application is still working 
+
+- with same way we modify the games hook so we copy all the code from the useGenre hook and change the interface and hook name 
+
+
+PS:
+in GameGrid when we call the useGames we should rename games with data 
+-------------------code---------------------
+const { data, error, isLoading } = useGames();
+-------------------code---------------------
+
+- now we test our code and commit our changes 
+"Creating a generic data function hook"
+
