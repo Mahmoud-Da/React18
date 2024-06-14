@@ -370,6 +370,19 @@ axios.create({
 
 - with this configration our API-Key will be included in every HTTP request we send
 
+*********************************
+our API KEY should not pushed to the git hub so we should pass at environment variable
+to do that:
+1- create .env file in the root of the project 
+2- add .env to .gitignore
+3- we pass the Key as VITE_SOME_NAME
+ps: we shuold start with VITE
+ex: VITE_API_KEY
+4- we call it using 
+import.meta.env.VITE_API_KEY
+
+*********************************
+
 - to we set the baseURL:
 first we go to the https://api.rawg.io/docs/
 we have multi endpoints 
@@ -636,3 +649,1201 @@ to fix it
 
 - now we commit our code untile this point
 "Create a custom hook to fetch the games"
+
+
+*** 11-_Building_Game_Cards ***
+
+next step is replace the ● the points with Game cards
+- we create GameCard.tsx 
+
+- next we should pass a game object as props for this component
+
+interface
+-------------------code----------------------
+interface Props {
+  game: Game;
+}
+-------------------code----------------------
+
+PS: but we need to import Game interface form our custom hook
+-------------------code---------------------- 
+import { Game } from "../hooks/useGames";
+-------------------code----------------------
+
+PS: importing interface from custom hook is kind ugly but we will fix it later
+
+- after creating Props we are going to pass Props as argument
+and we will return Card Component (import from Chakra UI ) and inside it Image component from ChakaraUI either.
+
+-------------------code----------------------
+import { Game } from "../hooks/useGames";
+import { Card, Image } from "@chakra-ui/react";
+
+interface Props {
+  game: Game;
+}
+
+const GameCard = () => {
+  return (
+    <>
+      <Card>
+        <Image />
+      </Card>
+    </>
+  );
+};
+
+export default GameCard;
+-------------------code----------------------
+
+- now to set the src of image we back to the rog documentation 
+https://api.rawg.io/docs/
+
+- if we access Get a list of games then press the result we can see background_image and this is
+what we will add to our interface
+
+- so in useGames.ts we go to the interface Game and add background_image
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+}
+-------------------code----------------------
+
+- now in our GameCard component we can set the image src to 
+-------------------code----------------------
+<>
+  <Card>
+    <Image src={game.background_image} />
+  </Card>
+</>
+-------------------code----------------------
+
+- next to it we add CardBody then inside it we add Heading with game.name 
+-------------------code----------------------
+<Card>
+  <Image src={game.background_image} />
+  <CardBody>
+    <Heading>{game.name}</Heading>
+  </CardBody>
+</Card>
+-------------------code----------------------
+
+- so we built the shape of our component then we will improve our code little by little
+
+- now we will test our code until this point 
+- so inside the GameGrid component
+we replace <ul> with SimpleGrid and add columns 3 with spacing of 10
+then replace the <li> code with our GameCard and set the key and the game props
+
+-------------------code----------------------
+<SimpleGrid columns={3} spacing={10}>
+  {games.map((game) => (
+    <GameCard key={game.id} game={game} />
+  ))}
+</SimpleGrid>
+-------------------code----------------------
+
+- the first thing we want to fix is the border-radius and fix the sharp border of the card 
+
+- to fix the radius 
+-------------------code----------------------
+<Card borderRadius={10}>
+-------------------code----------------------
+
+- now our bottom radius is fixed but not the top border coz the background_image is bigger 
+than it`s container to fix this we need to set the overflow to hidden it just basic css 
+-------------------code----------------------
+<Card borderRadius={10} overflow="hidden">
+-------------------code----------------------
+
+- next we will fix our heading size is a little big  
+PS: we can see the size in ChakaraUI documentation
+-------------------code----------------------
+<Heading fontSize="2xl">{game.name}</Heading>
+-------------------code----------------------
+
+- next thig to do is the columns number in small devices we don`t want always to render 3 columns 
+instead we want two columns on tablet and one column for mobile devices and 3 for large devices
+to do that 
+-------------------code----------------------
+<SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 5 }} spacing={10}>
+-------------------code----------------------
+now we test our code 
+
+in small devices we can see our card is so close to the edge to we add 10px for padding
+-------------------code----------------------
+<SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        padding="10px"
+        spacing={10}
+      >
+-------------------code----------------------
+
+- now our code works fine so we commit our code to git 
+"Building Game Card"
+
+*** 12-_Displaying_Platform_Icons ***
+- next we will display the games icons 
+
+by using the dev tool [Network -> press the request -> preview] we check the request result and we can see 
+every game has platform objects called first called parent_platform and the second platforms
+
+ex: 
+parent_platform: we have only one object that present playstaion switch PC
+platforms: for diffrent versoin of playstaion ex: ps4, ps5 
+
+in this object we have  parent_platforms which has array with platform object which has platform property which has property object
+
+it`s called "design smells"  
+which means:
+These smells are the symptoms of a poor design. They should be cleaned up as soon as possible to stop them from spreading to other code.
+
+-------------------code----------------------
+parent_platforms: 
+[{platform: {id: 1, name: "PC", slug: "pc"}},…]
+0: {platform: {id: 1, name: "PC", slug: "pc"}}
+platform: {id: 1, name: "PC", slug: "pc"}
+id: 1
+name: "PC"
+slug: "pc"
+-------------------code----------------------
+
+but in this cases we have to deal with it.
+
+now in our project the first thing we are add the platform_parent property to our Game interface
+shortcut cmd + t or ctrl + t we can search class, fuctions, component, interface any Symbol in our project
+
+now inside the useGame.ts we add 
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms:
+}
+-------------------code----------------------
+
+but to set the type of parent_platforms we have to define another interface 
+so we define platform interface 
+
+-------------------code----------------------
+interface Platfrom {
+  id: number;
+  name: string;
+  slug: string;
+}
+-------------------code----------------------
+now the tricky part is that the type of  parent_platforms: is not Platfrom[];
+
+it`s array of object where each object has property called platform (coz we had design smells )
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms: { platform: Platfrom }[];
+}
+-------------------code----------------------
+
+now we are going to render it step by step 
+-------------------code----------------------
+<Heading fontSize="2xl">{game.name}</Heading>
+{game.parent_platforms.map((platform) => platform.platform.name)}
+-------------------code----------------------
+platform.platform.name to too ugly so we destruct (文割代入) platform
+then we add it between Text component of ChakaraUI
+-------------------code----------------------
+{game.parent_platforms.map(({ platform }) => (
+            <Text>platform.name</Text>
+          ))}
+-------------------code----------------------
+
+now the next step is to render ths icons and for that we are going to user React Icon librariy
+in the terminl we install 
+-------------------code----------------------
+npm i react-icons@4.7.1
+-------------------code----------------------
+
+to render the icon we need mapping between the platform name and the icon we don`t we want to mapping the icon in the same CardComponent 
+component coz CardComponent is only related to the card implomantaion not the icons
+
+so we will move all the logic of rendering the platform to seperate component
+
+so in component folder we create component we called PlatfromIconList.tsx 
+
+first we create Props to access the platforms
+-------------------code----------------------
+interface Props {
+  platform: Platfrom[];
+}
+-------------------code----------------------
+
+and now we need to export it from useGame.ts
+
+after add Props to our Component we will test it intergation by add this code to it 
+-------------------code----------------------
+{game.parent_platforms.map(({ platform }) => (
+            <Text>{platform.name}</Text>
+          ))}
+-------------------code----------------------
+
+
+-------------------code----------------------
+const PlatfromIconList = ({ platform }: Props) => {
+  return (
+    <>
+      {game.parent_platforms.map(({ platform }) => (
+        <Text>{platform.name}</Text>
+      ))}
+    </>
+  );
+};
+-------------------code----------------------
+
+now we don`t need  game.parent_platforms coz we maping only the platform so need either for destructuring
+and import Text from ChakraUI we fix it 
+
+-------------------code----------------------
+const PlatfromIconList = ({ platform }: Props) => {
+  return (
+    <>
+      {platform.map((platform) => (
+        <Text>{platform.name}</Text>
+      ))}
+    </>
+  );
+};
+-------------------code----------------------
+
+no in the GameCard we use our PlatfromIconList Component
+-------------------code----------------------
+<PlatfromIconList
+  platform={game.parent_platforms.map((p) => p.platform)}
+/>
+-------------------code----------------------
+
+now we check if our code is workicg until this point 
+
+now the last step is chage the platform labels {pc, Playstaion, ...} with icons  
+
+now inside the PlatfromIconList we will import icons from React Icons libraries
+-------------------code----------------------
+import {
+  FaWindows,
+  FaPlaystation,
+  FaXbox,
+  FaApple,
+  FaLinux,
+  FaAndroid,
+} from "react-icons/fa";
+import { MdPhoneIphone } from "react-icons/md";
+import { SiNintendo } from "react-icons/si";
+import { BsGlobe } from "react-icons/bs";
+-------------------code----------------------
+
+now we have to map our names to icons we are not using if statment coz it`s ugly instead we are going to use
+mapping object
+
+now every platform has name and slug property 
+for playstaion as example we have id: 2, name: "PlayStaion", slug: "playstaion"  the slug is more relayable coz is like id
+names may changes 
+
+-------------------code----------------------
+const iconMap = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: SiNintendo,
+    mac: FaApple,
+    linux: FaLinux,
+    android: FaAndroid,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+  };
+  -------------------code----------------------
+
+now we replace 
+-------------------code----------------------
+<Text>{platform.name}</Text>
+with 
+
+<Icon as={iconMap[platform.slug]}></Icon>
+-------------------code----------------------
+
+now we error Type error 
+Element implicitly has an 'any' type because expression of type 'string' can't be used to index type
+
+now instead of writing the type of each Element
+-------------------code----------------------
+  const iconMap: {ps: string,  ....} = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: SiNintendo,
+    mac: FaApple,
+    linux: FaLinux,
+    android: FaAndroid,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+  };
+-------------------code----------------------
+
+shortcut way we grap the object inside arary [] and set all of them to same type
+-------------------code----------------------
+const iconMap: { [key: string] } = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: SiNintendo,
+    mac: FaApple,
+    linux: FaLinux,
+    android: FaAndroid,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+  };
+-------------------code----------------------
+
+that`s means each key of iconMap is stirng 
+now to fix the error we set 
+-------------------code----------------------
+const iconMap: { [key: string]: IconType } = {
+  pc: FaWindows,
+  playstation: FaPlaystation,
+  xbox: FaXbox,
+  nintendo: SiNintendo,
+  mac: FaApple,
+  linux: FaLinux,
+  android: FaAndroid,
+  ios: MdPhoneIphone,
+  web: BsGlobe,
+};
+-------------------code----------------------
+
+last thing we want to render the Icons horizontally so we add HStack
+-------------------code----------------------
+<HStack>
+  {platform.map((platform) => (
+    <Icon as={iconMap[platform.slug]}></Icon>
+  ))}
+</HStack>
+-------------------code----------------------
+
+now we test our code
+
+we can see our icons is same color as the name of the Game which coz visual noise so we want to make our 
+icons is darker to clean our interface 
+-------------------code----------------------
+<Icon as={iconMap[platform.slug]} color="gray.500"></Icon>
+-------------------code----------------------
+
+PS: to check the color of ChakaraUI we can go to ChakraUI doc => styled-system => theme
+
+now the next thing we want to improve is the space between the Game name and the icon currently they are too close
+
+-------------------code----------------------
+<HStack marginY={1}>
+-------------------code----------------------
+
+PS: marginY={1}> => result is them.space * 1  {the default chakara UI them space is 4px}
+but sometimes we have to handle spece manually so we use marginY="10 px" for example
+
+now we commit our code "Displaying platform icons"
+
+
+*** 13-_Displaying_Critic_Score ***
+
+next we add path that contains the Score game metacritic (review)  (number between 0 to 100 )
+the patch color dependent on the score high score should be green , medium score should be yellow 
+now we don`t want to add this logic inside our game card component instead we will seperate it to another component
+
+
+- we go to useGames.ts and add metacritic to our interface
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms: { platform: Platfrom }[];
+  metacritic: number;
+}
+-------------------code----------------------
+
+- next we create new component called CriticScore.tsx 
+
+inside it we need prop to recive the score 
+-------------------code----------------------
+interface Props {
+  score: number;
+}
+-------------------code----------------------
+
+- to render the score we will use Badge component that defined in ChakaraUI
+-------------------code----------------------
+const CriticScore = ({ score }: Props) => {
+  return (
+    <>
+      <Badge>{score}</Badge>
+    </>
+  );
+};
+-------------------code----------------------
+
+now we check if it`s working 
+
+- next we want to move the patch to the right next to game platform 
+so we should grap the two component PlatfromIconList and CriticScore inisde horizontal stack
+
+- next we justifyContent to space between (which means the space that left put between this elements)
+-------------------code----------------------
+
+<HStack justifyContent="space-between">
+  <PlatfromIconList
+    platform={game.parent_platforms.map((p) => p.platform)}
+  />
+  <CriticScore score={game.metacritic} />
+</HStack>
+
+-------------------code----------------------
+
+- next we need to improve the local veiw of this patch 
+we make it larger and add some horizontal padding and make the border more circle
+-------------------code----------------------
+
+<>
+  <Badge fontSize="14px" paddingX={2} borderRadius="4px">
+    {score}
+  </Badge>
+</>
+-------------------code----------------------
+
+- next we apply color if high score it will be green medium will be yellow otherwise still gray
+let color = score > 75 ? "green" : score > 60 ? "yellow" : "";
+-------------------code----------------------
+let color = score > 75 ? "green" : score > 60 ? "yellow" : "";
+
+return (
+  <>
+  <Badge
+    colorScheme={color}
+    fontSize="14px"
+    paddingX={2}
+    borderRadius="4px"
+  >
+    {score}
+  </Badge>
+</>
+)
+-------------------code----------------------
+
+Ps: "colorScheme" is to give color to everything related to the Component backgroud and so
+while "color" only give color to the number  
+
+now we commit our code "Displaying Critic Score"
+
+*** 14-_Getting_Optimized_Images ***
+
+- the image that we have until this point are actually very big (size) so for the Users of slow connection loading
+this images will take a long time.
+
+- so we will optimize the image size to get faster load
+
+we go to dev tool => Network =>  and filter by image by tap at img 
+
+we chose an image and with right click we copy the image url  and we paste it on new tab
+-------------------code----------------------
+https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+-------------------code----------------------
+we can see the image is big so no need to download big image to put inside a small game card 
+
+rawg.io support crop images so 
+after media keyword we cans set the size dimensions 
+ex: and add crop/600/400 after media 
+-------------------code----------------------
+https://media.rawg.io/media/crop/600/400/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+-------------------code----------------------
+
+- to render optimized images by make our image smaller we need to add crop/600/400 to the image url that we take fromt the api 
+we don`t want to optimized images in our GameCard component instead of that we will do it seperately 
+
+so we need service to modify the image url so inside the service folder we create image-url.ts
+
+first we define the getCroppedImageUrl method that take the image url and return a smaller image url
+then we export it 
+-------------------code----------------------
+const getCroppedImageUrl = (url: string) => {
+
+};
+
+export default getCroppedImageUrl;
+-------------------code----------------------
+
+- next we should find the index of media keyword (coz we want to add the crop after it) and save inside 
+variable we called index
+-------------------code----------------------
+const index = url.indexOf("media/");
+-------------------code----------------------
+
+now to insert the crop parameter after media we are gonna use the slice method 
+first we want to grap all the char from the begining until the media keyword
+-------------------code----------------------
+url.slice(0, index);
+-------------------code----------------------
+
+- now coz we want the crop parameter after media we add the length of the media to the index 
+-------------------code----------------------
+const index = url.indexOf("media/") + "media/".length;
+url.slice(0, index);
+-------------------code----------------------
+
+- now coz we used "media/" twice it`s better to put in in constant we called target 
+-------------------code----------------------
+const getCroppedImageUrl = (url: string) => {
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  url.slice(0, index);
+};
+-------------------code----------------------
+
+- until this point we got the char from the url until "media" keyword
+
+now we add "crop/600/400/"
+-------------------code----------------------
+url.slice(0, index) + "crop/600/400/" ;
+-------------------code----------------------
+
+- then we should add the rest of the url to our new url 
+-------------------code----------------------
+url.slice(0, index) + "crop/600/400/" + url.slice(index);
+-------------------code----------------------
+
+in otherword:
+our orl url:
+https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+
+
+url.slice(0, index) => "https://media.rawg.io/media/"
+url.slice(0, index) + "crop/600/400/" => "https://media.rawg.io/media/rop/600/400"
+url.slice(index) => "/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg"
+
+result:
+https://media.rawg.io/media/crop/600/400/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
+
+- finally we return it 
+-------------------code----------------------
+const getCroppedImageUrl = (url: string) => {
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+};
+
+export default getCroppedImageUrl;
+-------------------code----------------------
+
+now we to test our implomantaion we go to the GameCard.tsx and apply our method 
+-------------------code----------------------
+<Image src={getCroppedImageUrl(game.background_image)} />
+-------------------code----------------------
+
+from Dev tool => Network => img 
+then copy the url of an image and check if it smaller 
+
+now we commit our code
+"Get optimized images"
+
+*** 15-_Improving_User_Experience_with_Loading_Skeletons ***
+
+we will add loading skeletons to our page so while we wait for backend until showing the games we are going
+to show loading skeletons
+
+first we need to track the loading state in our useGame.ts hook 
+so we insilize a value to false and called isLoading 
+-------------------code----------------------
+const [isLoading, setLoading] = useState(false);
+-------------------code----------------------
+
+- first we set it setLoading to false before calling the api calling to true
+- then set off when there the result comes or if an error happens
+- finally we return isLoading 
+-------------------code----------------------
+const useGames = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  setLoading(true);
+  useEffect(() => {
+    const contoller = new AbortController();
+    apiClient
+      .get<FetchGamesResponse>("/games", { signal: contoller.signal })
+      .then((res) => {
+        setGames(res.data.results);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        setError(err.message);
+        setLoading(false);
+      });
+
+    return () => contoller.abort();
+  }, []);
+
+  return { games, error, isLoading };
+};
+-------------------code----------------------
+
+- now to render a skeletons we should render a seperate component
+that component is gonna looks like game card but it`s not a game card 
+
+- in otherword: 
+we are going to render game card when we have an object from backend otherwise w will render skeletons (empty card) 
+while we are waiting 
+
+- so we create component for the empty card we called GameCardSkeleton.tsx
+
+- now in our GameCardSkeleton.tsx we will render Card at first but we will not render an image instead
+we will render a skeletons
+-------------------code----------------------
+return (
+    <>
+      <Card>
+        <Skeleton height="200px" />
+      </Card>
+    </>
+  );
+-------------------code----------------------
+
+- then we add CardBody as the same shape of our game card
+-------------------code----------------------
+return (
+    <>
+      <Card>
+        <Skeleton height="200px" />
+        <CardBody>
+          <SkeletonText />
+        </CardBody>
+      </Card>
+    </>
+  );
+-------------------code----------------------
+
+- now our skeleton is ready and we will useit in our GameGrid.tsx
+first we add iseLoading
+-------------------code---------------------
+const { games, error, isLoading } = useGames();
+-------------------code---------------------
+
+now to render a skeleton we need an array with 6 item (otherword we render 6 skeletons (empty card) while loading)
+so we create an array with 6 elements or any number you like (for me 15)
+-------------------code---------------------
+const skeletons = [1, 2, 3, 4, 5, 6];
+-------------------code---------------------
+
+after creating array of 6 elements we need to render this 6 item as 6 skeletons of the isLoading is true
+-------------------code---------------------
+{isLoading &&
+          skeletons.map((skeleton) => <GameCardSkeleton key={skeleton} />)}
+-------------------code---------------------
+
+- now we test our code and we can see we have a layout issue coz our skeletons
+doesn`t have same width as our cards so we will try to make the width our card component
+as the same here we try 250px
+in our GameCard and GameCardSkeleton
+GameCard
+-------------------code---------------------
+<Card width="250px">
+-------------------code---------------------
+GameCardSkeleton
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+
+- now we have an issue we declure two related width 250px not dynamicaly in too places 
+so if our styles in the future change and need to change the width we have to remmber to chnage it 
+in tow places 
+so we should fix this issue (but later) after finish deploying 
+first we make our code workds then we refactor it
+
+- now we test our code and we can see that the loading skeletons border not the same 
+radius as the game card to fix that 
+
+as we we can see  are diffrent so we should apply the same styles to each other
+GameCard
+-------------------code---------------------
+<Card width="250px">
+-------------------code---------------------
+GameCardSkeleton
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+
+we fix to it 
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+GameCardSkeleton
+-------------------code---------------------
+<Card width="250px" borderRadius={10} overflow="hidden">
+-------------------code---------------------
+
+now we done in and commit our code coz it`s working next step we will fix the duplicattion issus
+"Show Loading skeleton"
+
+*** 16-_Refactor-_Removing_Duplicated_Styles ***
+
+to remove the duplicattion styles from the previous lesson we should create  
+another component that going to be the container of all the cards 
+then we will apply the styles (duplicated styles) to our component
+
+- so we create a component we called GameCardContainer.tsx 
+- in this component we will return a Box component (from ChakaraUI)  and give the common styles 
+from GameCard and GameCardSkeleton components
+
+with that we single place where we defined the the styled of card 
+-------------------code---------------------
+const GameCardContainer = () => {
+  return <Box width="250px" borderRadius={10} overflow="hidden"></Box>;
+};
+-------------------code---------------------
+
+now we remove the styles remove form GameCard and GameCardSkeleton
+
+- next we should pass GameCard and GameCardSkeleton as child component to GameCardContainer
+to do that we define an interface of children and called it inside the Box component
+-------------------code---------------------
+interface Props {
+  children: ReactNode;
+}
+
+const GameCardContainer = ({ children }: Props) => {
+  return (
+    <Box width="250px" borderRadius={10} overflow="hidden">
+      {children}
+    </Box>
+  );
+};
+-------------------code---------------------
+
+- finally in the GameGrid where we call GameCard and GameCardSkeleton we grap them with GameCardContainer
+
+
+-------------------code---------------------
+{isLoading &&
+  skeletons.map((skeleton) => (
+    <GameCardContainer>
+      <GameCardSkeleton key={skeleton} />
+    </GameCardContainer>
+  ))}
+{games.map((game) => (
+  <GameCardContainer>
+    <GameCard key={game.id} game={game} />
+  </GameCardContainer>
+))}
+-------------------code---------------------
+
+now we commit our code 
+"Refactor: remove duplicated styles"
+
+*** 17-_Fetching_the_Genres ***
+now we will start to build the aside panal to display the Game genre when the user 
+select a specific genre the games will be filter by that genre 
+
+we will build it step by step the first step is to fetch the genre 
+
+- we create a component we called GenreList.tsx
+
+- now to fetch the genre we create a custom hood that similar to the one that we created to fetch the games
+in the hooks folder we create another hook we called useGenres.ts
+
+simply we create constant called useGenres and export by default
+-------------------code---------------------
+const useGenres = () => {};
+
+export default useGenres;
+-------------------code---------------------
+now this hooks will be similar to useGames so we copy the function code from useGames
+and paste it 
+
+now in this case we will have duplication coz these two hooks will be similar
+so for now we will make it work then we will remove the duplications
+
+now to fix the error in our copied code 
+first we import hooks like useState then instead of Game[] interface we create Genre interface
+
+so first to create the interface of Genre we go back to the documentation of rog
+to see the responese of Genre request
+
+https://api.rawg.io/docs/
+
+we go to the endpoint genres 
+in the Responeses section we see 
+count
+next
+previous
+result 
+and similar to the games endpoint
+
+in the result we can see all the properties
+
+for the simplicity we use only id and name 
+
+-------------------code---------------------
+ interface Genre {
+  id: number;
+  name: string;
+}
+-------------------code---------------------
+
+now we change the name of the interface to Genre[] then we fix the variables name 
+by using rename shortcut shift+2 (custome)  (f2 for fow windows) we rename the all the variable faster
+
+-------------------code---------------------
+const [genres, setGanres] = useState<Genre[]>([]);
+-------------------code---------------------
+
+- next we define FetchGemresResponse interface and the same as useGames we add count and result 
+-------------------code---------------------
+interface FetchGemresResponse {
+  count: number;
+  results: Genre[];
+}
+-------------------code---------------------
+
+and finally change the endpoint to genres
+-------------------code---------------------
+.get<FetchGemresResponse>("/genres", { signal: contoller.signal })
+-------------------code---------------------
+
+- PS we rename by using f2 vsCode by default changed this return 
+from 
+-------------------code---------------------
+return { games , error, isLoading };
+-------------------code---------------------
+
+to
+-------------------code---------------------
+return { games: genres, error, isLoading };
+-------------------code---------------------
+
+so we remove the extra games coz we don`t need it 
+-------------------code---------------------
+return { genres, error, isLoading };
+-------------------code---------------------
+
+now to test our hook in our GenreList we call our useGenre hook then we render like
+list 
+
+-------------------code---------------------
+const GenreList = () => {
+  const { genres } = useGenres();
+  return (
+    <>
+      <ul>
+        {genres.map((genre) => (
+          <li key={genre.id}>{genre.name}</li>
+        ))}
+      </ul>
+    </>
+  );
+};
+-------------------code---------------------
+
+finally we add GenreList component to App.tsx in the Aside section
+
+now we will commit our code and next we will refactor our code 
+"Fetch the genres"
+
+*** 18-_Creating_a_Generic_Data_Fetching_Hook ***
+
+our hooks until this point are identical, to avoid the duplication we will create a Generic Data Fetching Hook 
+now in our hooks folder we create useData.ts
+
+- now we take all the code from useGenre and copied inside the useData.ts
+
+- now we are going to modify this code line by line
+everywhere that we have reference to genre we should remove that reference or make it generic
+
+- so first we delete the Genre interface
+
+- interface FetchGemresResponse we will come to it later coz fetching the responese
+is similar in each Games hook and Genre hook 
+
+PS: use f2 (shift + 2 my custom shortcut) to rename the rename all the variables at same time in the file
+- next we should rename the function of useGenre to useData 
+
+- rename the genres and setGanres to data and setData
+
+- change the Genre[] with generic type parameter <T>
+-------------------code---------------------
+const useData = () => {
+  const [data, setData] = useState<Genre[]>([]);
+
+  ... }
+-------------------code---------------------
+
+- error and loading no need to change coz we need to use it both the custom hooks 
+
+- now we when get the data we don`t want to use FetchGemresResponse interface instead we need a generic interface
+so we rename it to FetchResponse and change the results type to T[] and that means we have to generic type parameter <T>
+to the interface
+-------------------code---------------------
+interface FetchResponse<T> {
+  count: number;
+  results: T[];
+}
+-------------------code---------------------
+
+- now we have a compilation error says:
+"Generic type 'FetchResponse<T>' requires 1 type argument(s)."
+
+coz we defined FetchResponse as interface take <T> as parameter so we need add parameter to it
+-------------------code---------------------
+.get<FetchResponse<T>>("/genres", { signal: contoller.signal })
+-------------------code---------------------
+
+so this <T> is the same <T> that we had passed to our entire hook 
+-------------------code---------------------
+const useData = <T>() =>
+-------------------code---------------------
+
+- next we need to get rid of the genre endpoint "/genres" to do that we give the hook
+a parameter called endpoint with type string and use it when we get the data 
+-------------------code---------------------
+const useData = <T>(endpoint: string)
+
+
+.get<FetchResponse<T>>(endpoint, { signal: contoller.signal })
+-------------------code---------------------
+
+- the final part that we don`t want to return genres but only data 
+-------------------code---------------------
+return { data, error, isLoading };
+-------------------code---------------------
+
+
+- now we done with this hook and let test it in the Genre custom hook
+
+so in GenreList 
+instead of calling useGenres we call useData and pass Genre as generic type parameter and "/genres" as endpoint parameter
+-------------------code---------------------
+const { genres } = useData<Genre>("/genres");
+-------------------code---------------------
+
+we got error coz we need to export Genre interface from Genre hook 
+then we need to rename genres to data (vs code has sometimes problem const { genres: data } = useData<Genre>("/genres");)
+so we fix it manually
+-------------------code---------------------
+const { data } = useData<Genre>("/genres");
+-------------------code---------------------
+
+- now we test our code until point 
+
+
+- our code works finally but we have refactor problem 
+our we need to pass "/genres" as endpoint inside GenreList but early we said we need to split backend code from the frontend 
+to fix that we got to Genre.ts 
+
+- we don`t need FetchGemresResponse so we remove it
+
+- remove all the code from inside the useGenre coz we already imploment it inside Data hook 
+and instead we pass Genre as  generic type parameter and "/genres" as endpoint parameter
+-------------------code---------------------
+const useGenres = () => useData<Genre>("/genres");
+-------------------code---------------------
+
+- with that we hide the backend detail inside the useGenres hook 
+
+- we remove all unused import statement using cmd+. 
+
+- now in the GenreList component we replace useData with useGenre
+-------------------code---------------------
+const { data } = useGenres();
+-------------------code---------------------
+
+- finally we removed all unused import statement using cmd+.
+
+- and test if our application is still working 
+
+- with same way we modify the games hook so we copy all the code from the useGenre hook and change the interface and hook name 
+
+
+PS:
+in GameGrid when we call the useGames we should rename games with data 
+-------------------code---------------------
+const { data, error, isLoading } = useGames();
+-------------------code---------------------
+
+- now we test our code and commit our changes 
+"Creating a generic data function hook"
+
+*** 19- Displaying the Genres ***
+now we are going to show the genres for each genre we have an image and label 
+
+now to get the image we got the Network tap we go to genre endpoint and we can see
+property called image_background and we need to add to genre interface 
+
+- by typing cmd + t we move to genre interface and add image_background
+-------------------code---------------------
+export interface Genre {
+  id: number;
+  name: string;
+  image_background: string;
+}
+-------------------code---------------------
+
+- then in GenreList component we reolace ul with List component from ChakaraUI to render a list item
+without bullet points and replace at the same time li with ListItem 
+-------------------code---------------------
+<List>
+  {data.map((genre) => (
+    <ListItem key={genre.id}>{genre.name}</ListItem>
+  ))}
+</List>
+-------------------code---------------------
+
+- next we need to render the name and image of the genre horizontal so we add inside the ListItem 
+component a HStack element 
+-------------------code---------------------
+<List>
+  {data.map((genre) => (
+    <ListItem key={genre.id}>
+      <HStack>
+        
+      </HStack>
+    </ListItem>
+  ))}
+</List>
+-------------------code---------------------
+
+- now inside the HStach we add Image Component of the ChakaraUI and it should be small so we 
+set the boxSize to 32px and we want to apply radius at the same time so we set the borderRadius to 8 px
+and finally we set the src to the image (but same as image we don`t want to render the full size of the image 
+so we use the getCroppedImageUrl method that we created to take the small sized image)
+
+-------------------code---------------------
+<HStack>
+  <Image
+    boxSize="32px"
+    borderRadius={8}
+    src={getCroppedImageUrl(genre.image_background)}
+  />
+</HStack>
+-------------------code---------------------
+
+- after the image we add a Text component to render the genre name 
+-------------------code---------------------
+<HStack>
+  <Image
+    boxSize="32px"
+    borderRadius={8}
+    src={getCroppedImageUrl(genre.image_background)}
+  />
+  <Text>{genre.name}</Text>
+</HStack>
+-------------------code---------------------
+
+- now we check if our rendering done successfully 
+
+- now we need to improve our few things
+
+- first we need to apply a vertical padding to each list item 
+so they`re not too close to each other 
+-------------------code---------------------
+<ListItem key={genre.id} paddingY="5px">
+-------------------code---------------------
+
+- next we want to increase the size of the font of the genere name
+-------------------code---------------------
+<Text fontSize="lg">{genre.name}</Text>
+-------------------code---------------------
+
+- our genere are so close to the edge of the screen so we will add a horizontal padding 
+in this case is better to apply the padding to the aside layout of App.tsx so 
+in future if we add another component other than List we have to remmber to add either to that component
+-------------------code---------------------
+<GridItem area={"aside"} paddingX="5px">
+-------------------code---------------------
+
+- next we want to apply a fixed width to the columns so if we have more read estate on the screen
+our game grid stretchs and takes up the available space 
+to define the width to our component we set the templateColumns to object coz we have two diffrent sernarios
+where we have base(we have single columns) and lg(where we have multi columns) screen 
+for base we will set the width to 1fr which means one fraction so our columns scratches and takes up
+all the available space on lg devices we will have two columns one 200px and one 1fr
+-------------------code---------------------
+<Grid
+  templateAreas={{
+    base: `"nav" "main"`,
+    lg: `"nav nav" "aside main"`,
+  }}
+  templateColumns={{
+    base: "1fr",
+    lg: "200px 1fr",
+  }}
+>
+-------------------code---------------------
+
+
+- finally to make our game take 100% of the screen we remove the fixed width from GameCardContainer
+(by that we fix the skeleton layout either)
+-------------------code---------------------
+<Box borderRadius={10} overflow="hidden">
+  {children}
+</Box>
+-------------------code---------------------
+
+- now we can see the space between cards are too wide to fix that we go to GameGrid component and
+reduce the space to 3 
+-------------------code---------------------
+<SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        padding="10px"
+        spacing={3}
+      >
+-------------------code---------------------
+
+now we check our layout in all devices 
+
+and commit our code 
+"Displaying the Genres"
+
+*** 20-_Showing_a_Spinner ***
+now we want to add a spinner while waiting to our genre data to fetch from the server 
+
+- in our GenreList we grape isLoading from useGenres hook
+-------------------code---------------------
+const { data, isLoading } = useGenres();
+-------------------code---------------------
+
+- now we say if is loading we a want to return a spinner 
+that is all what we want to do 
+-------------------code---------------------
+const { data, isLoading } = useGenres();
+
+if (isLoading) return <Spinner />;
+return (
+  <></>
+)
+-------------------code---------------------
+
+- now what if we had an error, we don`t want to throw too many diffrent errors on diffrent parts on the page
+that way too much conforntint, so we want only to return null 
+-------------------code---------------------
+const { data, isLoading, error } = useGenres();
+
+if (error) return null;
+
+if (isLoading) return <Spinner />;
+
+return (
+  <></>
+)
+-------------------code---------------------
+
+- now we simulate error by change the endpoint to "/genresX" and test our code 
+
+now we commit our code 
+"Show a spinner while fetching the genre"
+
