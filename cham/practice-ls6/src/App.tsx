@@ -22,7 +22,7 @@ import UpdatingData2 from "./components/UpdatingData2";
 import ExtractingTheUserService from "./components/ExtractingTheUserService";
 import Practice from "./components/Practice";
 import ExtractingAReusableApiClient from "./components/ExtractingAReusableApiClient";
-
+import Summary from "./components/Summary";
 
 function App() {
   const [category, setCategory] = useState("");
@@ -55,10 +55,9 @@ function App() {
       {/* <DeletetingData2 /> */}
       {/* <UpdatingData1 /> */}
       {/* <UpdatingData2 /> */}
-      {/* <ExtractingTheUserService /> */}
-      <Practice />
-      <ExtractingAReusableApiClient />
-
+      {/* <ExtractingTheUserService />
+      <ExtractingAReusableApiClient /> */}
+      <Summary />
     </>
   );
 }
