@@ -5,8 +5,8 @@ function App() {
     <>
       <Grid
         templateAreas={{
-          base: '"nav" "main"',
-          lg: '"nav nav nav" "menu main aside"',
+          base: '"nav" "aside"',
+          lg: '"nav nav nav" "menu aside right_menu"',
         }}
       >
         <GridItem area={"nav"} bg={"green"}>
@@ -18,12 +18,12 @@ function App() {
           </GridItem>
         </Show>
 
-        <GridItem area={"main"} bg={"orange"}>
-          Main
+        <GridItem area={"aside"} bg={"orange"}>
+          Aside
         </GridItem>
         <Show above="lg">
-          <GridItem area={"aside"} bg={"blue"}>
-            Aside
+          <GridItem area={"right_menu"} bg={"blue"}>
+            Right menu
           </GridItem>
         </Show>
       </Grid>
