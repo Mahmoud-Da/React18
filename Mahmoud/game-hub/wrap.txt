@@ -876,7 +876,7 @@ so in component folder we create component we called PlatfromIconList.tsx
 first we create Props to access the platforms
 -------------------code----------------------
 interface Props {
-  platform: Platfrom[];
+  platforms: Platfrom[];
 }
 -------------------code----------------------
 
@@ -891,7 +891,7 @@ after add Props to our Component we will test it intergation by add this code to
 
 
 -------------------code----------------------
-const PlatfromIconList = ({ platform }: Props) => {
+const PlatfromIconList = ({ platforms }: Props) => {
   return (
     <>
       {game.parent_platforms.map(({ platform }) => (
@@ -906,10 +906,10 @@ now we don`t need  game.parent_platforms coz we maping only the platform so need
 and import Text from ChakraUI we fix it 
 
 -------------------code----------------------
-const PlatfromIconList = ({ platform }: Props) => {
+const PlatfromIconList = ({ platforms }: Props) => {
   return (
     <>
-      {platform.map((platform) => (
+      {platforms.map((platform) => (
         <Text>{platform.name}</Text>
       ))}
     </>
@@ -920,7 +920,7 @@ const PlatfromIconList = ({ platform }: Props) => {
 no in the GameCard we use our PlatfromIconList Component
 -------------------code----------------------
 <PlatfromIconList
-  platform={game.parent_platforms.map((p) => p.platform)}
+  platforms={game.parent_platforms.map((p) => p.platform)}
 />
 -------------------code----------------------
 
@@ -1847,3 +1847,350 @@ return (
 now we commit our code 
 "Show a spinner while fetching the genre"
 
+
+*** 21-_Filtering_Games_by_Genre ***
+we `re going to imploment filtering so when we press click on genre we only see the games that match
+that genre 
+
+
+- in GenreList component first we want to change the Text with genre.name to button to be able to 
+click that genre set we set the variant to link to ou button looks like links 
+-------------------code---------------------
+<Button fontSize="lg" variant="link" >{genre.name}</Button>
+-------------------code---------------------
+
+- now we onClick event and for right now we will log the currect genre in the console 
+-------------------code---------------------
+<Button
+  fontSize="lg"
+  variant="link"
+  onClick={() => console.log(genre)}
+>
+  {genre.name}
+</Button>
+-------------------code---------------------
+
+- now when we open the console we test our click event we an error
+"Warning: Each child in a list should have a unique "key" prop."
+so before we contiune we shuold fix this Warning to do that in GameGrid component
+we move the key properties form the child elements to the parent elements
+-------------------code---------------------
+<GameCardContainer key={skeleton}>
+  <GameCardSkeleton />
+</GameCardContainer>
+-------------------code---------------------
+and 
+-------------------code---------------------
+<GameCardContainer key={game.id}>
+  <GameCard game={game} />
+</GameCardContainer>
+-------------------code---------------------
+
+same error with PlatfromIconList
+
+so we fix it by add key with platform.id
+-------------------code---------------------
+{platforms.map((platform) => (
+          <Icon key={platform.id} as={iconMap[platform.slug]} color="gray.500"></Icon>
+        ))}
+-------------------code---------------------
+
+
+**************************************
+PS when we don`t have id we can use the index as key
+-------------------code---------------------
+{platforms.map((platform, index) => (
+          <Icon key={index} as={iconMap[platform.slug]} color="gray.500"></Icon>
+        ))}
+-------------------code---------------------
+**************************************
+
+
+- after cleaing our code wanings now we need to share the selecetd genre with the game grid
+
+- so here we question how can we share the state with two components
+to do that we should lift up to the closet parent component
+so what is the parent of this two components 
+it`s the App component 
+
+
+- now in the App component we craete useState and set to null so initialilly no genre 
+is selecetd we called selecetdGenre 
+-------------------code---------------------
+const [selectedGenre, setSelectedGenre] = useState(null);
+-------------------code---------------------
+
+until this point we can`t set the selecetdGenre to a diffrent value other than null coz TypeScript 
+compiler doesn`t know that this varible can store Genre object so we need to type a generic type
+argument 
+
+we add null coz we want to apply select genre or null(nothing selected)
+-------------------code---------------------
+const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
+-------------------code---------------------
+
+- now when we select genere the GenreList component should notify the App component so set the selectedGenre
+remmber: the component that holds some state should be the one updating it 
+
+- so we got to the GenreList component and Props with tha callback function 
+-------------------code---------------------
+interface Props {
+  onSelectedGenre: (genre: Genre) => void;
+}
+-------------------code---------------------
+
+- then we add the props 
+-------------------code---------------------
+const GenreList = ({ onSelectedGenre }: Props)
+-------------------code---------------------
+
+- finally instead of loging only the genre we pass the onSelectedGenre
+-------------------code---------------------
+<Button
+  fontSize="lg"
+  variant="link"
+  onClick={() => onSelectedGenre(genre)}
+>
+  {genre.name}
+</Button>
+-------------------code---------------------
+
+- now in App component we pass GenreList the onSelectedGenre property
+-------------------code---------------------
+<GenreList onSelectedGenre={(genre) => setSelectedGenre(genre)} />
+-------------------code---------------------
+
+- now let`s test out implomantaion until this point
+in the Browser we select a Action genre for example 
+access to Components of dev tool and press on App component and we should see the selecetd state
+
+
+- next we need to pass this state to out game grid so it can be passed to the backend
+while fetching the games so in GameGrid component 
+we define selectedGenre that may can be Genre or null 
+-------------------code---------------------
+interface Props {
+  selectedGenre: Genre | null;
+}
+-------------------code---------------------
+
+
+then we add to props 
+-------------------code---------------------
+const GameGrid = ({ selectedGenre }: Props)
+-------------------code---------------------
+
+then we should add it to the game hook 
+-------------------code---------------------
+const { data, error, isLoading } = useGames(selectedGenre);
+-------------------code---------------------
+
+that means we should modify the useGame hook 
+-------------------code---------------------
+const useGames = (selectedGenre: Genre | null) => useData<Game>("/games");
+-------------------code---------------------
+
+we need to make another change in useGame hook we need to pass (selectedGenre: Genre | null) 
+to our useData hook 
+now our useData hook only take an endpoint but we need to make more flexible by give it 
+"Axios request config object"
+to give it Axios request config object
+in this code the object that we passed as second argument ({signal: ....}) is what we call "Axios request config object"
+-------------------code---------------------
+apiClient
+    .get<FetchResponse<T>>(endpoint, { signal: contoller.signal })
+-------------------code---------------------
+in this second argument we can pass data or qurey stirng parameter
+
+- so we give our useData hook another paramter we called requestConfig 
+and set it to the type of AxiosRequestConfig and we make it optional 
+so we don`t always have to pass it 
+-------------------code---------------------
+const useData = <T>(endpoint: string, requestConfig?: AxiosRequestConfig) =>{
+
+}
+-------------------code---------------------
+
+- now to filter our games depend on genre we should pass the genre as qurey string parameter
+
+*********************************************************************************************************
+What is Query string parameters:
+
+Query string parameters are a way to pass information to a web server as part of a URL. 
+They are commonly used in web development for sending data via HTTP GET requests.
+
+Example 1: Simple Search Query
+URL:
+https://www.example.com/search?query=cats
+
+Explanation:
+This URL is querying the search endpoint with a parameter query having the value cats.
+
+
+Query string parameters are a way to pass information to a web server as part of a URL. They are commonly used in web development for sending data via HTTP GET requests. Here are some examples to illustrate different scenarios:
+
+Example 1: Simple Search Query
+URL:
+
+https://www.example.com/search?query=cats
+Explanation:
+This URL is querying the search endpoint with a parameter query having the value cats.
+
+Example 2: Multiple Parameters
+URL:
+https://www.example.com/search?query=cats&sort=asc&page=2
+
+Explanation:
+This URL is querying the search endpoint with multiple parameters:
+
+query with the value cats
+sort with the value asc (ascending)
+page with the value 2 (second page of results)
+
+Example 3: Parameters with Special Characters
+URL:
+
+https://www.example.com/search?query=New+York&category=restaurants
+Explanation:
+In this URL:
+
+query parameter has the value New York (space is encoded as + or %20)
+category parameter has the value restaurants
+Example 4: Date Range Filter
+URL:
+
+https://www.example.com/events?start_date=2023-01-01&end_date=2023-12-31
+Explanation:
+This URL filters events between January 1, 2023, and December 31, 2023, using the start_date and end_date parameters.
+
+Example 5: Complex Parameters with Arrays
+URL:
+
+https://www.example.com/products?category=electronics&features[]=bluetooth&features[]=wifi
+Explanation:
+This URL is querying the products endpoint for electronics category products that have both bluetooth and wifi features.
+
+Example 6: Authentication Token
+URL:
+
+https://www.example.com/user/profile?token=abc123
+Explanation:
+This URL uses a token parameter for authenticating the user accessing their profile.
+
+Example 7: Locale and Language
+URL:
+
+https://www.example.com/content?locale=us&language=en
+Explanation:
+This URL sets the locale to us and the language to en (English).
+
+Example 8: Pagination
+URL:
+
+https://www.example.com/articles?page=3&limit=10
+Explanation:
+This URL is querying the articles endpoint to get the third page of results with a limit of 10 articles per page.
+*********************************************************************************************************
+
+- so when we should pass qurey parameter that depends of the api
+if it support the query parameter string and in our API (it supported)
+we can see the genre as query parameter
+https://api.rawg.io/docs/#tag/games
+
+
+- so inside the game hook we set the params(one of property of AxiosRequestConfig)
+and coz genre could be bull here we use ?. optional chaining 
+-------------------code---------------------
+const useGames = (selectedGenre: Genre | null) =>
+  useData<Game>("/games", { params: { genres: selectedGenre?.id } });
+-------------------code---------------------
+
+- now we back to our useData hook and ...requestConfig to pass to be able
+to add any additional properties
+-------------------code---------------------
+apiClient
+      .get<FetchResponse<T>>(endpoint, {
+        signal: contoller.signal,
+        ...requestConfig,
+      })
+-------------------code---------------------
+
+- now we test our application until this point 
+
+- when we select some genre nothing changing so let`s check our Network tab to see what we sending 
+to our server 
+we can see that when we select a genre we don`t send a request to the server why that happing?
+
+in useData when  we use useEffect we pass empty brackets([]) as second argument
+empty brackets in useEffect that`s means we want to fetch the data only the first time a component
+is rendrered.
+
+to to solve this issue we should pass an array of dependencies as second argument of useEffect hook 
+so when the selector genre chnages we send another request to get the games that match the selected genre
+to do that 
+we add deps as thid parameter which is going to be an array of dependencies, now at this point we don`t 
+know the type of that dependencies, so any array 
+-------------------code---------------------
+const useData = <T>(
+  endpoint: string,
+  requestConfig?: AxiosRequestConfig,
+  deps: any[]
+)
+-------------------code---------------------
+
+we have compilation error coz we set deps parameter which not optional after the requestConfig option parameter
+but in our case we will we set the deps as optional as well so no need to move it 
+-------------------code---------------------
+const useData = <T>(
+  endpoint: string,
+  requestConfig?: AxiosRequestConfig,
+  deps?: any[]
+)
+-------------------code---------------------
+
+- next we pass ...deps as second argument of useEffect hook 
+-------------------code---------------------
+[...deps];
+-------------------code---------------------
+
+- but we have compilation error says 
+Type 'any[] | undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+coz we deps as optional it could be undefined, and we can`t ... for undefined object 
+to fix that 
+-------------------code---------------------
+deps ? [...deps] : []
+-------------------code---------------------
+
+- next we should specify the genre when calling the data hook and pass the deps array argument
+-------------------code---------------------
+const useGames = (selectedGenre: Genre | null) =>
+  useData<Game>("/games", { params: { genres: selectedGenre?.id } }, [
+    selectedGenre?.id,
+  ]);
+-------------------code---------------------
+
+- now the last step we back to App components and pass the selecetd genre to GameGrid component
+-------------------code---------------------
+<GridItem area={"main"}>
+  <GameGrid selectedGenre={selectedGenre} />
+</GridItem>
+-------------------code---------------------
+
+TORECAP:
+ 
+- in GenreList componentwe added a new  props called onSelectGenre 
+to notify the consumer of the component that the genre has bees slected 
+
+- the parens of GenreList  is App component so insideit we notify and set the selector Genre
+this cause the app component to rerender
+
+- so in the next render we will pass the selector genre to the GameGrid  
+
+- in our GameGrid we add a new props which is selectedGenre and inside the component we take the 
+value of the slected genre and pass it to our game hook 
+
+- now our game hook passes the selector genre as qurey string parameter to the data hook 
+
+we commit our code 
+"Filter games by genre"
