@@ -1360,7 +1360,7 @@ GameCardSkeleton
 <Card width="250px" borderRadius={10} overflow="hidden">
 -------------------code---------------------
 
-- now we have an issue we declure two related width 250px not dynamicaly in too places 
+- now we have an issue we declure two related width 250px not dynamically in too places 
 so if our styles in the future change and need to change the width we have to remmber to chnage it 
 in tow places 
 so we should fix this issue (but later) after finish deploying 
@@ -2194,3 +2194,42 @@ value of the slected genre and pass it to our game hook
 
 we commit our code 
 "Filter games by genre"
+
+*** 22-_Highlighting_the_Selected_Genre ***
+
+we should have the app component pass the selecetd genre, to our GenreList.tsx.
+and in GenreList where we render the button we`ll set the font weight dynamically.
+so if yo`re rendreing the selected genre, we make the font bold. other wise we render it normal 
+
+
+to to imploment it
+in GenreList
+- we add to Props selectedGenre
+-------------------code---------------------
+interface Props {
+  onSelectedGenre: (genre: Genre) => void;
+  selectedGenre: Genre | null;
+}
+-------------------code---------------------
+
+- we pass as parameter
+-------------------code---------------------
+const GenreList = ({ selectedGenre, onSelectedGenre }: Props) => {}
+-------------------code---------------------
+
+- we pass the fontweight to button 
+-------------------code---------------------
+fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+-------------------code---------------------
+
+- finally in the App component we we set the selectedGenre to selectedGenre
+-------------------code---------------------
+<GenreList
+  selectedGenre={selectedGenre}
+  onSelectedGenre={(genre) => setSelectedGenre(genre)}
+/>
+-------------------code---------------------
+
+here we commit our code
+"High light the selected genre"
+
