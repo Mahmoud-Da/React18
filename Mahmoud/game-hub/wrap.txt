@@ -2233,3 +2233,101 @@ fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
 here we commit our code
 "High light the selected genre"
 
+*** 23-_Building_Platform_Selector ***
+now we will just focus on rendreing this list and after we will imploment filtering
+
+- we create a component called PlatformSelector
+and inside we are going to return a Menu component of ChakaraUI and inside the Menu
+Component we create MenuButton component as Button
+
+-------------------code---------------------
+<Menu>
+  <MenuButton as={Button}>Platforms</MenuButton>
+</Menu>
+-------------------code---------------------
+
+- we give the MenuButton rightIcon of BsChevronDown
+-------------------code---------------------
+<Menu>
+  <MenuButton as={Button} rightIcon={<BsChevronDown></BsChevronDown>}>
+    Platforms
+  </MenuButton>
+</Menu>
+-------------------code---------------------
+
+- right after the MenuButton we add MenuList 
+and inside the MenuList we add right now 3 Menuitem 
+-------------------code---------------------
+<MenuList>
+  <MenuItem>item1</MenuItem>
+  <MenuItem>item2</MenuItem>
+  <MenuItem>item3</MenuItem>
+</MenuList>
+-------------------code---------------------
+
+and let`s test our application until this point 
+
+- we go to App component and add out PlatformSelector above GameGrid
+-------------------code---------------------
+<GridItem area={"main"}>
+  <PlatformSelector></PlatformSelector>
+  <GameGrid selectedGenre={selectedGenre} />
+</GridItem>
+-------------------code---------------------
+
+- next we need to render the items dynamically
+to do that we need to use different endpoint on rock API
+
+we go to https://api.rawg.io/docs/#tag/platforms
+and press "Get a list of parent platforms."
+
+we can see the endpoint 
+GET /platforms/lists/parents
+
+- so we need to create a custome hook to fetch the data from the endpoint
+
+- in hooks folder we create a file called usePlatforms.ts
+we copy the code from the useGenre and 
+1- change the Genre to Platform
+2- change the interface to match the platform 
+3- change the endpoint url 
+-------------------code---------------------
+import useData from "./useData";
+
+export interface Platforms {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+const usePlatforms = () => useData<Platforms>("/platforms/lists/parents");
+
+export default usePlatforms;
+-------------------code---------------------
+
+- now we got PlatformSelector.tsx and use our new hook 
+we get the data form the usePlatforms hook 
+-------------------code---------------------
+const { data } = usePlatforms();
+-------------------code---------------------
+
+then render it 
+-------------------code---------------------
+<MenuList>
+  {data.map((platform) => (
+    <MenuItem key={platform.id}>{platform.name}</MenuItem>
+  ))}
+</MenuList>
+-------------------code---------------------
+
+- now if we had error we don`t want to render too much error messages for each 
+component so we will return null
+-------------------code---------------------
+if (error) return null;
+-------------------code---------------------
+
+- now we test our error by going to the usePlatforms hook and manipulate the endpoint url
+
+now we commit our code 
+"Build platform selector"
+
