@@ -2613,3 +2613,67 @@ now we test our code if our platform and genre work fine
 then we commit our code 
 "Refactor: Extract a Query Object"
 
+
+
+*** 26-_Building_Sort_Selector ***
+we will add another dropdown list next to platform to sort the games 
+now we will only render the sort component later we will do the actual sorting
+
+- first we create a new component SortSelector 
+this component will be too much similar to our Platform component
+to save time we will copy the code (return statement) from Platform component
+and for label we will render somthing static like "Order by: Relevance"
+and where we map the platform we render MenuItem*6
+-------------------code---------------------
+<Menu>
+  <MenuButton as={Button} rightIcon={<BsChevronDown></BsChevronDown>}>
+    "Order by: Relevance"
+  </MenuButton>
+  <MenuList>
+    <MenuItem>Relevance</MenuItem>
+    <MenuItem>Date added</MenuItem>
+    <MenuItem>Name</MenuItem>
+    <MenuItem>Release date</MenuItem>
+    <MenuItem>Popularity</MenuItem>
+    <MenuItem>Average rating</MenuItem>
+  </MenuList>
+</Menu>
+-------------------code---------------------
+
+- next we render it in App component
+-------------------code---------------------
+<GridItem area={"main"}>
+  <PlatformSelector
+    selectedPlatform={gameQuery.platform}
+    onSelectPlatform={(platform) =>
+      setGameQuery({ ...gameQuery, platform })
+    }
+  ></PlatformSelector>
+  <SortSelector></SortSelector>
+  <GameGrid gameQurey={gameQuery} />
+</GridItem>
+-------------------code---------------------
+
+- we check our code it`s work but need to add space between PlatformSelector and SortSelector
+to do that we should wrap PlatformSelector and SortSelector in HStack component and apply spacing of 5
+-------------------code---------------------
+<HStack spacing={5}>
+  <PlatformSelector
+    selectedPlatform={gameQuery.platform}
+    onSelectPlatform={(platform) =>
+      setGameQuery({ ...gameQuery, platform })
+    }
+  ></PlatformSelector>
+  <SortSelector></SortSelector>
+</HStack>
+-------------------code---------------------
+
+now our platform menu is not lined up with the first card so we need to apply left padding to line them  
+-------------------code---------------------
+<HStack spacing={5} paddingLeft={2}>
+-------------------code---------------------
+
+now our card is too close the card so we need seprate them by adding bottom margin 
+
+now we commit our code
+"Build Sort Selector"
