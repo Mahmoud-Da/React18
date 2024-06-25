@@ -227,7 +227,7 @@ ChakraProvider theme={theme}>   /=> first place
 <App />
 -------------------code----------------------
 
-- now if we refresh our page the page is still light coz ChakaraUI stores the selecetd mode 
+- now if we refresh our page the page is still light coz ChakaraUI stores the selected mode 
 in the local storge so it can remmeber it in the future sessions
 
 we can check that with dev tool and went to Application then Local Storage
@@ -829,13 +829,13 @@ but to set the type of parent_platforms we have to define another interface
 so we define platform interface 
 
 -------------------code----------------------
-interface Platfrom {
+interface Platform {
   id: number;
   name: string;
   slug: string;
 }
 -------------------code----------------------
-now the tricky part is that the type of  parent_platforms: is not Platfrom[];
+now the tricky part is that the type of  parent_platforms: is not Platform[];
 
 it`s array of object where each object has property called platform (coz we had design smells )
 -------------------code----------------------
@@ -843,7 +843,7 @@ export interface Game {
   id: number;
   name: string;
   background_image: string;
-  parent_platforms: { platform: Platfrom }[];
+  parent_platforms: { platform: Platform }[];
 }
 -------------------code----------------------
 
@@ -871,12 +871,12 @@ component coz CardComponent is only related to the card implomantaion not the ic
 
 so we will move all the logic of rendering the platform to seperate component
 
-so in component folder we create component we called PlatfromIconList.tsx 
+so in component folder we create component we called PlatformIconList.tsx 
 
 first we create Props to access the platforms
 -------------------code----------------------
 interface Props {
-  platforms: Platfrom[];
+  platforms: Platform[];
 }
 -------------------code----------------------
 
@@ -891,7 +891,7 @@ after add Props to our Component we will test it intergation by add this code to
 
 
 -------------------code----------------------
-const PlatfromIconList = ({ platforms }: Props) => {
+const PlatformIconList = ({ platforms }: Props) => {
   return (
     <>
       {game.parent_platforms.map(({ platform }) => (
@@ -906,7 +906,7 @@ now we don`t need  game.parent_platforms coz we maping only the platform so need
 and import Text from ChakraUI we fix it 
 
 -------------------code----------------------
-const PlatfromIconList = ({ platforms }: Props) => {
+const PlatformIconList = ({ platforms }: Props) => {
   return (
     <>
       {platforms.map((platform) => (
@@ -917,9 +917,9 @@ const PlatfromIconList = ({ platforms }: Props) => {
 };
 -------------------code----------------------
 
-no in the GameCard we use our PlatfromIconList Component
+no in the GameCard we use our PlatformIconList Component
 -------------------code----------------------
-<PlatfromIconList
+<PlatformIconList
   platforms={game.parent_platforms.map((p) => p.platform)}
 />
 -------------------code----------------------
@@ -928,7 +928,7 @@ now we check if our code is workicg until this point
 
 now the last step is chage the platform labels {pc, Playstaion, ...} with icons  
 
-now inside the PlatfromIconList we will import icons from React Icons libraries
+now inside the PlatformIconList we will import icons from React Icons libraries
 -------------------code----------------------
 import {
   FaWindows,
@@ -1065,7 +1065,7 @@ export interface Game {
   id: number;
   name: string;
   background_image: string;
-  parent_platforms: { platform: Platfrom }[];
+  parent_platforms: { platform: Platform }[];
   metacritic: number;
 }
 -------------------code----------------------
@@ -1093,13 +1093,13 @@ const CriticScore = ({ score }: Props) => {
 now we check if it`s working 
 
 - next we want to move the patch to the right next to game platform 
-so we should grap the two component PlatfromIconList and CriticScore inisde horizontal stack
+so we should grap the two component PlatformIconList and CriticScore inisde horizontal stack
 
 - next we justifyContent to space between (which means the space that left put between this elements)
 -------------------code----------------------
 
 <HStack justifyContent="space-between">
-  <PlatfromIconList
+  <PlatformIconList
     platform={game.parent_platforms.map((p) => p.platform)}
   />
   <CriticScore score={game.metacritic} />
@@ -1886,7 +1886,7 @@ and
 </GameCardContainer>
 -------------------code---------------------
 
-same error with PlatfromIconList
+same error with PlatformIconList
 
 so we fix it by add key with platform.id
 -------------------code---------------------
@@ -1906,7 +1906,7 @@ PS when we don`t have id we can use the index as key
 **************************************
 
 
-- after cleaing our code wanings now we need to share the selecetd genre with the game grid
+- after cleaing our code wanings now we need to share the selected genre with the game grid
 
 - so here we question how can we share the state with two components
 to do that we should lift up to the closet parent component
@@ -1915,12 +1915,12 @@ it`s the App component
 
 
 - now in the App component we craete useState and set to null so initialilly no genre 
-is selecetd we called selecetdGenre 
+is selected we called selectedGenre 
 -------------------code---------------------
 const [selectedGenre, setSelectedGenre] = useState(null);
 -------------------code---------------------
 
-until this point we can`t set the selecetdGenre to a diffrent value other than null coz TypeScript 
+until this point we can`t set the selectedGenre to a diffrent value other than null coz TypeScript 
 compiler doesn`t know that this varible can store Genre object so we need to type a generic type
 argument 
 
@@ -1962,7 +1962,7 @@ const GenreList = ({ onSelectedGenre }: Props)
 
 - now let`s test out implomantaion until this point
 in the Browser we select a Action genre for example 
-access to Components of dev tool and press on App component and we should see the selecetd state
+access to Components of dev tool and press on App component and we should see the selected state
 
 
 - next we need to pass this state to out game grid so it can be passed to the backend
@@ -2170,7 +2170,7 @@ const useGames = (selectedGenre: Genre | null) =>
   ]);
 -------------------code---------------------
 
-- now the last step we back to App components and pass the selecetd genre to GameGrid component
+- now the last step we back to App components and pass the selected genre to GameGrid component
 -------------------code---------------------
 <GridItem area={"main"}>
   <GameGrid selectedGenre={selectedGenre} />
@@ -2197,7 +2197,7 @@ we commit our code
 
 *** 22-_Highlighting_the_Selected_Genre ***
 
-we should have the app component pass the selecetd genre, to our GenreList.tsx.
+we should have the app component pass the selected genre, to our GenreList.tsx.
 and in GenreList where we render the button we`ll set the font weight dynamically.
 so if yo`re rendreing the selected genre, we make the font bold. other wise we render it normal 
 
@@ -2331,3 +2331,150 @@ if (error) return null;
 now we commit our code 
 "Build platform selector"
 
+*** 24-_Filtering_Games_by_Platform  ***
+
+we will use the same approch as genere
+
+- in the App component we declear a state variable for keeping track 
+of the selected platform chnages.
+we pass the selected platform to the game grid for filtering
+-------------------code---------------------
+const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
+    null
+  );
+-------------------code---------------------
+
+- now when the user select a platform we should notify the App component
+so we should go to the PlatformSelector.tsx and define a Props
+-------------------code---------------------
+interface Props {
+  onSelectPlatform: (platform: Platform) => void;
+}
+-------------------code---------------------
+
+- next we add as parameter
+-------------------code---------------------
+const PlatformSelector = ({ onSelectPlatform }: Props) => {}
+-------------------code---------------------
+
+- for handing the selection 
+-------------------code---------------------
+<MenuItem
+  onClick={() => onSelectPlatform(platform)}
+  key={platform.id}
+>
+  {platform.name}
+</MenuItem>
+-------------------code---------------------
+
+with that we notified our App component
+
+- next we go to App component and set this props 
+-------------------code---------------------
+<PlatformSelector
+  onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+></PlatformSelector>
+-------------------code---------------------
+
+now let`s test our implomantaion until this point
+
+now if we slected a platform nothing happens but we can see in the dev tool 
+when we go to components that the status has changed so our plumbing is working
+
+- now we need to pass this slector platform to teh GameGrid component
+
+so in App component
+-------------------code---------------------
+<GameGrid
+  selectedPlatform={selectedPlatform}
+  selectedGenre={selectedGenre}
+/>
+-------------------code---------------------
+
+- but we didn`t define the selectedPlatform in the GameGrid component yet so 
+first we add to Props
+-------------------code---------------------
+interface Props {
+  selectedGenre: Genre | null;
+  selectedPlatform: Platform | null;
+}
+-------------------code---------------------
+
+- then we add as parameter 
+-------------------code---------------------
+const GameGrid = ({ selectedGenre, selectedPlatform }: Props) => {}
+-------------------code---------------------
+
+- we should pass to the useGame hook 
+-------------------code---------------------
+const { data, error, isLoading } = useGames(selectedGenre, selectedPlatform);
+-------------------code---------------------
+
+- we modify the game hook to take platform as parameter and pass to the API using 
+parameter object 
+-------------------code---------------------
+const useGames = (
+  selectedGenre: Genre | null,
+  selectedPlatform: Platform | null
+) =>
+  useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: selectedGenre?.id,
+        parent_platforms: selectedPlatform?.id,
+      },
+    },
+    [selectedGenre?.id]
+  );
+-------------------code---------------------
+
+- then we should add selectedPlatform as dependency so many changes are affecting refreshes the data
+-------------------code---------------------
+useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: selectedGenre?.id,
+        parent_platforms: selectedPlatform?.id,
+      },
+    },
+    [selectedGenre?.id, selectedPlatform?.id]
+  );
+-------------------code---------------------
+
+- but still is not clear which platform is selected so we should render the label of the
+Platform dynamically
+
+- in App component we add selectedPlatform to the PlatformSelector
+-------------------code---------------------
+<PlatformSelector
+  selectedPlatform={selectedPlatform}
+  onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+></PlatformSelector>
+-------------------code---------------------
+
+
+- then we add selectedPlatform as Props to PlatformSelector.tsx 
+-------------------code---------------------
+interface Props {
+  selectedPlatform: Platform | null;
+  onSelectPlatform: (platform: Platform) => void;
+}
+-------------------code---------------------
+
+and add as parameter 
+-------------------code---------------------
+const PlatformSelector = ({ onSelectPlatform, selectedPlatform }: Props) => {}
+-------------------code---------------------
+
+and finally
+instead of rendering Platforms
+-------------------code---------------------
+{selectedPlatform?.name || "Platforms"}
+-------------------code---------------------
+
+- now we test our code until this point (filtering the genre and the platform togather)
+and we check our Network tab in dev tool to see if we send a correct request(has genre and platform parameters)
+we commit our code
+"Filter games by platforms"
