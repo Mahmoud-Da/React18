@@ -2478,3 +2478,138 @@ instead of rendering Platforms
 and we check our Network tab in dev tool to see if we send a correct request(has genre and platform parameters)
 we commit our code
 "Filter games by platforms"
+
+*** 25-_Refactoring-_Extracting_a_Query_Object ***
+
+it`s a refactoring time
+Currentlyin App.tsx we`ve got two useState variable (selectedGenre and selectedPlatform)
+but as we add more feature for filtering or sorting we will need to much useState 
+which will make our code more ugly and hard repetitive
+
+so what can we do here 
+we should pack our related variable inisde what we call the "Query Object Pattern"
+so we`ll create Query Object that contains all the information we need to query the games.
+with this our code will be cleaner and easier to understand.
+
+
+- first we define an interface called GameQuery with genre and platform (we didn`t called them selectGenre or selectPlatform)
+coz it will be repetitive
+-------------------code---------------------
+interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+}
+-------------------code---------------------
+
+- next we remove selectedGenre and selectedPlatform useState and instead we create useState with type GameQuery
+and we initialize to empty object not null coz we will only have a query object but the properties of this object
+could be null 
+-------------------code---------------------
+useState<GameQuery>({});
+-------------------code---------------------
+
+but we have error :
+Argument of type '{}' is not assignable to parameter of type 'GameQuery | (() => GameQuery)'
+
+to get rid of this error we as keyword
+-------------------code---------------------
+useState<GameQuery>({} as GameQuery);
+-------------------code---------------------
+
+- we called gameQuery
+-------------------code---------------------
+const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
+-------------------code---------------------
+
+- now we have alot of error we have to fix them one by one 
+-------------------code---------------------
+<GridItem area={"aside"} paddingX="5px">
+  <GenreList
+    selectedGenre={gameQuery.genre}
+    onSelectedGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+  />
+</GridItem>
+-------------------code---------------------
+
+and 
+-------------------code---------------------
+<PlatformSelector
+  selectedPlatform={gameQuery.platform}
+  onSelectPlatform={(platform) =>
+    setGameQuery({ ...gameQuery, platform })
+  }
+></PlatformSelector>
+-------------------code---------------------
+
+and 
+-------------------code---------------------
+<GameGrid
+  selectedPlatform={gameQuery.platform}
+  selectedGenre={gameQuery.genre}
+/>
+-------------------code---------------------
+
+- and now we need to use same technique in GameGrid.tsx 
+insetad of passing a bunch of variable here 
+-------------------code---------------------
+const GameGrid = ({ selectedGenre, selectedPlatform }: Props) => {}
+-------------------code---------------------
+
+we should pass an object 
+first we change the Props by adding gameQuery
+-------------------code---------------------
+interface Props {
+  gameQurey: GameQurey;
+  selectedGenre: Genre | null;
+  selectedPlatform: Platform | null;
+}
+-------------------code---------------------
+
+- we export form App.tsx 
+
+- next we remove this ugly properties
+-------------------code---------------------
+selectedGenre: Genre | null;
+selectedPlatform: Platform | null;
+-------------------code---------------------
+
+-  change GameGrid parameters to 
+-------------------code---------------------
+const GameGrid = ({ gameQurey }: Props) => {}
+-------------------code---------------------
+
+- now instead of passing multiple arguments to useGames we pass only one argument
+-------------------code---------------------
+ const { data, error, isLoading } = useGames(gameQurey);
+-------------------code---------------------
+
+- so we need to modify the parameter of useGames hook 
+-------------------code---------------------
+const useGames = (gameQuery: GameQuery)
+-------------------code---------------------
+
+- and fix the error code 
+and instead of passing the id of each object as dependencies we can pass all the object
+-------------------code---------------------
+const useGames = (gameQuery: GameQuery) =>
+  useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        parent_platforms: gameQuery.platform?.id,
+      },
+    },
+    [gameQuery]
+  );
+-------------------code---------------------
+
+- finaly we have in App.tsx error coz we changed the properties of GameGrid so we fix it 
+-------------------code---------------------
+<GameGrid gameQurey={gameQuery} />
+-------------------code---------------------
+
+now we test our code if our platform and genre work fine 
+then we commit our code 
+"Refactor: Extract a Query Object"
+
