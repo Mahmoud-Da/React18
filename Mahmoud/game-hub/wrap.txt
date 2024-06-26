@@ -2965,3 +2965,55 @@ now our code run fine so we commit our code
 when we selcet an item from sorting or platform component we see an error in console 
 
 for me i don`t see this error so i will skip this lesson 
+
+*** 30-_Building_Search_Input ***
+we will add search input to the navbar to search the games 
+
+- first we create SearchInput.tsx
+
+- we add inside Input component with placehoder and variant
+-------------------code---------------------
+<>
+  <Input borderRadius={20} placeholder="Search games ..."></Input>
+</>
+-------------------code---------------------
+
+- next we simply add this component to the NavBar.tsx next to Image component
+-------------------code---------------------
+<HStack justifyContent={"space-between"} padding="10px">
+  <Image src={logo} boxSize="60px"></Image>
+  <SearchInput />
+  <ColorModeSwitch />
+</HStack>
+-------------------code---------------------
+
+- now we can see that Dark Mode label is wrapped to fix it 
+we go to ColorModeSwitch component and chnage add to Text whitSpace="nowrap" (nowrap is just a standerd CSS)
+-------------------code---------------------
+<Text whiteSpace="nowrap">Dark Mode</Text>
+-------------------code---------------------
+
+- now in NavBar component we set justifyContent="space-between" coz we only had two Components
+now we already have three so no need for it we remove it 
+-------------------code---------------------
+<HStack padding="10px">
+-------------------code---------------------
+
+it will not make our UI better but it will make our code cleaner 
+
+- now we want to add Icon to the SearchInput component
+first we grap the Input componet with InputGroup component 
+then we add the InputLeftElement component and set the children to BsSearch component
+-------------------code---------------------
+<>
+  <InputGroup>
+    <InputLeftElement children={<BsSearch />} />
+    <Input borderRadius={20} placeholder="Search games ..."></Input>
+  </InputGroup>
+</>
+-------------------code---------------------
+
+now we test our code on multiple layout small and big 
+
+we commit our code 
+"Build search input"
