@@ -227,7 +227,7 @@ ChakraProvider theme={theme}>   /=> first place
 <App />
 -------------------code----------------------
 
-- now if we refresh our page the page is still light coz ChakaraUI stores the selecetd mode 
+- now if we refresh our page the page is still light coz ChakaraUI stores the selected mode 
 in the local storge so it can remmeber it in the future sessions
 
 we can check that with dev tool and went to Application then Local Storage
@@ -829,13 +829,13 @@ but to set the type of parent_platforms we have to define another interface
 so we define platform interface 
 
 -------------------code----------------------
-interface Platfrom {
+interface Platform {
   id: number;
   name: string;
   slug: string;
 }
 -------------------code----------------------
-now the tricky part is that the type of  parent_platforms: is not Platfrom[];
+now the tricky part is that the type of  parent_platforms: is not Platform[];
 
 it`s array of object where each object has property called platform (coz we had design smells )
 -------------------code----------------------
@@ -843,7 +843,7 @@ export interface Game {
   id: number;
   name: string;
   background_image: string;
-  parent_platforms: { platform: Platfrom }[];
+  parent_platforms: { platform: Platform }[];
 }
 -------------------code----------------------
 
@@ -871,12 +871,12 @@ component coz CardComponent is only related to the card implomantaion not the ic
 
 so we will move all the logic of rendering the platform to seperate component
 
-so in component folder we create component we called PlatfromIconList.tsx 
+so in component folder we create component we called PlatformIconList.tsx 
 
 first we create Props to access the platforms
 -------------------code----------------------
 interface Props {
-  platforms: Platfrom[];
+  platforms: Platform[];
 }
 -------------------code----------------------
 
@@ -891,7 +891,7 @@ after add Props to our Component we will test it intergation by add this code to
 
 
 -------------------code----------------------
-const PlatfromIconList = ({ platforms }: Props) => {
+const PlatformIconList = ({ platforms }: Props) => {
   return (
     <>
       {game.parent_platforms.map(({ platform }) => (
@@ -906,7 +906,7 @@ now we don`t need  game.parent_platforms coz we maping only the platform so need
 and import Text from ChakraUI we fix it 
 
 -------------------code----------------------
-const PlatfromIconList = ({ platforms }: Props) => {
+const PlatformIconList = ({ platforms }: Props) => {
   return (
     <>
       {platforms.map((platform) => (
@@ -917,9 +917,9 @@ const PlatfromIconList = ({ platforms }: Props) => {
 };
 -------------------code----------------------
 
-no in the GameCard we use our PlatfromIconList Component
+no in the GameCard we use our PlatformIconList Component
 -------------------code----------------------
-<PlatfromIconList
+<PlatformIconList
   platforms={game.parent_platforms.map((p) => p.platform)}
 />
 -------------------code----------------------
@@ -928,7 +928,7 @@ now we check if our code is workicg until this point
 
 now the last step is chage the platform labels {pc, Playstaion, ...} with icons  
 
-now inside the PlatfromIconList we will import icons from React Icons libraries
+now inside the PlatformIconList we will import icons from React Icons libraries
 -------------------code----------------------
 import {
   FaWindows,
@@ -1065,7 +1065,7 @@ export interface Game {
   id: number;
   name: string;
   background_image: string;
-  parent_platforms: { platform: Platfrom }[];
+  parent_platforms: { platform: Platform }[];
   metacritic: number;
 }
 -------------------code----------------------
@@ -1093,13 +1093,13 @@ const CriticScore = ({ score }: Props) => {
 now we check if it`s working 
 
 - next we want to move the patch to the right next to game platform 
-so we should grap the two component PlatfromIconList and CriticScore inisde horizontal stack
+so we should grap the two component PlatformIconList and CriticScore inisde horizontal stack
 
 - next we justifyContent to space between (which means the space that left put between this elements)
 -------------------code----------------------
 
 <HStack justifyContent="space-between">
-  <PlatfromIconList
+  <PlatformIconList
     platform={game.parent_platforms.map((p) => p.platform)}
   />
   <CriticScore score={game.metacritic} />
@@ -1360,7 +1360,7 @@ GameCardSkeleton
 <Card width="250px" borderRadius={10} overflow="hidden">
 -------------------code---------------------
 
-- now we have an issue we declure two related width 250px not dynamicaly in too places 
+- now we have an issue we declure two related width 250px not dynamically in too places 
 so if our styles in the future change and need to change the width we have to remmber to chnage it 
 in tow places 
 so we should fix this issue (but later) after finish deploying 
@@ -1886,7 +1886,7 @@ and
 </GameCardContainer>
 -------------------code---------------------
 
-same error with PlatfromIconList
+same error with PlatformIconList
 
 so we fix it by add key with platform.id
 -------------------code---------------------
@@ -1906,7 +1906,7 @@ PS when we don`t have id we can use the index as key
 **************************************
 
 
-- after cleaing our code wanings now we need to share the selecetd genre with the game grid
+- after cleaing our code wanings now we need to share the selected genre with the game grid
 
 - so here we question how can we share the state with two components
 to do that we should lift up to the closet parent component
@@ -1915,12 +1915,12 @@ it`s the App component
 
 
 - now in the App component we craete useState and set to null so initialilly no genre 
-is selecetd we called selecetdGenre 
+is selected we called selectedGenre 
 -------------------code---------------------
 const [selectedGenre, setSelectedGenre] = useState(null);
 -------------------code---------------------
 
-until this point we can`t set the selecetdGenre to a diffrent value other than null coz TypeScript 
+until this point we can`t set the selectedGenre to a diffrent value other than null coz TypeScript 
 compiler doesn`t know that this varible can store Genre object so we need to type a generic type
 argument 
 
@@ -1962,7 +1962,7 @@ const GenreList = ({ onSelectedGenre }: Props)
 
 - now let`s test out implomantaion until this point
 in the Browser we select a Action genre for example 
-access to Components of dev tool and press on App component and we should see the selecetd state
+access to Components of dev tool and press on App component and we should see the selected state
 
 
 - next we need to pass this state to out game grid so it can be passed to the backend
@@ -2170,7 +2170,7 @@ const useGames = (selectedGenre: Genre | null) =>
   ]);
 -------------------code---------------------
 
-- now the last step we back to App components and pass the selecetd genre to GameGrid component
+- now the last step we back to App components and pass the selected genre to GameGrid component
 -------------------code---------------------
 <GridItem area={"main"}>
   <GameGrid selectedGenre={selectedGenre} />
@@ -2194,3 +2194,486 @@ value of the slected genre and pass it to our game hook
 
 we commit our code 
 "Filter games by genre"
+
+*** 22-_Highlighting_the_Selected_Genre ***
+
+we should have the app component pass the selected genre, to our GenreList.tsx.
+and in GenreList where we render the button we`ll set the font weight dynamically.
+so if yo`re rendreing the selected genre, we make the font bold. other wise we render it normal 
+
+
+to to imploment it
+in GenreList
+- we add to Props selectedGenre
+-------------------code---------------------
+interface Props {
+  onSelectedGenre: (genre: Genre) => void;
+  selectedGenre: Genre | null;
+}
+-------------------code---------------------
+
+- we pass as parameter
+-------------------code---------------------
+const GenreList = ({ selectedGenre, onSelectedGenre }: Props) => {}
+-------------------code---------------------
+
+- we pass the fontweight to button 
+-------------------code---------------------
+fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+-------------------code---------------------
+
+- finally in the App component we we set the selectedGenre to selectedGenre
+-------------------code---------------------
+<GenreList
+  selectedGenre={selectedGenre}
+  onSelectedGenre={(genre) => setSelectedGenre(genre)}
+/>
+-------------------code---------------------
+
+here we commit our code
+"High light the selected genre"
+
+*** 23-_Building_Platform_Selector ***
+now we will just focus on rendreing this list and after we will imploment filtering
+
+- we create a component called PlatformSelector
+and inside we are going to return a Menu component of ChakaraUI and inside the Menu
+Component we create MenuButton component as Button
+
+-------------------code---------------------
+<Menu>
+  <MenuButton as={Button}>Platforms</MenuButton>
+</Menu>
+-------------------code---------------------
+
+- we give the MenuButton rightIcon of BsChevronDown
+-------------------code---------------------
+<Menu>
+  <MenuButton as={Button} rightIcon={<BsChevronDown></BsChevronDown>}>
+    Platforms
+  </MenuButton>
+</Menu>
+-------------------code---------------------
+
+- right after the MenuButton we add MenuList 
+and inside the MenuList we add right now 3 Menuitem 
+-------------------code---------------------
+<MenuList>
+  <MenuItem>item1</MenuItem>
+  <MenuItem>item2</MenuItem>
+  <MenuItem>item3</MenuItem>
+</MenuList>
+-------------------code---------------------
+
+and let`s test our application until this point 
+
+- we go to App component and add out PlatformSelector above GameGrid
+-------------------code---------------------
+<GridItem area={"main"}>
+  <PlatformSelector></PlatformSelector>
+  <GameGrid selectedGenre={selectedGenre} />
+</GridItem>
+-------------------code---------------------
+
+- next we need to render the items dynamically
+to do that we need to use different endpoint on rock API
+
+we go to https://api.rawg.io/docs/#tag/platforms
+and press "Get a list of parent platforms."
+
+we can see the endpoint 
+GET /platforms/lists/parents
+
+- so we need to create a custome hook to fetch the data from the endpoint
+
+- in hooks folder we create a file called usePlatforms.ts
+we copy the code from the useGenre and 
+1- change the Genre to Platform
+2- change the interface to match the platform 
+3- change the endpoint url 
+-------------------code---------------------
+import useData from "./useData";
+
+export interface Platforms {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+const usePlatforms = () => useData<Platforms>("/platforms/lists/parents");
+
+export default usePlatforms;
+-------------------code---------------------
+
+- now we got PlatformSelector.tsx and use our new hook 
+we get the data form the usePlatforms hook 
+-------------------code---------------------
+const { data } = usePlatforms();
+-------------------code---------------------
+
+then render it 
+-------------------code---------------------
+<MenuList>
+  {data.map((platform) => (
+    <MenuItem key={platform.id}>{platform.name}</MenuItem>
+  ))}
+</MenuList>
+-------------------code---------------------
+
+- now if we had error we don`t want to render too much error messages for each 
+component so we will return null
+-------------------code---------------------
+if (error) return null;
+-------------------code---------------------
+
+- now we test our error by going to the usePlatforms hook and manipulate the endpoint url
+
+now we commit our code 
+"Build platform selector"
+
+*** 24-_Filtering_Games_by_Platform  ***
+
+we will use the same approch as genere
+
+- in the App component we declear a state variable for keeping track 
+of the selected platform chnages.
+we pass the selected platform to the game grid for filtering
+-------------------code---------------------
+const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
+    null
+  );
+-------------------code---------------------
+
+- now when the user select a platform we should notify the App component
+so we should go to the PlatformSelector.tsx and define a Props
+-------------------code---------------------
+interface Props {
+  onSelectPlatform: (platform: Platform) => void;
+}
+-------------------code---------------------
+
+- next we add as parameter
+-------------------code---------------------
+const PlatformSelector = ({ onSelectPlatform }: Props) => {}
+-------------------code---------------------
+
+- for handing the selection 
+-------------------code---------------------
+<MenuItem
+  onClick={() => onSelectPlatform(platform)}
+  key={platform.id}
+>
+  {platform.name}
+</MenuItem>
+-------------------code---------------------
+
+with that we notified our App component
+
+- next we go to App component and set this props 
+-------------------code---------------------
+<PlatformSelector
+  onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+></PlatformSelector>
+-------------------code---------------------
+
+now let`s test our implomantaion until this point
+
+now if we slected a platform nothing happens but we can see in the dev tool 
+when we go to components that the status has changed so our plumbing is working
+
+- now we need to pass this slector platform to teh GameGrid component
+
+so in App component
+-------------------code---------------------
+<GameGrid
+  selectedPlatform={selectedPlatform}
+  selectedGenre={selectedGenre}
+/>
+-------------------code---------------------
+
+- but we didn`t define the selectedPlatform in the GameGrid component yet so 
+first we add to Props
+-------------------code---------------------
+interface Props {
+  selectedGenre: Genre | null;
+  selectedPlatform: Platform | null;
+}
+-------------------code---------------------
+
+- then we add as parameter 
+-------------------code---------------------
+const GameGrid = ({ selectedGenre, selectedPlatform }: Props) => {}
+-------------------code---------------------
+
+- we should pass to the useGame hook 
+-------------------code---------------------
+const { data, error, isLoading } = useGames(selectedGenre, selectedPlatform);
+-------------------code---------------------
+
+- we modify the game hook to take platform as parameter and pass to the API using 
+parameter object 
+-------------------code---------------------
+const useGames = (
+  selectedGenre: Genre | null,
+  selectedPlatform: Platform | null
+) =>
+  useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: selectedGenre?.id,
+        parent_platforms: selectedPlatform?.id,
+      },
+    },
+    [selectedGenre?.id]
+  );
+-------------------code---------------------
+
+- then we should add selectedPlatform as dependency so many changes are affecting refreshes the data
+-------------------code---------------------
+useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: selectedGenre?.id,
+        parent_platforms: selectedPlatform?.id,
+      },
+    },
+    [selectedGenre?.id, selectedPlatform?.id]
+  );
+-------------------code---------------------
+
+- but still is not clear which platform is selected so we should render the label of the
+Platform dynamically
+
+- in App component we add selectedPlatform to the PlatformSelector
+-------------------code---------------------
+<PlatformSelector
+  selectedPlatform={selectedPlatform}
+  onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+></PlatformSelector>
+-------------------code---------------------
+
+
+- then we add selectedPlatform as Props to PlatformSelector.tsx 
+-------------------code---------------------
+interface Props {
+  selectedPlatform: Platform | null;
+  onSelectPlatform: (platform: Platform) => void;
+}
+-------------------code---------------------
+
+and add as parameter 
+-------------------code---------------------
+const PlatformSelector = ({ onSelectPlatform, selectedPlatform }: Props) => {}
+-------------------code---------------------
+
+and finally
+instead of rendering Platforms
+-------------------code---------------------
+{selectedPlatform?.name || "Platforms"}
+-------------------code---------------------
+
+- now we test our code until this point (filtering the genre and the platform togather)
+and we check our Network tab in dev tool to see if we send a correct request(has genre and platform parameters)
+we commit our code
+"Filter games by platforms"
+
+*** 25-_Refactoring-_Extracting_a_Query_Object ***
+
+it`s a refactoring time
+Currentlyin App.tsx we`ve got two useState variable (selectedGenre and selectedPlatform)
+but as we add more feature for filtering or sorting we will need to much useState 
+which will make our code more ugly and hard repetitive
+
+so what can we do here 
+we should pack our related variable inisde what we call the "Query Object Pattern"
+so we`ll create Query Object that contains all the information we need to query the games.
+with this our code will be cleaner and easier to understand.
+
+
+- first we define an interface called GameQuery with genre and platform (we didn`t called them selectGenre or selectPlatform)
+coz it will be repetitive
+-------------------code---------------------
+interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+}
+-------------------code---------------------
+
+- next we remove selectedGenre and selectedPlatform useState and instead we create useState with type GameQuery
+and we initialize to empty object not null coz we will only have a query object but the properties of this object
+could be null 
+-------------------code---------------------
+useState<GameQuery>({});
+-------------------code---------------------
+
+but we have error :
+Argument of type '{}' is not assignable to parameter of type 'GameQuery | (() => GameQuery)'
+
+to get rid of this error we as keyword
+-------------------code---------------------
+useState<GameQuery>({} as GameQuery);
+-------------------code---------------------
+
+- we called gameQuery
+-------------------code---------------------
+const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
+-------------------code---------------------
+
+- now we have alot of error we have to fix them one by one 
+-------------------code---------------------
+<GridItem area={"aside"} paddingX="5px">
+  <GenreList
+    selectedGenre={gameQuery.genre}
+    onSelectedGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+  />
+</GridItem>
+-------------------code---------------------
+
+and 
+-------------------code---------------------
+<PlatformSelector
+  selectedPlatform={gameQuery.platform}
+  onSelectPlatform={(platform) =>
+    setGameQuery({ ...gameQuery, platform })
+  }
+></PlatformSelector>
+-------------------code---------------------
+
+and 
+-------------------code---------------------
+<GameGrid
+  selectedPlatform={gameQuery.platform}
+  selectedGenre={gameQuery.genre}
+/>
+-------------------code---------------------
+
+- and now we need to use same technique in GameGrid.tsx 
+insetad of passing a bunch of variable here 
+-------------------code---------------------
+const GameGrid = ({ selectedGenre, selectedPlatform }: Props) => {}
+-------------------code---------------------
+
+we should pass an object 
+first we change the Props by adding gameQuery
+-------------------code---------------------
+interface Props {
+  gameQurey: GameQurey;
+  selectedGenre: Genre | null;
+  selectedPlatform: Platform | null;
+}
+-------------------code---------------------
+
+- we export form App.tsx 
+
+- next we remove this ugly properties
+-------------------code---------------------
+selectedGenre: Genre | null;
+selectedPlatform: Platform | null;
+-------------------code---------------------
+
+-  change GameGrid parameters to 
+-------------------code---------------------
+const GameGrid = ({ gameQurey }: Props) => {}
+-------------------code---------------------
+
+- now instead of passing multiple arguments to useGames we pass only one argument
+-------------------code---------------------
+ const { data, error, isLoading } = useGames(gameQurey);
+-------------------code---------------------
+
+- so we need to modify the parameter of useGames hook 
+-------------------code---------------------
+const useGames = (gameQuery: GameQuery)
+-------------------code---------------------
+
+- and fix the error code 
+and instead of passing the id of each object as dependencies we can pass all the object
+-------------------code---------------------
+const useGames = (gameQuery: GameQuery) =>
+  useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        parent_platforms: gameQuery.platform?.id,
+      },
+    },
+    [gameQuery]
+  );
+-------------------code---------------------
+
+- finaly we have in App.tsx error coz we changed the properties of GameGrid so we fix it 
+-------------------code---------------------
+<GameGrid gameQurey={gameQuery} />
+-------------------code---------------------
+
+now we test our code if our platform and genre work fine 
+then we commit our code 
+"Refactor: Extract a Query Object"
+
+
+
+*** 26-_Building_Sort_Selector ***
+we will add another dropdown list next to platform to sort the games 
+now we will only render the sort component later we will do the actual sorting
+
+- first we create a new component SortSelector 
+this component will be too much similar to our Platform component
+to save time we will copy the code (return statement) from Platform component
+and for label we will render somthing static like "Order by: Relevance"
+and where we map the platform we render MenuItem*6
+-------------------code---------------------
+<Menu>
+  <MenuButton as={Button} rightIcon={<BsChevronDown></BsChevronDown>}>
+    "Order by: Relevance"
+  </MenuButton>
+  <MenuList>
+    <MenuItem>Relevance</MenuItem>
+    <MenuItem>Date added</MenuItem>
+    <MenuItem>Name</MenuItem>
+    <MenuItem>Release date</MenuItem>
+    <MenuItem>Popularity</MenuItem>
+    <MenuItem>Average rating</MenuItem>
+  </MenuList>
+</Menu>
+-------------------code---------------------
+
+- next we render it in App component
+-------------------code---------------------
+<GridItem area={"main"}>
+  <PlatformSelector
+    selectedPlatform={gameQuery.platform}
+    onSelectPlatform={(platform) =>
+      setGameQuery({ ...gameQuery, platform })
+    }
+  ></PlatformSelector>
+  <SortSelector></SortSelector>
+  <GameGrid gameQurey={gameQuery} />
+</GridItem>
+-------------------code---------------------
+
+- we check our code it`s work but need to add space between PlatformSelector and SortSelector
+to do that we should wrap PlatformSelector and SortSelector in HStack component and apply spacing of 5
+-------------------code---------------------
+<HStack spacing={5}>
+  <PlatformSelector
+    selectedPlatform={gameQuery.platform}
+    onSelectPlatform={(platform) =>
+      setGameQuery({ ...gameQuery, platform })
+    }
+  ></PlatformSelector>
+  <SortSelector></SortSelector>
+</HStack>
+-------------------code---------------------
+
+now our platform menu is not lined up with the first card so we need to apply left padding to line them  
+-------------------code---------------------
+<HStack spacing={5} paddingLeft={2}>
+-------------------code---------------------
+
+now our card is too close the card so we need seprate them by adding bottom margin 
+
+now we commit our code
+"Build Sort Selector"
