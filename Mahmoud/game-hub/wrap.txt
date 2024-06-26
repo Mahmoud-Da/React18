@@ -3351,3 +3351,49 @@ coz the heading is large we make it smaller and give it space between genres and
 
 now we commit our code 
 "clean up the Genres"
+
+*** 34-_Cleaning_Up_the_Game_Cards  ***
+
+now we will clean our GameCards.tsx first we want to move the icons and metacritic a bove the name 
+-------------------code---------------------
+<HStack justifyContent="space-between">
+  <PlatformIconList
+    platforms={game.parent_platforms.map((p) => p.platform)}
+  />
+  <CriticScore score={game.metacritic} />
+</HStack>
+<Heading fontSize="2xl">{game.name}</Heading>
+-------------------code---------------------
+
+- but the HStack is close to our Heading so we will give it a button margin 
+-------------------code---------------------
+<HStack justifyContent="space-between" marginBottom={3}>
+  <PlatformIconList
+    platforms={game.parent_platforms.map((p) => p.platform)}
+  />
+  <CriticScore score={game.metacritic} />
+</HStack>
+-------------------code---------------------
+
+- the next thing we want to improve is the spacing between the cards 
+currently it`s too close to each other so in GameGrid.tsx 
+we change the space to 6
+-------------------code---------------------
+<SimpleGrid
+  columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+  padding="10px"
+  spacing={6}
+>
+-------------------code---------------------
+
+- now having 5 cards on larg screen is too much so we will do it 4
+-------------------code---------------------
+<SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+        padding="10px"
+        spacing={6}
+      >
+-------------------code---------------------
+
+now we commit our code 
+"clean up the Game card"
