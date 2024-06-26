@@ -3017,3 +3017,175 @@ now we test our code on multiple layout small and big
 
 we commit our code 
 "Build search input"
+
+*** 31-_Searching_Games ***
+to imploment the searching we`ll use the same approach as before 
+so when user type somthing in the search bar and press enter the SearchInput component
+will notify the App component take this search text, store it in our qurey object
+and pass it down to the GameGrid component exacly like platform and sort
+
+- fisrt in the SearchInput component we will wrap all the elements inside form element
+and we don`t need action instead we handle it manually using onSubmit
+- we use preventDefault to prevent our form to post data to server 
+-------------------code---------------------
+<form
+  onSubmit={(event) => {
+    event.preventDefault();
+  }}
+>
+  <InputGroup>
+    <InputLeftElement children={<BsSearch />} />
+    <Input borderRadius={20} placeholder="Search games ..."></Input>
+  </InputGroup>
+</form>
+-------------------code---------------------
+
+- next we want to access the input field value we can use useState or useRef but 
+coz we have only one element it`s better to use useRef hook 
+
+so we define ref element
+-------------------code---------------------
+const ref = useRef<HTMLInputElement>(null);
+-------------------code---------------------
+
+and then we associate this ref object with input components
+-------------------code---------------------
+<Input
+  ref={ref}
+  borderRadius={20}
+  placeholder="Search games ..."
+></Input>
+-------------------code---------------------
+
+- next we say if ref.currect is truthy for now we log the ref to check if it works 
+-------------------code---------------------
+<form
+  onSubmit={(event) => {
+    event.preventDefault();
+    if (ref.current) console.log(ref.current.value);
+  }}
+>
+-------------------code---------------------
+
+now we check our code 
+first we have layout issue coz form element doesn`t have the width of 100% 
+we have two options 
+option1 to add css dirctery 
+-------------------code---------------------
+<form
+  style={{ width: "100%" }}
+  onSubmit={(event) => {
+    event.preventDefault();
+    if (ref.current) console.log(ref.current.value);
+  }}
+>
+-------------------code---------------------
+but generaly speaking inline style are ugly and we should try to avoid them as much as possible
+
+the better approach to add global rule in our stylesheet  
+so we go to index.css and give all the form the width of 100% 
+-------------------code---------------------
+form {
+  width: 100%;
+}
+-------------------code---------------------
+
+- now we solved our layout issue and test the ref of the search input 
+we can see if we type anything in the search input and press enter we can see it in the console 
+
+so we need to take the value of search input and pass it to App component
+
+- to pass to App component in SearchInput.tsx we add Props we will add function
+onSearch that take searchText and return void
+-------------------code---------------------
+interface Props {
+  onSearch: (searchText: string) => void;
+}
+-------------------code---------------------
+
+next we add as paramter 
+-------------------code---------------------
+const SearchInput = ({ onSearch }: Props) => {
+
+}
+-------------------code---------------------
+
+- and finally we change the log on console with onSearch method 
+-------------------code---------------------
+onSubmit={(event) => {
+        event.preventDefault();
+        if (ref.current) onSearch(ref.current.value);
+      }}
+-------------------code---------------------
+
+- now we go to the App component
+first we should add the search to our query object
+-------------------code---------------------
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code---------------------
+
+now we can`t pass the searchText to Navbar coz we should pass it to InputSreach and InputSreach we called inside the 
+NavBar 
+we can`t pass a props to Navbar then pass it InputSreach coz it will make our code hard to maintaine in the future 
+but now we will do it in this way then we will fix in the next part 
+
+to save time we copy the interface from the SearchInput.tsx to NavBar.tsx
+-------------------code---------------------
+interface Props {
+  onSearch: (searchText: string) => void;
+}
+-------------------code---------------------
+
+pass it as parameter
+-------------------code---------------------
+const NavBar = ({ onSearch }: Props) => {}
+-------------------code---------------------
+
+then pass it to SearchInput
+-------------------code---------------------
+<SearchInput onSearch={onSearch} />
+-------------------code---------------------
+
+no we go back to App component and pass it the same as platform and sort game 
+-------------------code---------------------
+<GridItem area={"nav"}>
+  <NavBar
+    onSearch={(searchText) =>
+      setGameQuery({ ...gameQuery, searchText })
+    }
+  />
+</GridItem>
+-------------------code---------------------
+
+- now we will test out state if the value is the same as search input before sending it to server
+we add "grand" to serach input and check in dev tool Components => App if the hooks state has serachText with grand 
+-------------------code---------------------
+State : {searchText: "dsadasd"}
+searchText : "dsadasd"
+-------------------code---------------------
+
+- now we check it and saw it`s work fine then in useGames we pass it to backend
+-------------------code---------------------
+const useGames = (gameQuery: GameQuery) =>
+  useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        parent_platforms: gameQuery.platform?.id,
+        ordering: gameQuery.sortOrder,
+        search: gameQuery.searchText,
+      },
+    },
+    [gameQuery]
+  );
+-------------------code---------------------
+
+
+- now we check our code and it works and we commit our code 
+"imploment Search"
