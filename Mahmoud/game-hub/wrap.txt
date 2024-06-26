@@ -2960,3 +2960,8 @@ const getCroppedImageUrl = (url: string) => {
 now our code run fine so we commit our code 
 "Handle games with no images"
 
+*** 29-_Fixing_the_Issue_with_Chakra_Menus ***
+
+when we selcet an item from sorting or platform component we see an error in console 
+
+for me i don`t see this error so i will skip this lesson 
