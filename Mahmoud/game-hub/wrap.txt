@@ -2627,7 +2627,7 @@ and where we map the platform we render MenuItem*6
 -------------------code---------------------
 <Menu>
   <MenuButton as={Button} rightIcon={<BsChevronDown></BsChevronDown>}>
-    "Order by: Relevance"
+    Order by: Relevance
   </MenuButton>
   <MenuList>
     <MenuItem>Relevance</MenuItem>
@@ -2677,3 +2677,247 @@ now our card is too close the card so we need seprate them by adding bottom marg
 
 now we commit our code
 "Build Sort Selector"
+
+*** 27-_Sorting_Games ***
+to sort the game we will take the same approch as filtering
+
+so when the user selcet the sort order the SortSelector component will notify App component
+and then the app component will pass the new sort order to the game grid.
+
+- for sorting the data we will look at the documentation of the rog 
+in Get a list of games.
+we can see the "QUERY PARAMETER" inside we can see ordering query parameter
+we can set it as it writin to name, released and so on 
+and if we want for the reverse sort order we can use "-" before the sort order as the example
+-------------------code---------------------
+ordering	 string
+           Available fields: name, released, added, created, updated, rating, metacritic.
+          You can reverse the sort order adding a hyphen, for example: -released.
+-------------------code---------------------
+
+
+- now in SortSelector.tsx insetad of apply onClick to each Menuitem 
+-------------------code---------------------
+<MenuList>
+  <MenuItem onClick{}>Relevance</MenuItem>
+  <MenuItem onClick{}>Date added</MenuItem>
+  <MenuItem onClick{}>Name</MenuItem>
+  <MenuItem onClick{}>Release date</MenuItem>
+  <MenuItem onClick{}>Popularity</MenuItem>
+  <MenuItem onClick{}>Average rating</MenuItem>
+</MenuList>
+-------------------code---------------------
+
+it`s better to store all MenuItem(sort order) valuse inside  an array and map each item of that array to MenuItem
+
+- so on the top we create array of sort order 
+this array containes objects each object has value (the one we want to send it the backend) and label (to show to UI)
+-------------------code---------------------
+const sortOrders = [
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+  ];
+-------------------code---------------------
+
+- now we add each value of MenuItem inside the label 
+-------------------code---------------------
+const sortOrders = [
+    { value: "", label: "Relevance" },
+    { value: "", label: "Date added" },
+    { value: "", label: "Name" },
+    { value: "", label: "Release date" },
+    { value: "", label: "Popularity" },
+    { value: "", label: "Average rating" },
+  ];
+-------------------code---------------------
+
+- now for 
+Relevance:
+ the value will be empty coz we don`t want to send anything to server (default value)
+
+Date added:
+value will be added but we want to show the newest game first so we will add hyphen before -added
+
+Name:
+value will be name
+
+Release date:
+the value will be released with hyphon coz we want to show the newest one -released
+
+Popularity:
+the value will be -metacritic
+
+Average rating:
+the value will be -rating
+-------------------code---------------------
+const sortOrders = [
+    { value: "", label: "Relevance" },
+    { value: "-added", label: "Date added" },
+    { value: "name", label: "Name" },
+    { value: "-released", label: "Release date" },
+    { value: "-metacritic", label: "Popularity" },
+    { value: "-rating", label: "Average rating" },
+  ];
+-------------------code---------------------
+
+
+- now we remove the 6 MenuItem and map sortOrders to each MenuItem
+-------------------code---------------------
+{sortOrders.map((order) => (
+  <MenuItem key={order.value} value={order.value}>
+    {order.label}
+  </MenuItem>
+))}
+-------------------code---------------------
+
+- next we add the onClick event to notify the App component (parent component)
+first we add props 
+-------------------code---------------------
+interface Props {
+  onSelectSortOrder: (sortOrder: string) => void;
+}
+-------------------code---------------------
+
+next we give it as parameter to SortSelector 
+-------------------code---------------------
+const SortSelector = ({ onSelectSortOrder }: Props) => {}
+-------------------code---------------------
+
+finaly we set the value that we want to notify it to App component
+-------------------code---------------------
+<MenuItem
+  onClick={() => onSelectSortOrder(order.value)}
+  key={order.value}
+  value={order.value}
+>
+  {order.label}
+</MenuItem>
+-------------------code---------------------
+
+- now we should go to the App component
+
+add the sort order to our query object
+-------------------code---------------------
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+  sortOrder: string;
+}
+-------------------code---------------------
+
+next pass the new game query object to our GameGrid
+-------------------code---------------------
+<SortSelector
+  onSelectSortOrder={(sortOrder) =>
+    setGameQuery({ ...gameQuery, sortOrder })
+  }
+></SortSelector>
+-------------------code---------------------
+
+now by adding the onSelectSortOrder to gameGrid it will causees the app component to be render (coz the status is changed)
+
+now in the next render we will pass the new game query object to our GameGrid
+inside GameGrid already we use useGame(gameQuery) so we don`t need to make any changes 
+so we go to the useGame hook when calling the server we should add a new query parameter called ordering 
+and coz we already encapsulating related value inside an object we don`t need to set the dependencies
+-------------------code---------------------
+useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        parent_platforms: gameQuery.platform?.id,
+        ordering: gameQuery.sortOrder,
+      },
+    },
+    [gameQuery]
+  );
+-------------------code---------------------
+
+- now let`s test our code 
+
+- we can see our app is crashed 
+
+in console we have this error:
+TypeError: Cannot read properties of null (reading 'indexOf')
+
+this happend in image URL on the line 4 if we click it we can see in the Browser
+the error lcoation 
+-------------------code---------------------
+const index = url.indexOf(target) + target.length;
+-------------------code---------------------
+
+the reasong why coz some games doesn`t have images so we need to handle it 
+but this issue is problem and different of what we are working on we will temproray fix 
+and then we will fix it temproray by adding TODO: 
+-------------------code---------------------
+const getCroppedImageUrl = (url: string) => {
+  // TODO: Cannot read properties of null (reading 'indexOf') for games without image
+  if (!url) return "";
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+};
+-------------------code---------------------
+
+
+now we test or code and if we sorted by name we can see the games withuot image
+we will fix this later 
+
+now let`s check our request in dev tool to see if we are sending the right qurey parameter
+we can see
+-------------------code---------------------
+key: --------
+ordering: name
+-------------------code---------------------
+
+and now what if we select the platform then we slected the order 
+-------------------code---------------------
+parent_platforms: 3
+ordering: -released
+-------------------code---------------------
+it`s still work finally
+
+now one thing is missing is the dynamic currnet sorting label 
+to render it we should have the app component pass the current sort order to SortSelector component
+-------------------code---------------------
+<SortSelector
+  sortOrder={gameQuery.sortOrder}
+  onSelectSortOrder={(sortOrder) =>
+    setGameQuery({ ...gameQuery, sortOrder })
+  }
+-------------------code---------------------
+
+and add this props to SortSelector
+-------------------code---------------------
+interface Props {
+  onSelectSortOrder: (sortOrder: string) => void;
+  sortOrder: string;
+}
+-------------------code---------------------
+
+then add as parameter
+-------------------code---------------------
+const SortSelector = ({ onSelectSortOrder, sortOrder }: Props) => {}
+-------------------code---------------------
+
+now instead of rendering the relevance we should find the sort order with a given value of sortOrders array 
+and sort is label 
+-------------------code---------------------
+const currentSortOrder = sortOrders.find(
+    (order) => order.value === sortOrder
+  );
+
+-------------------code---------------------
+
+finally we rendering it 
+-------------------code---------------------
+Order by: {currentSortOrder?.label || "Relevance"}
+-------------------code---------------------
+
+we commit our code 
+"Sort the Games"
