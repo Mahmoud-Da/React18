@@ -58,7 +58,7 @@ we add button (method: ChakraUI site)
 we see u ugly blue border around the button when we hover
 coz we havn`t remove the the code from the index.css (so we remove all the style the code inside it to fix that)
 
-until this point we check the git tree of of our chnages (always make sure to do that before commit to avoid commit unnecessary code )
+until this point we check the git tree of of our changes (always make sure to do that before commit to avoid commit unnecessary code )
 and we commnt our code  "install ChakraUI" 
 
 to check our commit until this point we type
@@ -2126,7 +2126,7 @@ empty brackets in useEffect that`s means we want to fetch the data only the firs
 is rendrered.
 
 to to solve this issue we should pass an array of dependencies as second argument of useEffect hook 
-so when the selector genre chnages we send another request to get the games that match the selected genre
+so when the selector genre changes we send another request to get the games that match the selected genre
 to do that 
 we add deps as thid parameter which is going to be an array of dependencies, now at this point we don`t 
 know the type of that dependencies, so any array 
@@ -2336,7 +2336,7 @@ now we commit our code
 we will use the same approch as genere
 
 - in the App component we declear a state variable for keeping track 
-of the selected platform chnages.
+of the selected platform changes.
 we pass the selected platform to the game grid for filtering
 -------------------code---------------------
 const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
@@ -3189,3 +3189,106 @@ const useGames = (gameQuery: GameQuery) =>
 
 - now we check our code and it works and we commit our code 
 "imploment Search"
+
+*** 32-_Adding_a_Dynamic_Heading ***
+next we will add a dynamic Header above the Platform and SortSelector components changes based on currunt
+filter
+
+ex: if we select Action from Genre  we will have "Action Games" and if we select Xbox from platform 
+we will see "Xbox Action Games"
+
+- we will create new component called GameHeading.tsx and we can return h1 element
+but because we using ChakaraUI in all our project it`s better to use ChakaraUI components as much as possible
+so we will use Heading component from ChakaraUI
+-------------------code---------------------
+<>
+  <Heading as="h1"></Heading>
+</>
+-------------------code---------------------
+
+- now to render the heading dynamically we should receive the game query object as a Props in GameHeading.tsx 
+so let`s define the Props 
+-------------------code---------------------
+interface Props {
+  gameQuery: GameQuery;
+}
+-------------------code---------------------
+
+then we add as parameter
+-------------------code---------------------
+const GameHeading = ({ gameQuery }: Props) => {}
+-------------------code---------------------
+
+- so what the logic we want to render 
+1- we want to render "Games" 
+2- if the user select a genre we want to render genre name + Games ex: "Action Games" 
+3- if the user select a platform we should render platform name + Games "Xbox Games" 
+4- if the user select both genre and platform we want to show genre name + platform name + Games "Xbox Action Games"
+
+to do that we define a constant of that logic and render it
+-------------------code---------------------
+const heading = `${gameQuery?.platform?.name} ${gameQuery.genre?.name} Games`;
+
+  return (
+    <>
+      <Heading as="h1">{heading}</Heading>
+    </>
+  );
+-------------------code---------------------
+
+next we go the App component and render GameHeading before HStack component
+-------------------code---------------------
+<GameHeading gameQuery={gameQuery} />
+-------------------code---------------------
+
+now we test our code we can see we have 
+"undefined undefined Games"
+
+to fix that we render empty string if the value not exist 
+-------------------code---------------------
+const heading = `${gameQuery?.platform?.name || ""} 
+  ${gameQuery.genre?.name || ""}
+   Games`;
+-------------------code---------------------
+
+- now we test our code 
+it`s work fine but we need to add a vertical margin coz our GameHeading is too much near to our SortSelector and PlatformSelector components
+and we can also make our fon bigger 
+-------------------code---------------------
+<>
+  <Heading as="h1" marginY={5} fontSize="5xl">
+    {heading}
+  </Heading>
+</>
+-------------------code---------------------
+
+now we have issue that our GameHeading is not a line with our Sorts component coz we already pass paddingLeft={2}
+to HStack now to fix we have two options 
+1- add paddingLeft={2} to GameHeading either but that will make our code repetitive
+and in future if add another component we have to remmber to paddingLeft={2} to it
+2- better approach to wrap HStack and GameHeading inisde A Box and give a paddingLeft={2}
+
+-------------------code---------------------
+<Box paddingLeft={2}>
+  <GameHeading gameQuery={gameQuery} />
+  <HStack spacing={5} marginBottom={5}>
+    <PlatformSelector
+      selectedPlatform={gameQuery.platform}
+      onSelectPlatform={(platform) =>
+        setGameQuery({ ...gameQuery, platform })
+      }
+    ></PlatformSelector>
+    <SortSelector
+      sortOrder={gameQuery.sortOrder}
+      onSelectSortOrder={(sortOrder) =>
+        setGameQuery({ ...gameQuery, sortOrder })
+      }
+    ></SortSelector>
+  </HStack>
+</Box>
+-------------------code---------------------
+
+now our code looks beautiful and aligind 
+
+now we commit our code 
+"Add a dynamic page heading"
