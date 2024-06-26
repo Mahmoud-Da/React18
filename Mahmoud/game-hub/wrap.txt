@@ -2921,3 +2921,42 @@ Order by: {currentSortOrder?.label || "Relevance"}
 
 we commit our code 
 "Sort the Games"
+
+*** 28-_Handling_Games_without_an_Image ***
+
+to handle the games without image we will use default placehoder from GameHub Resources.zip
+and grap it inside the assets folder
+
+we rename it to no-image-placeholder (make sure to webp)
+
+- now in image-url.ts because the no-image-placeholder.webp is static asset that is going to deploy
+in our application 
+we can`t type path like ex
+-------------------code---------------------
+if (!url) return "../asset/imgae.webp";
+-------------------code---------------------
+
+instead we should import the image as module 
+-------------------code---------------------
+const getCroppedImageUrl = (url: string) => {
+  // TODO: Cannot read properties of null (reading 'indexOf') for games without image
+  if (!url) return noImage;
+  const target = "media/";
+  .... }
+-------------------code---------------------
+
+- finally we check our code and if it`s work we remove the TODO statement
+-------------------code---------------------
+import noImage from "../assets/no-image-placeholder.webp";
+
+const getCroppedImageUrl = (url: string) => {
+  if (!url) return noImage;
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+};
+-------------------code---------------------
+
+now our code run fine so we commit our code 
+"Handle games with no images"
+
