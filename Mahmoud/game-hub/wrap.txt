@@ -3292,3 +3292,62 @@ now our code looks beautiful and aligind
 
 now we commit our code 
 "Add a dynamic page heading"
+
+*** 33-_Cleaning_Up_the_Genres ***
+there some few things that we want to improve in the look for example 
+in genre we have 
+"Massively Multiplayer" the text is too sticked togather and overlapping the image
+this because we are using button and buttons by default don`t wrap text
+
+how to fix it in GenreList.tsx we set the whiteSpace of the Button to normal (nowrap is the default value)
+-------------------code---------------------
+<Button
+  whiteSpace="normal"
+  fontSize="lg"
+  fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+  variant="link"
+  onClick={() => onSelectedGenre(genre)}
+>
+  {genre.name}
+</Button>
+-------------------code---------------------
+
+but the text is currently center aligind, so we should make it left aligind, so it aligins with other 
+genres 
+-------------------code---------------------
+<Button
+  whiteSpace="normal"
+  textAlign="left"
+  fontSize="lg"
+  fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+  variant="link"
+  onClick={() => onSelectedGenre(genre)}
+>
+  {genre.name}
+</Button>
+-------------------code---------------------
+
+- the next issue is we need to address involves our images, if we pay close attention we can see 
+aspect ratio of these images is distorted because be getting images that 600 by 400
+but we displaying them 32 by 32 boxes with objectFit="cover" the image will scaled to fit the container
+while preserving it aspect ratio
+
+-------------------code---------------------
+<Image
+  boxSize="32px"
+  objectFit="cover"
+  borderRadius={8}
+  src={getCroppedImageUrl(genre.image_background)}
+/>
+-------------------code---------------------
+
+- finaly we add Heading to our component says Genre
+coz the heading is large we make it smaller and give it space between genres and the heading
+-------------------code---------------------
+<Heading fontSize="2xl" marginBottom={3}>
+  Genres
+</Heading>
+-------------------code---------------------
+
+now we commit our code 
+"clean up the Genres"
