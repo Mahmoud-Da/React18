@@ -58,7 +58,7 @@ we add button (method: ChakraUI site)
 we see u ugly blue border around the button when we hover
 coz we havn`t remove the the code from the index.css (so we remove all the style the code inside it to fix that)
 
-until this point we check the git tree of of our chnages (always make sure to do that before commit to avoid commit unnecessary code )
+until this point we check the git tree of of our changes (always make sure to do that before commit to avoid commit unnecessary code )
 and we commnt our code  "install ChakraUI" 
 
 to check our commit until this point we type
@@ -2126,7 +2126,7 @@ empty brackets in useEffect that`s means we want to fetch the data only the firs
 is rendrered.
 
 to to solve this issue we should pass an array of dependencies as second argument of useEffect hook 
-so when the selector genre chnages we send another request to get the games that match the selected genre
+so when the selector genre changes we send another request to get the games that match the selected genre
 to do that 
 we add deps as thid parameter which is going to be an array of dependencies, now at this point we don`t 
 know the type of that dependencies, so any array 
@@ -2336,7 +2336,7 @@ now we commit our code
 we will use the same approch as genere
 
 - in the App component we declear a state variable for keeping track 
-of the selected platform chnages.
+of the selected platform changes.
 we pass the selected platform to the game grid for filtering
 -------------------code---------------------
 const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
@@ -2627,7 +2627,7 @@ and where we map the platform we render MenuItem*6
 -------------------code---------------------
 <Menu>
   <MenuButton as={Button} rightIcon={<BsChevronDown></BsChevronDown>}>
-    "Order by: Relevance"
+    Order by: Relevance
   </MenuButton>
   <MenuList>
     <MenuItem>Relevance</MenuItem>
@@ -2677,3 +2677,723 @@ now our card is too close the card so we need seprate them by adding bottom marg
 
 now we commit our code
 "Build Sort Selector"
+
+*** 27-_Sorting_Games ***
+to sort the game we will take the same approch as filtering
+
+so when the user selcet the sort order the SortSelector component will notify App component
+and then the app component will pass the new sort order to the game grid.
+
+- for sorting the data we will look at the documentation of the rog 
+in Get a list of games.
+we can see the "QUERY PARAMETER" inside we can see ordering query parameter
+we can set it as it writin to name, released and so on 
+and if we want for the reverse sort order we can use "-" before the sort order as the example
+-------------------code---------------------
+ordering	 string
+           Available fields: name, released, added, created, updated, rating, metacritic.
+          You can reverse the sort order adding a hyphen, for example: -released.
+-------------------code---------------------
+
+
+- now in SortSelector.tsx insetad of apply onClick to each Menuitem 
+-------------------code---------------------
+<MenuList>
+  <MenuItem onClick{}>Relevance</MenuItem>
+  <MenuItem onClick{}>Date added</MenuItem>
+  <MenuItem onClick{}>Name</MenuItem>
+  <MenuItem onClick{}>Release date</MenuItem>
+  <MenuItem onClick{}>Popularity</MenuItem>
+  <MenuItem onClick{}>Average rating</MenuItem>
+</MenuList>
+-------------------code---------------------
+
+it`s better to store all MenuItem(sort order) valuse inside  an array and map each item of that array to MenuItem
+
+- so on the top we create array of sort order 
+this array containes objects each object has value (the one we want to send it the backend) and label (to show to UI)
+-------------------code---------------------
+const sortOrders = [
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+    { value: "", label: "" },
+  ];
+-------------------code---------------------
+
+- now we add each value of MenuItem inside the label 
+-------------------code---------------------
+const sortOrders = [
+    { value: "", label: "Relevance" },
+    { value: "", label: "Date added" },
+    { value: "", label: "Name" },
+    { value: "", label: "Release date" },
+    { value: "", label: "Popularity" },
+    { value: "", label: "Average rating" },
+  ];
+-------------------code---------------------
+
+- now for 
+Relevance:
+ the value will be empty coz we don`t want to send anything to server (default value)
+
+Date added:
+value will be added but we want to show the newest game first so we will add hyphen before -added
+
+Name:
+value will be name
+
+Release date:
+the value will be released with hyphon coz we want to show the newest one -released
+
+Popularity:
+the value will be -metacritic
+
+Average rating:
+the value will be -rating
+-------------------code---------------------
+const sortOrders = [
+    { value: "", label: "Relevance" },
+    { value: "-added", label: "Date added" },
+    { value: "name", label: "Name" },
+    { value: "-released", label: "Release date" },
+    { value: "-metacritic", label: "Popularity" },
+    { value: "-rating", label: "Average rating" },
+  ];
+-------------------code---------------------
+
+
+- now we remove the 6 MenuItem and map sortOrders to each MenuItem
+-------------------code---------------------
+{sortOrders.map((order) => (
+  <MenuItem key={order.value} value={order.value}>
+    {order.label}
+  </MenuItem>
+))}
+-------------------code---------------------
+
+- next we add the onClick event to notify the App component (parent component)
+first we add props 
+-------------------code---------------------
+interface Props {
+  onSelectSortOrder: (sortOrder: string) => void;
+}
+-------------------code---------------------
+
+next we give it as parameter to SortSelector 
+-------------------code---------------------
+const SortSelector = ({ onSelectSortOrder }: Props) => {}
+-------------------code---------------------
+
+finaly we set the value that we want to notify it to App component
+-------------------code---------------------
+<MenuItem
+  onClick={() => onSelectSortOrder(order.value)}
+  key={order.value}
+  value={order.value}
+>
+  {order.label}
+</MenuItem>
+-------------------code---------------------
+
+- now we should go to the App component
+
+add the sort order to our query object
+-------------------code---------------------
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+  sortOrder: string;
+}
+-------------------code---------------------
+
+next pass the new game query object to our GameGrid
+-------------------code---------------------
+<SortSelector
+  onSelectSortOrder={(sortOrder) =>
+    setGameQuery({ ...gameQuery, sortOrder })
+  }
+></SortSelector>
+-------------------code---------------------
+
+now by adding the onSelectSortOrder to gameGrid it will causees the app component to be render (coz the status is changed)
+
+now in the next render we will pass the new game query object to our GameGrid
+inside GameGrid already we use useGame(gameQuery) so we don`t need to make any changes 
+so we go to the useGame hook when calling the server we should add a new query parameter called ordering 
+and coz we already encapsulating related value inside an object we don`t need to set the dependencies
+-------------------code---------------------
+useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        parent_platforms: gameQuery.platform?.id,
+        ordering: gameQuery.sortOrder,
+      },
+    },
+    [gameQuery]
+  );
+-------------------code---------------------
+
+- now let`s test our code 
+
+- we can see our app is crashed 
+
+in console we have this error:
+TypeError: Cannot read properties of null (reading 'indexOf')
+
+this happend in image URL on the line 4 if we click it we can see in the Browser
+the error lcoation 
+-------------------code---------------------
+const index = url.indexOf(target) + target.length;
+-------------------code---------------------
+
+the reasong why coz some games doesn`t have images so we need to handle it 
+but this issue is problem and different of what we are working on we will temproray fix 
+and then we will fix it temproray by adding TODO: 
+-------------------code---------------------
+const getCroppedImageUrl = (url: string) => {
+  // TODO: Cannot read properties of null (reading 'indexOf') for games without image
+  if (!url) return "";
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+};
+-------------------code---------------------
+
+
+now we test or code and if we sorted by name we can see the games withuot image
+we will fix this later 
+
+now let`s check our request in dev tool to see if we are sending the right qurey parameter
+we can see
+-------------------code---------------------
+key: --------
+ordering: name
+-------------------code---------------------
+
+and now what if we select the platform then we slected the order 
+-------------------code---------------------
+parent_platforms: 3
+ordering: -released
+-------------------code---------------------
+it`s still work finally
+
+now one thing is missing is the dynamic currnet sorting label 
+to render it we should have the app component pass the current sort order to SortSelector component
+-------------------code---------------------
+<SortSelector
+  sortOrder={gameQuery.sortOrder}
+  onSelectSortOrder={(sortOrder) =>
+    setGameQuery({ ...gameQuery, sortOrder })
+  }
+-------------------code---------------------
+
+and add this props to SortSelector
+-------------------code---------------------
+interface Props {
+  onSelectSortOrder: (sortOrder: string) => void;
+  sortOrder: string;
+}
+-------------------code---------------------
+
+then add as parameter
+-------------------code---------------------
+const SortSelector = ({ onSelectSortOrder, sortOrder }: Props) => {}
+-------------------code---------------------
+
+now instead of rendering the relevance we should find the sort order with a given value of sortOrders array 
+and sort is label 
+-------------------code---------------------
+const currentSortOrder = sortOrders.find(
+    (order) => order.value === sortOrder
+  );
+
+-------------------code---------------------
+
+finally we rendering it 
+-------------------code---------------------
+Order by: {currentSortOrder?.label || "Relevance"}
+-------------------code---------------------
+
+we commit our code 
+"Sort the Games"
+
+*** 28-_Handling_Games_without_an_Image ***
+
+to handle the games without image we will use default placehoder from GameHub Resources.zip
+and grap it inside the assets folder
+
+we rename it to no-image-placeholder (make sure to webp)
+
+- now in image-url.ts because the no-image-placeholder.webp is static asset that is going to deploy
+in our application 
+we can`t type path like ex
+-------------------code---------------------
+if (!url) return "../asset/imgae.webp";
+-------------------code---------------------
+
+instead we should import the image as module 
+-------------------code---------------------
+const getCroppedImageUrl = (url: string) => {
+  // TODO: Cannot read properties of null (reading 'indexOf') for games without image
+  if (!url) return noImage;
+  const target = "media/";
+  .... }
+-------------------code---------------------
+
+- finally we check our code and if it`s work we remove the TODO statement
+-------------------code---------------------
+import noImage from "../assets/no-image-placeholder.webp";
+
+const getCroppedImageUrl = (url: string) => {
+  if (!url) return noImage;
+  const target = "media/";
+  const index = url.indexOf(target) + target.length;
+  return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+};
+-------------------code---------------------
+
+now our code run fine so we commit our code 
+"Handle games with no images"
+
+*** 29-_Fixing_the_Issue_with_Chakra_Menus ***
+
+when we selcet an item from sorting or platform component we see an error in console 
+
+for me i don`t see this error so i will skip this lesson 
+
+*** 30-_Building_Search_Input ***
+we will add search input to the navbar to search the games 
+
+- first we create SearchInput.tsx
+
+- we add inside Input component with placehoder and variant
+-------------------code---------------------
+<>
+  <Input borderRadius={20} placeholder="Search games ..."></Input>
+</>
+-------------------code---------------------
+
+- next we simply add this component to the NavBar.tsx next to Image component
+-------------------code---------------------
+<HStack justifyContent={"space-between"} padding="10px">
+  <Image src={logo} boxSize="60px"></Image>
+  <SearchInput />
+  <ColorModeSwitch />
+</HStack>
+-------------------code---------------------
+
+- now we can see that Dark Mode label is wrapped to fix it 
+we go to ColorModeSwitch component and chnage add to Text whitSpace="nowrap" (nowrap is just a standerd CSS)
+-------------------code---------------------
+<Text whiteSpace="nowrap">Dark Mode</Text>
+-------------------code---------------------
+
+- now in NavBar component we set justifyContent="space-between" coz we only had two Components
+now we already have three so no need for it we remove it 
+-------------------code---------------------
+<HStack padding="10px">
+-------------------code---------------------
+
+it will not make our UI better but it will make our code cleaner 
+
+- now we want to add Icon to the SearchInput component
+first we grap the Input componet with InputGroup component 
+then we add the InputLeftElement component and set the children to BsSearch component
+-------------------code---------------------
+<>
+  <InputGroup>
+    <InputLeftElement children={<BsSearch />} />
+    <Input borderRadius={20} placeholder="Search games ..."></Input>
+  </InputGroup>
+</>
+-------------------code---------------------
+
+now we test our code on multiple layout small and big 
+
+we commit our code 
+"Build search input"
+
+*** 31-_Searching_Games ***
+to imploment the searching we`ll use the same approach as before 
+so when user type somthing in the search bar and press enter the SearchInput component
+will notify the App component take this search text, store it in our qurey object
+and pass it down to the GameGrid component exacly like platform and sort
+
+- fisrt in the SearchInput component we will wrap all the elements inside form element
+and we don`t need action instead we handle it manually using onSubmit
+- we use preventDefault to prevent our form to post data to server 
+-------------------code---------------------
+<form
+  onSubmit={(event) => {
+    event.preventDefault();
+  }}
+>
+  <InputGroup>
+    <InputLeftElement children={<BsSearch />} />
+    <Input borderRadius={20} placeholder="Search games ..."></Input>
+  </InputGroup>
+</form>
+-------------------code---------------------
+
+- next we want to access the input field value we can use useState or useRef but 
+coz we have only one element it`s better to use useRef hook 
+
+so we define ref element
+-------------------code---------------------
+const ref = useRef<HTMLInputElement>(null);
+-------------------code---------------------
+
+and then we associate this ref object with input components
+-------------------code---------------------
+<Input
+  ref={ref}
+  borderRadius={20}
+  placeholder="Search games ..."
+></Input>
+-------------------code---------------------
+
+- next we say if ref.currect is truthy for now we log the ref to check if it works 
+-------------------code---------------------
+<form
+  onSubmit={(event) => {
+    event.preventDefault();
+    if (ref.current) console.log(ref.current.value);
+  }}
+>
+-------------------code---------------------
+
+now we check our code 
+first we have layout issue coz form element doesn`t have the width of 100% 
+we have two options 
+option1 to add css dirctery 
+-------------------code---------------------
+<form
+  style={{ width: "100%" }}
+  onSubmit={(event) => {
+    event.preventDefault();
+    if (ref.current) console.log(ref.current.value);
+  }}
+>
+-------------------code---------------------
+but generaly speaking inline style are ugly and we should try to avoid them as much as possible
+
+the better approach to add global rule in our stylesheet  
+so we go to index.css and give all the form the width of 100% 
+-------------------code---------------------
+form {
+  width: 100%;
+}
+-------------------code---------------------
+
+- now we solved our layout issue and test the ref of the search input 
+we can see if we type anything in the search input and press enter we can see it in the console 
+
+so we need to take the value of search input and pass it to App component
+
+- to pass to App component in SearchInput.tsx we add Props we will add function
+onSearch that take searchText and return void
+-------------------code---------------------
+interface Props {
+  onSearch: (searchText: string) => void;
+}
+-------------------code---------------------
+
+next we add as paramter 
+-------------------code---------------------
+const SearchInput = ({ onSearch }: Props) => {
+
+}
+-------------------code---------------------
+
+- and finally we change the log on console with onSearch method 
+-------------------code---------------------
+onSubmit={(event) => {
+        event.preventDefault();
+        if (ref.current) onSearch(ref.current.value);
+      }}
+-------------------code---------------------
+
+- now we go to the App component
+first we should add the search to our query object
+-------------------code---------------------
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code---------------------
+
+now we can`t pass the searchText to Navbar coz we should pass it to InputSreach and InputSreach we called inside the 
+NavBar 
+we can`t pass a props to Navbar then pass it InputSreach coz it will make our code hard to maintaine in the future 
+but now we will do it in this way then we will fix in the next part 
+
+to save time we copy the interface from the SearchInput.tsx to NavBar.tsx
+-------------------code---------------------
+interface Props {
+  onSearch: (searchText: string) => void;
+}
+-------------------code---------------------
+
+pass it as parameter
+-------------------code---------------------
+const NavBar = ({ onSearch }: Props) => {}
+-------------------code---------------------
+
+then pass it to SearchInput
+-------------------code---------------------
+<SearchInput onSearch={onSearch} />
+-------------------code---------------------
+
+no we go back to App component and pass it the same as platform and sort game 
+-------------------code---------------------
+<GridItem area={"nav"}>
+  <NavBar
+    onSearch={(searchText) =>
+      setGameQuery({ ...gameQuery, searchText })
+    }
+  />
+</GridItem>
+-------------------code---------------------
+
+- now we will test out state if the value is the same as search input before sending it to server
+we add "grand" to serach input and check in dev tool Components => App if the hooks state has serachText with grand 
+-------------------code---------------------
+State : {searchText: "dsadasd"}
+searchText : "dsadasd"
+-------------------code---------------------
+
+- now we check it and saw it`s work fine then in useGames we pass it to backend
+-------------------code---------------------
+const useGames = (gameQuery: GameQuery) =>
+  useData<Game>(
+    "/games",
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        parent_platforms: gameQuery.platform?.id,
+        ordering: gameQuery.sortOrder,
+        search: gameQuery.searchText,
+      },
+    },
+    [gameQuery]
+  );
+-------------------code---------------------
+
+
+- now we check our code and it works and we commit our code 
+"imploment Search"
+
+*** 32-_Adding_a_Dynamic_Heading ***
+next we will add a dynamic Header above the Platform and SortSelector components changes based on currunt
+filter
+
+ex: if we select Action from Genre  we will have "Action Games" and if we select Xbox from platform 
+we will see "Xbox Action Games"
+
+- we will create new component called GameHeading.tsx and we can return h1 element
+but because we using ChakaraUI in all our project it`s better to use ChakaraUI components as much as possible
+so we will use Heading component from ChakaraUI
+-------------------code---------------------
+<>
+  <Heading as="h1"></Heading>
+</>
+-------------------code---------------------
+
+- now to render the heading dynamically we should receive the game query object as a Props in GameHeading.tsx 
+so let`s define the Props 
+-------------------code---------------------
+interface Props {
+  gameQuery: GameQuery;
+}
+-------------------code---------------------
+
+then we add as parameter
+-------------------code---------------------
+const GameHeading = ({ gameQuery }: Props) => {}
+-------------------code---------------------
+
+- so what the logic we want to render 
+1- we want to render "Games" 
+2- if the user select a genre we want to render genre name + Games ex: "Action Games" 
+3- if the user select a platform we should render platform name + Games "Xbox Games" 
+4- if the user select both genre and platform we want to show genre name + platform name + Games "Xbox Action Games"
+
+to do that we define a constant of that logic and render it
+-------------------code---------------------
+const heading = `${gameQuery?.platform?.name} ${gameQuery.genre?.name} Games`;
+
+  return (
+    <>
+      <Heading as="h1">{heading}</Heading>
+    </>
+  );
+-------------------code---------------------
+
+next we go the App component and render GameHeading before HStack component
+-------------------code---------------------
+<GameHeading gameQuery={gameQuery} />
+-------------------code---------------------
+
+now we test our code we can see we have 
+"undefined undefined Games"
+
+to fix that we render empty string if the value not exist 
+-------------------code---------------------
+const heading = `${gameQuery?.platform?.name || ""} 
+  ${gameQuery.genre?.name || ""}
+   Games`;
+-------------------code---------------------
+
+- now we test our code 
+it`s work fine but we need to add a vertical margin coz our GameHeading is too much near to our SortSelector and PlatformSelector components
+and we can also make our fon bigger 
+-------------------code---------------------
+<>
+  <Heading as="h1" marginY={5} fontSize="5xl">
+    {heading}
+  </Heading>
+</>
+-------------------code---------------------
+
+now we have issue that our GameHeading is not a line with our Sorts component coz we already pass paddingLeft={2}
+to HStack now to fix we have two options 
+1- add paddingLeft={2} to GameHeading either but that will make our code repetitive
+and in future if add another component we have to remmber to paddingLeft={2} to it
+2- better approach to wrap HStack and GameHeading inisde A Box and give a paddingLeft={2}
+
+-------------------code---------------------
+<Box paddingLeft={2}>
+  <GameHeading gameQuery={gameQuery} />
+  <HStack spacing={5} marginBottom={5}>
+    <PlatformSelector
+      selectedPlatform={gameQuery.platform}
+      onSelectPlatform={(platform) =>
+        setGameQuery({ ...gameQuery, platform })
+      }
+    ></PlatformSelector>
+    <SortSelector
+      sortOrder={gameQuery.sortOrder}
+      onSelectSortOrder={(sortOrder) =>
+        setGameQuery({ ...gameQuery, sortOrder })
+      }
+    ></SortSelector>
+  </HStack>
+</Box>
+-------------------code---------------------
+
+now our code looks beautiful and aligind 
+
+now we commit our code 
+"Add a dynamic page heading"
+
+*** 33-_Cleaning_Up_the_Genres ***
+there some few things that we want to improve in the look for example 
+in genre we have 
+"Massively Multiplayer" the text is too sticked togather and overlapping the image
+this because we are using button and buttons by default don`t wrap text
+
+how to fix it in GenreList.tsx we set the whiteSpace of the Button to normal (nowrap is the default value)
+-------------------code---------------------
+<Button
+  whiteSpace="normal"
+  fontSize="lg"
+  fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+  variant="link"
+  onClick={() => onSelectedGenre(genre)}
+>
+  {genre.name}
+</Button>
+-------------------code---------------------
+
+but the text is currently center aligind, so we should make it left aligind, so it aligins with other 
+genres 
+-------------------code---------------------
+<Button
+  whiteSpace="normal"
+  textAlign="left"
+  fontSize="lg"
+  fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+  variant="link"
+  onClick={() => onSelectedGenre(genre)}
+>
+  {genre.name}
+</Button>
+-------------------code---------------------
+
+- the next issue is we need to address involves our images, if we pay close attention we can see 
+aspect ratio of these images is distorted because be getting images that 600 by 400
+but we displaying them 32 by 32 boxes with objectFit="cover" the image will scaled to fit the container
+while preserving it aspect ratio
+
+-------------------code---------------------
+<Image
+  boxSize="32px"
+  objectFit="cover"
+  borderRadius={8}
+  src={getCroppedImageUrl(genre.image_background)}
+/>
+-------------------code---------------------
+
+- finaly we add Heading to our component says Genre
+coz the heading is large we make it smaller and give it space between genres and the heading
+-------------------code---------------------
+<Heading fontSize="2xl" marginBottom={3}>
+  Genres
+</Heading>
+-------------------code---------------------
+
+now we commit our code 
+"clean up the Genres"
+
+*** 34-_Cleaning_Up_the_Game_Cards  ***
+
+now we will clean our GameCards.tsx first we want to move the icons and metacritic a bove the name 
+-------------------code---------------------
+<HStack justifyContent="space-between">
+  <PlatformIconList
+    platforms={game.parent_platforms.map((p) => p.platform)}
+  />
+  <CriticScore score={game.metacritic} />
+</HStack>
+<Heading fontSize="2xl">{game.name}</Heading>
+-------------------code---------------------
+
+- but the HStack is close to our Heading so we will give it a button margin 
+-------------------code---------------------
+<HStack justifyContent="space-between" marginBottom={3}>
+  <PlatformIconList
+    platforms={game.parent_platforms.map((p) => p.platform)}
+  />
+  <CriticScore score={game.metacritic} />
+</HStack>
+-------------------code---------------------
+
+- the next thing we want to improve is the spacing between the cards 
+currently it`s too close to each other so in GameGrid.tsx 
+we change the space to 6
+-------------------code---------------------
+<SimpleGrid
+  columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+  padding="10px"
+  spacing={6}
+>
+-------------------code---------------------
+
+- now having 5 cards on larg screen is too much so we will do it 4
+-------------------code---------------------
+<SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+        padding="10px"
+        spacing={6}
+      >
+-------------------code---------------------
+
+now we commit our code 
+"clean up the Game card"
