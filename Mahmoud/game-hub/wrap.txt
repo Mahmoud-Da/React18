@@ -3397,3 +3397,125 @@ we change the space to 6
 
 now we commit our code 
 "clean up the Game card"
+
+*** 35-_Adding_Emojis ***
+
+now we will add Emojis to our project 
+- first in useGames.ts we add to the interface rating_top
+-------------------code---------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code---------------------
+
+PS: in our API we have rating_top and rating the difference is between these two properties
+is rating is a floating point number, while rating_top is a whole number 
+
+- next we grap three images from GameHub Resources.zip to our assets
+
+1-bulls-eye.webp
+2-meh.webp
+3-thups-up.webp
+
+- next we create new component called Emoji.tsx
+inside it we shoukd receive game rating_top as Props
+-------------------code---------------------
+interface Props {
+  rating: number;
+}
+
+const Emoji = ({ rating }: Props) => {
+
+}
+-------------------code---------------------
+
+- now if rating is less than 3 we are not going to render anything
+-------------------code---------------------
+const Emoji = ({ rating }: Props) => {
+  if (rating < 3) return null;
+
+  return <div>Emoji</div>;
+};
+-------------------code---------------------
+
+- next depend on rating we want to show different emoji but we will are not going to use 
+nasting if statement (remmber nasting if statement is ugly ) 
+instead we are going to use map function
+
+so to do that first we import the images 
+-------------------code---------------------
+import bullsEye from "../assets/bulls-eye.webp";
+import thumpsUp from "../assets/thumbs-up.webp";
+import meh from "../assets/meh.webp";
+-------------------code---------------------
+
+
+now each image has src and alt so we create emojiMap constant and map the number of rating to that alt and src 
+-------------------code---------------------
+const emojiMap = {
+    3: { src: meh, alt: "meh" },
+    4: { src: thumpsUp, alt: "recommended" },
+    5: { src: bullsEye, alt: "exceptional" },
+  };
+-------------------code---------------------
+
+- next we render Image of chakaraUI 
+-------------------code---------------------
+return (
+    <>
+      <Image {...emojiMap[rating]} />
+    </>
+  );
+-------------------code---------------------
+
+- we have type error coz we have to use index signature 
+-------------------code---------------------
+const emojiMap: { [key: number]: ImageProps } = {
+    3: { src: meh, alt: "meh" },
+    4: { src: thumpsUp, alt: "recommended" },
+    5: { src: bullsEye, alt: "exceptional" },
+  };
+-------------------code---------------------
+
+PS: import image from ChakraUI
+-------------------code---------------------
+import { ImageProps, Image } from "@chakra-ui/react";
+-------------------code---------------------
+
+- finally we set the boxSize to 25px 
+-------------------code---------------------
+<>
+  <Image {...emojiMap[rating]} boxSize="25px" />
+</>
+-------------------code---------------------
+
+- now we add to GameCard.tsx
+-------------------code---------------------
+<Heading fontSize="2xl">
+  {game.name} <Emoji rating={game.rating_top} />
+</Heading>
+-------------------code---------------------
+
+- now we test our code we can see bullsEye is not the same as thumpsUp so we should 
+handle the size either 
+-------------------code---------------------
+const emojiMap: { [key: number]: ImageProps } = {
+  3: { src: meh, alt: "meh", boxSize: "25px" },
+  4: { src: thumpsUp, alt: "recommended", boxSize: "25px" },
+  5: { src: bullsEye, alt: "exceptional", boxSize: "35px" },
+};
+-------------------code---------------------
+
+now we emojis is code but the Emoji is too close o our haeading so we give it marginTop of 1
+-------------------code---------------------
+ <Image {...emojiMap[rating]} marginTop={1} />
+-------------------code---------------------
+
+now we commit our code 
+"Add emoji"
+
