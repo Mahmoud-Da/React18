@@ -3652,3 +3652,21 @@ const theme = extendTheme({
 
 commit our code 
 "Customizing the them to get darker grays"
+
+*** 38-_Refactoring_Game_Grid ***
+
+on our GameGrid we either have error or SimpleGrid instead to render them next to each other
+as a best practice is better to use another return statement
+-------------------code---------------------
+if (error) return <Text>{error}</Text>;
+
+  return (
+    <SimpleGrid
+
+    ..)
+-------------------code---------------------
+
+with that we don`t have either to use fragment and make our code cleaner
+ 
+now we commit our code 
+"Refactor GameGrid"
