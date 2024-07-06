@@ -2681,7 +2681,7 @@ now we commit our code
 *** 27-_Sorting_Games ***
 to sort the game we will take the same approch as filtering
 
-so when the user selcet the sort order the SortSelector component will notify App component
+so when the user select the sort order the SortSelector component will notify App component
 and then the app component will pass the new sort order to the game grid.
 
 - for sorting the data we will look at the documentation of the rog 
@@ -2962,7 +2962,7 @@ now our code run fine so we commit our code
 
 *** 29-_Fixing_the_Issue_with_Chakra_Menus ***
 
-when we selcet an item from sorting or platform component we see an error in console 
+when we select an item from sorting or platform component we see an error in console 
 
 for me i don`t see this error so i will skip this lesson 
 
@@ -3722,8 +3722,47 @@ Found 1 error in src/components/SortSelector.tsx:31
 
 so remmber we can catch error in our application we build it to the production 
 
-using "shif+cmd P" we can select "Task: Run Build Task" then we selcet "npm build"
+using "shif+cmd P" we can select "Task: Run Build Task" then we select "npm build"
 or shortcut "shif+cmd B"
 
 PS: the output of the input is file called dist which is shortcut of distributeable, is what we deploy to our production
 
+*** 40-_Deploying_to_Vercel ***
+the final part we are going to deploy our application to a platform called Vercel
+
+we can deploy our project with another tools either if we go to 
+https://vitejs.dev/
+
+then press on Guide we can see "Deploying a Static Site"
+we can multi ways to deploy our project 
+
+but now we will use Vercel
+remmber we need to create repository so when add new feature our application will build and push it
+to Vercel
+
+- fisrt we create an account in Vercel
+
+- then install Vercel to in our application
+"npm i -g vercel"
+
+after we finish we will have question but we will just press enter (default)
+
+then we will have url if we access we can see our project
+
+finally:
+we need to link our github to that project 
+in our Vercel account we can see our project and "No Git Repository connected" is writin 
+so we select it the we go to "Connect Git Repository" then we select "GitHub" and from the list we select
+our repository
+
+now if we push changes in our application and push it Vercel will build it for us
+
+to test that in index.html 
+we change 
+-------------------code---------------------
+<title>Vite + React + TS</title>
+-------------------code---------------------
+to 
+-------------------code---------------------
+<title>GameShop</title>
+-------------------code---------------------
