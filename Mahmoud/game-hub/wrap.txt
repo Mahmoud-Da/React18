@@ -3605,3 +3605,50 @@ PS: we can use the same technique with platforms too (we will make it as additio
 
 now we commit our code 
 "ship genres with the app"
+
+
+*** 37-_Customizing_the_Chakra_Theme ***
+we want to Customizing the Chakra Theme to match rawg.io
+
+in Chakara documentation we got to "Styled System" and then in the menu we go to the "default Theme"
+
+we can see see this line  
+"We recommend adding a palette that ranges from 50 to 900. Tools like Themera,
+ Smart Swatch, Coolors or Palx are available to generate these palettes."
+
+and we can try colors using "Smart Swatch" we can write a number thin click on the colors plate 
+to have the value and copy it to our project
+
+now in our theme.ts we have a property called colors here we can set the colors 
+-------------------code---------------------
+const theme = extendTheme({
+  config,
+  colors: {
+    gray: {},
+  },
+});
+-------------------code---------------------
+
+- now we set the colors 
+-------------------code---------------------
+const theme = extendTheme({
+  config,
+  colors: {
+    gray: {
+      50: "#f9f9f9",
+      100: "#ededed",
+      200: "#d3d3d3",
+      300: "#b3b3b3",
+      400: "#a0a0a0",
+      500: "#898989",
+      600: "#6c6c6c",
+      700: "#202020",
+      800: "#121212",
+      900: "#111",
+    },
+  },
+});
+-------------------code---------------------
+
+commit our code 
+"Customizing the them to get darker grays"
