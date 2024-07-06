@@ -3519,3 +3519,89 @@ now we emojis is code but the Emoji is too close o our haeading so we give it ma
 now we commit our code 
 "Add emoji"
 
+*** 36-_Shipping_Static_Data ***
+
+in the currect implomantaion we show a spinner while we fetch the genere 
+and skeletons while we fetch the games.
+so we`re dynamically loading to different parts of the page and showing loading indicators.
+now whike this isn`t necessarily a bad thing, overusing this technique can negatively impact 
+the user expression. it makes their eyes dart around the page.
+
+so as cool idea to improve things:
+we can ship the list of generes with our application. since the list of genres hardly 
+ever chnages we can treat the genres as static data and included with our app
+with that we don`t need to make extra request to our backend and the data will be available right away 
+so no need to wait and show a spinner 
+
+- now to do that we go to the deve tool and to to the request that have the Genres
+and click on Preview and right click on result and copy the values 
+
+- next in our src folder we create a folder called a data inside it we create a file called 
+genres.ts and inside we type export default then paste the values 
+-------------------code---------------------
+export default [
+  {
+    id: 4,
+    name: "Action",
+    slug: "action",
+    games_count: 180931,
+    image_background:
+      "https://media.rawg.io/media/games/f87/f87457e8347484033cb34cde6101d08d.jpg",
+    games: [
+      {
+        id: 3498,
+        slug: "grand-theft-auto-v",
+        name: "Grand Theft Auto V",
+        added: 21015,
+      },
+      ....
+      ...
+    ]}]
+-------------------code---------------------
+
+with that we including satic data in our application we don`t have to load them from the server 
+
+next we go to the useGenres.ts  and instead of using useData we return object
+
+-------------------code---------------------
+const useGenres = () => ({ data: null, isLoading: false, error: null });
+-------------------code---------------------
+
+coz we want to minimize the impact of these changes on the consumers 
+of useGenres hook. (we used the same return statements of useData)
+ex: 
+in GenreList when using useGenres we use { data, isLoading, error } properties
+so we want the changes that we apply in the useGenres.ts to impact the components 
+where we useed it 
+-------------------code---------------------
+const { data, isLoading, error } = useGenres();
+-------------------code---------------------
+
+
+- next we set the data property to genres that we stored in genres module 
+first we import genres module then we set the data to that genres 
+-------------------code---------------------
+import genres from "../data/genres";
+
+
+
+const useGenres = () => ({ data: genres, isLoading: false, error: null });
+-------------------code---------------------
+
+- now we test our code we can see our generes available right away without spinner 
+in another word without connecting to server
+
+
+now in our GenreList we can remove rendering the loading spinner or even the error 
+but it`s better to keep them coz in future if we changed our mind and wanted to fetch the data from the server
+
+-------------------code---------------------
+if (error) return null;
+
+if (isLoading) return <Spinner />;
+-------------------code---------------------
+
+PS: we can use the same technique with platforms too (we will make it as additional exercise)
+
+now we commit our code 
+"ship genres with the app"
