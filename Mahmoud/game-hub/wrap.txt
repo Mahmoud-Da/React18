@@ -2681,7 +2681,7 @@ now we commit our code
 *** 27-_Sorting_Games ***
 to sort the game we will take the same approch as filtering
 
-so when the user selcet the sort order the SortSelector component will notify App component
+so when the user select the sort order the SortSelector component will notify App component
 and then the app component will pass the new sort order to the game grid.
 
 - for sorting the data we will look at the documentation of the rog 
@@ -2962,7 +2962,7 @@ now our code run fine so we commit our code
 
 *** 29-_Fixing_the_Issue_with_Chakra_Menus ***
 
-when we selcet an item from sorting or platform component we see an error in console 
+when we select an item from sorting or platform component we see an error in console 
 
 for me i don`t see this error so i will skip this lesson 
 
@@ -3397,3 +3397,372 @@ we change the space to 6
 
 now we commit our code 
 "clean up the Game card"
+
+*** 35-_Adding_Emojis ***
+
+now we will add Emojis to our project 
+- first in useGames.ts we add to the interface rating_top
+-------------------code---------------------
+export interface Game {
+  id: number;
+  name: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code---------------------
+
+PS: in our API we have rating_top and rating the difference is between these two properties
+is rating is a floating point number, while rating_top is a whole number 
+
+- next we grap three images from GameHub Resources.zip to our assets
+
+1-bulls-eye.webp
+2-meh.webp
+3-thups-up.webp
+
+- next we create new component called Emoji.tsx
+inside it we shoukd receive game rating_top as Props
+-------------------code---------------------
+interface Props {
+  rating: number;
+}
+
+const Emoji = ({ rating }: Props) => {
+
+}
+-------------------code---------------------
+
+- now if rating is less than 3 we are not going to render anything
+-------------------code---------------------
+const Emoji = ({ rating }: Props) => {
+  if (rating < 3) return null;
+
+  return <div>Emoji</div>;
+};
+-------------------code---------------------
+
+- next depend on rating we want to show different emoji but we will are not going to use 
+nasting if statement (remmber nasting if statement is ugly ) 
+instead we are going to use map function
+
+so to do that first we import the images 
+-------------------code---------------------
+import bullsEye from "../assets/bulls-eye.webp";
+import thumpsUp from "../assets/thumbs-up.webp";
+import meh from "../assets/meh.webp";
+-------------------code---------------------
+
+
+now each image has src and alt so we create emojiMap constant and map the number of rating to that alt and src 
+-------------------code---------------------
+const emojiMap = {
+    3: { src: meh, alt: "meh" },
+    4: { src: thumpsUp, alt: "recommended" },
+    5: { src: bullsEye, alt: "exceptional" },
+  };
+-------------------code---------------------
+
+- next we render Image of chakaraUI 
+-------------------code---------------------
+return (
+    <>
+      <Image {...emojiMap[rating]} />
+    </>
+  );
+-------------------code---------------------
+
+- we have type error coz we have to use index signature 
+-------------------code---------------------
+const emojiMap: { [key: number]: ImageProps } = {
+    3: { src: meh, alt: "meh" },
+    4: { src: thumpsUp, alt: "recommended" },
+    5: { src: bullsEye, alt: "exceptional" },
+  };
+-------------------code---------------------
+
+PS: import image from ChakraUI
+-------------------code---------------------
+import { ImageProps, Image } from "@chakra-ui/react";
+-------------------code---------------------
+
+- finally we set the boxSize to 25px 
+-------------------code---------------------
+<>
+  <Image {...emojiMap[rating]} boxSize="25px" />
+</>
+-------------------code---------------------
+
+- now we add to GameCard.tsx
+-------------------code---------------------
+<Heading fontSize="2xl">
+  {game.name} <Emoji rating={game.rating_top} />
+</Heading>
+-------------------code---------------------
+
+- now we test our code we can see bullsEye is not the same as thumpsUp so we should 
+handle the size either 
+-------------------code---------------------
+const emojiMap: { [key: number]: ImageProps } = {
+  3: { src: meh, alt: "meh", boxSize: "25px" },
+  4: { src: thumpsUp, alt: "recommended", boxSize: "25px" },
+  5: { src: bullsEye, alt: "exceptional", boxSize: "35px" },
+};
+-------------------code---------------------
+
+now we emojis is code but the Emoji is too close o our haeading so we give it marginTop of 1
+-------------------code---------------------
+ <Image {...emojiMap[rating]} marginTop={1} />
+-------------------code---------------------
+
+now we commit our code 
+"Add emoji"
+
+*** 36-_Shipping_Static_Data ***
+
+in the currect implomantaion we show a spinner while we fetch the genere 
+and skeletons while we fetch the games.
+so we`re dynamically loading to different parts of the page and showing loading indicators.
+now whike this isn`t necessarily a bad thing, overusing this technique can negatively impact 
+the user expression. it makes their eyes dart around the page.
+
+so as cool idea to improve things:
+we can ship the list of generes with our application. since the list of genres hardly 
+ever chnages we can treat the genres as static data and included with our app
+with that we don`t need to make extra request to our backend and the data will be available right away 
+so no need to wait and show a spinner 
+
+- now to do that we go to the deve tool and to to the request that have the Genres
+and click on Preview and right click on result and copy the values 
+
+- next in our src folder we create a folder called a data inside it we create a file called 
+genres.ts and inside we type export default then paste the values 
+-------------------code---------------------
+export default [
+  {
+    id: 4,
+    name: "Action",
+    slug: "action",
+    games_count: 180931,
+    image_background:
+      "https://media.rawg.io/media/games/f87/f87457e8347484033cb34cde6101d08d.jpg",
+    games: [
+      {
+        id: 3498,
+        slug: "grand-theft-auto-v",
+        name: "Grand Theft Auto V",
+        added: 21015,
+      },
+      ....
+      ...
+    ]}]
+-------------------code---------------------
+
+with that we including satic data in our application we don`t have to load them from the server 
+
+next we go to the useGenres.ts  and instead of using useData we return object
+
+-------------------code---------------------
+const useGenres = () => ({ data: null, isLoading: false, error: null });
+-------------------code---------------------
+
+coz we want to minimize the impact of these changes on the consumers 
+of useGenres hook. (we used the same return statements of useData)
+ex: 
+in GenreList when using useGenres we use { data, isLoading, error } properties
+so we want the changes that we apply in the useGenres.ts to impact the components 
+where we useed it 
+-------------------code---------------------
+const { data, isLoading, error } = useGenres();
+-------------------code---------------------
+
+
+- next we set the data property to genres that we stored in genres module 
+first we import genres module then we set the data to that genres 
+-------------------code---------------------
+import genres from "../data/genres";
+
+
+
+const useGenres = () => ({ data: genres, isLoading: false, error: null });
+-------------------code---------------------
+
+- now we test our code we can see our generes available right away without spinner 
+in another word without connecting to server
+
+
+now in our GenreList we can remove rendering the loading spinner or even the error 
+but it`s better to keep them coz in future if we changed our mind and wanted to fetch the data from the server
+
+-------------------code---------------------
+if (error) return null;
+
+if (isLoading) return <Spinner />;
+-------------------code---------------------
+
+PS: we can use the same technique with platforms too (we will make it as additional exercise)
+
+now we commit our code 
+"ship genres with the app"
+
+
+*** 37-_Customizing_the_Chakra_Theme ***
+we want to Customizing the Chakra Theme to match rawg.io
+
+in Chakara documentation we got to "Styled System" and then in the menu we go to the "default Theme"
+
+we can see see this line  
+"We recommend adding a palette that ranges from 50 to 900. Tools like Themera,
+ Smart Swatch, Coolors or Palx are available to generate these palettes."
+
+and we can try colors using "Smart Swatch" we can write a number thin click on the colors plate 
+to have the value and copy it to our project
+
+now in our theme.ts we have a property called colors here we can set the colors 
+-------------------code---------------------
+const theme = extendTheme({
+  config,
+  colors: {
+    gray: {},
+  },
+});
+-------------------code---------------------
+
+- now we set the colors 
+-------------------code---------------------
+const theme = extendTheme({
+  config,
+  colors: {
+    gray: {
+      50: "#f9f9f9",
+      100: "#ededed",
+      200: "#d3d3d3",
+      300: "#b3b3b3",
+      400: "#a0a0a0",
+      500: "#898989",
+      600: "#6c6c6c",
+      700: "#202020",
+      800: "#121212",
+      900: "#111",
+    },
+  },
+});
+-------------------code---------------------
+
+commit our code 
+"Customizing the them to get darker grays"
+
+*** 38-_Refactoring_Game_Grid ***
+
+on our GameGrid we either have error or SimpleGrid instead to render them next to each other
+as a best practice is better to use another return statement
+-------------------code---------------------
+if (error) return <Text>{error}</Text>;
+
+  return (
+    <SimpleGrid
+
+    ..)
+-------------------code---------------------
+
+with that we don`t have either to use fragment and make our code cleaner
+ 
+now we commit our code 
+"Refactor GameGrid"
+
+*** 39-_Building_for_Production ***
+
+we are ready to deploy our Project but first we should run it locally to make sure it doesn`t have error
+remmber it easier to check it locally than waiting for deployment to finish 
+so to build our application we run "npm run build"  
+
+
+we can see our application is builded without any errors but we have Warning says 
+*********************************************************************
+(!) Some chunks are larger than 500 kBs after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+*********************************************************************
+
+we got this error coz our bundle js is over 500 kb 
+*********************************************************************
+dist/assets/index-f6dd315d.css                    0.02 kB │ gzip:   0.04 kB
+dist/assets/index-afd6bf25.js                   537.01 kB │ gzip: 182.27 kB
+*********************************************************************
+
+in this part we don`t have to worry a bout it in the next part we will handle it. so we will ignore it 
+
+but what if we have a compiled error to simulate an error in SortSelector.tsx we change onSelectSortOrder to xonSelectSortOrder
+
+-------------------code---------------------
+<MenuItem
+  onClick={() => xonSelectSortOrder(order.value)}
+  key={order.value}
+  value={order.value}
+>
+-------------------code---------------------
+
+we run an error we can see it the terminl we run "npm run build" another time 
+*********************************************************************
+src/components/SortSelector.tsx:31:30 - error TS2552: Cannot find name 'xonSelectSortOrder'. Did you mean 'onSelectSortOrder'?
+
+31               onClick={() => xonSelectSortOrder(order.value)}
+                                ~~~~~~~~~~~~~~~~~~
+
+  src/components/SortSelector.tsx:9:25
+    9 const SortSelector = ({ onSelectSortOrder, sortOrder }: Props) => {
+                              ~~~~~~~~~~~~~~~~~
+    'onSelectSortOrder' is declared here.
+    }
+
+Found 1 error in src/components/SortSelector.tsx:31
+*********************************************************************
+
+so remmber we can catch error in our application we build it to the production 
+
+using "shif+cmd P" we can select "Task: Run Build Task" then we select "npm build"
+or shortcut "shif+cmd B"
+
+PS: the output of the input is file called dist which is shortcut of distributeable, is what we deploy to our production
+
+*** 40-_Deploying_to_Vercel ***
+the final part we are going to deploy our application to a platform called Vercel
+
+we can deploy our project with another tools either if we go to 
+https://vitejs.dev/
+
+then press on Guide we can see "Deploying a Static Site"
+we can multi ways to deploy our project 
+
+but now we will use Vercel
+remmber we need to create repository so when add new feature our application will build and push it
+to Vercel
+
+- fisrt we create an account in Vercel
+
+- then install Vercel to in our application
+"npm i -g vercel"
+
+after we finish we will have question but we will just press enter (default)
+
+then we will have url if we access we can see our project
+
+finally:
+we need to link our github to that project 
+in our Vercel account we can see our project and "No Git Repository connected" is writin 
+so we select it the we go to "Connect Git Repository" then we select "GitHub" and from the list we select
+our repository
+
+now if we push changes in our application and push it Vercel will build it for us
+
+to test that in index.html 
+we change 
+-------------------code---------------------
+<title>Vite + React + TS</title>
+-------------------code---------------------
+to 
+-------------------code---------------------
+<title>GameShop</title>
+-------------------code---------------------
