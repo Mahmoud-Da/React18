@@ -3670,3 +3670,60 @@ with that we don`t have either to use fragment and make our code cleaner
  
 now we commit our code 
 "Refactor GameGrid"
+
+*** 39-_Building_for_Production ***
+
+we are ready to deploy our Project but first we should run it locally to make sure it doesn`t have error
+remmber it easier to check it locally than waiting for deployment to finish 
+so to build our application we run "npm run build"  
+
+
+we can see our application is builded without any errors but we have Warning says 
+*********************************************************************
+(!) Some chunks are larger than 500 kBs after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+*********************************************************************
+
+we got this error coz our bundle js is over 500 kb 
+*********************************************************************
+dist/assets/index-f6dd315d.css                    0.02 kB │ gzip:   0.04 kB
+dist/assets/index-afd6bf25.js                   537.01 kB │ gzip: 182.27 kB
+*********************************************************************
+
+in this part we don`t have to worry a bout it in the next part we will handle it. so we will ignore it 
+
+but what if we have a compiled error to simulate an error in SortSelector.tsx we change onSelectSortOrder to xonSelectSortOrder
+
+-------------------code---------------------
+<MenuItem
+  onClick={() => xonSelectSortOrder(order.value)}
+  key={order.value}
+  value={order.value}
+>
+-------------------code---------------------
+
+we run an error we can see it the terminl we run "npm run build" another time 
+*********************************************************************
+src/components/SortSelector.tsx:31:30 - error TS2552: Cannot find name 'xonSelectSortOrder'. Did you mean 'onSelectSortOrder'?
+
+31               onClick={() => xonSelectSortOrder(order.value)}
+                                ~~~~~~~~~~~~~~~~~~
+
+  src/components/SortSelector.tsx:9:25
+    9 const SortSelector = ({ onSelectSortOrder, sortOrder }: Props) => {
+                              ~~~~~~~~~~~~~~~~~
+    'onSelectSortOrder' is declared here.
+    }
+
+Found 1 error in src/components/SortSelector.tsx:31
+*********************************************************************
+
+so remmber we can catch error in our application we build it to the production 
+
+using "shif+cmd P" we can select "Task: Run Build Task" then we selcet "npm build"
+or shortcut "shif+cmd B"
+
+PS: the output of the input is file called dist which is shortcut of distributeable, is what we deploy to our production
+
