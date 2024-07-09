@@ -1,1 +1,69 @@
 *** 2-_What_is_React_Query ***
+in this file 
+react-course-part2-starter-main/src/react-query/TodoList.tsx
+we have the code to fetch the data from the backend
+
+-------------------code----------------------
+const [todos, setTodos] = useState<Todo[]>([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    axios
+      .get('https://jsonplaceholder.typicode.com/todos')
+      .then((res) => setTodos(res.data))
+      .catch((error) => setError(error));
+  }, []);
+
+  if (error) return <p>{error}</p>;
+-------------------code----------------------
+
+but we have multi issues:
+1- No request cancelation:
+if our component is not mounted there is not request cancelation
+PS: coz we strict mode is enabled we end up send request to the server twice
+
+2- No separation of concerns:
+our backend code and our frontend code are next to each other 
+if someone else need the data we to duplicate the useEffect hook in other component
+
+3- No retries:
+if there is an error we show the user only an error and move on and tha is not the best user experience
+
+4- No automatic refresh:
+if the data changes while the user on this page. they don`t see the chages unless they 
+refresh
+
+
+5- No caching:
+caching : the prosses of storing data in a place where it can be accessed more quickly and efficiently 
+in the future.
+
+ex: we can store frequently data in frontend side (inside the user Browser) so we don`t have to fetch 
+it from the server everytime we need it
+and this can improve the performance of our application.
+
+now we have 5 problems and everytime we fetch data we need to care a bout them.
+so here where "React Query" come to rescue.
+React Query:
+a powerful library for managing data fetching and caching in React applications
+
+alot of people using "Redux" for caching
+Redux: a popular state managment library for JavaScript applications
+it allow us to store the state or the data in our application in single global store (java script object in user Browser)
+so a lot of people using that data we have in global store for caching
+but:
+
+Redux:           
+- Difficult to learn 
+- so much boilerplate code so it make our code hard to maintaine
+
+React Query:
+- a lot simpler
+- More lightwight code
+
+so Redux is no longer needed for too much cases at least for caching
+PS: do not use Redux for caching
+
+and if we want to maintaine old project with Redux see if you can replace it with React Query
+
+
