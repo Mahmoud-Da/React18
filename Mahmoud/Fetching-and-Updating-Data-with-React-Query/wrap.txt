@@ -97,3 +97,192 @@ to the queryClient
 </React.StrictMode>
 -------------------code----------------------
 
+*** 4-_Fetching_Data ***
+now to fetch data with React Query we go to TodoList.tsx
+and we use useQuery hook that defined in tanstack
+
+we call it and give it a configration object with two properties
+1- qureyKey: which is a unique identifier for the qurey it used for caching
+so when we want to get the data from backend the data will be saved in the Browser cache
+and it will be accessble by the qureyKey.
+
+we set it the array of one or more values the first value is where we define the type
+of the data that we want store in our useQuery hook in our case "todos" and we can have and object 
+to set which data we want store normally it depends on our project
+
+ex:
+-------------------code----------------------
+{queryKey: ["todos", {completed: true}]}
+-------------------code----------------------
+
+but now we want to make it simple so we stick in one value "todos"
+PS: todos we take it from the endpoint
+https://jsonplaceholder.typicode.com/todos
+
+2- qureyFn: and this the function where we use it to fetch the data form the backend
+this function return a promise that result the data or throw an error 
+
+so first we pass an arrow function and inisde it we fetch the data
+PS: inside we can use any http librariy not only axios
+-------------------code----------------------
+queryFn: () => axios.get("https://jsonplaceholder.typicode.com/todos"),
+-------------------code----------------------
+
+so useQuery will be like this 
+-------------------code----------------------
+useQuery({
+    queryKey: ["todos"],
+    queryFn: () => axios.get("https://jsonplaceholder.typicode.com/todos"),
+  });
+-------------------code----------------------
+
+useQuery it deosn`t care a bout how we fetch the data it`s only responsible how we 
+managing and cacheing data 
+
+now axios.get is return the responese object but we don`t want to store all the responese in our cache
+instead we only want to store the actual data that we get from the backend
+
+so after the get method we call then to get the response and return only the data
+-------------------code----------------------
+useQuery({
+    queryKey: ["todos"],
+    queryFn: () =>
+      axios
+        .get("https://jsonplaceholder.typicode.com/todos")
+        .then((res) => res.data),
+  });
+-------------------code----------------------
+
+we can also move the fetching statment to another function
+
+-------------------code----------------------
+const fetchTodos = () =>
+    axios
+      .get("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => res.data);
+
+  useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+-------------------code----------------------
+
+now if we hover on our fetchTodos function we can see it return Promise of type any
+-------------------code----------------------
+const fetchTodos: () => Promise<any>
+-------------------code----------------------
+
+and "any" not a desired TypeScript Type so to get advantage of TS we have to be more specific
+in otherword we want this promise to return not any an array of todos 
+so we fix the get method and give a TS type generic
+
+PS: Todo interface is already defined 
+-------------------code----------------------
+.get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+-------------------code----------------------
+
+next we store the result cache qurey in qurey constant
+-------------------code----------------------
+const query = useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+-------------------code----------------------
+
+or we can destructuring the value to get only the data 
+-------------------code----------------------
+const { data } = useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+-------------------code----------------------
+
+now we have our Qurey look like that 
+-------------------code----------------------
+const fetchTodos = () =>
+    axios
+      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => res.data);
+
+  const { data } = useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+-------------------code----------------------
+
+with useQuery hook we don`t need useState any more so we remove this code 
+and we don`t the Effect hook so we delete it 
+-------------------code----------------------
+const [todos, setTodos] = useState<Todo[]>([]);
+const [error, setError] = useState("");
+
+useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => setTodos(res.data))
+      .catch((error) => setError(error));
+  }, []);
+-------------------code----------------------
+
+for the error handling we will do it later so we comment it 
+-------------------code----------------------
+// if (error) return <p>{error}</p>;
+-------------------code----------------------
+
+now in the return statement we can 
+-------------------code----------------------
+<ul className="list-group">
+      {data.map((todo) => (
+        <li key={todo.id} className="list-group-item">
+          {todo.title}
+        </li>
+      ))}
+    </ul>
+-------------------code----------------------
+
+but if data hard name to understand we can use union 
+-------------------code----------------------
+const { data: todos } = useQuery({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+-------------------code----------------------
+
+then we reference it in the return statement
+-------------------code----------------------
+<ul className="list-group">
+  {todos.map((todo) => (
+    <li key={todo.id} className="list-group-item">
+      {todo.title}
+    </li>
+  ))}
+</ul>
+-------------------code----------------------
+
+now we have error todos' is possibly 'undefined'. 
+coz maybe the calling to backend may fail and todos will be undefined at that time 
+so we should use optional chaining
+-------------------code----------------------
+<ul className="list-group">
+  {todos?.map((todo) => (
+    <li key={todo.id} className="list-group-item">
+      {todo.title}
+    </li>
+  ))}
+</ul>
+-------------------code----------------------
+
+with this implomantaion we have multi benifits:
+- Auto Retries:
+if the call to the server failed React Qurey will try a couple times 
+
+- Auto Refetch:
+we can configure the Qurey to refetch after a period of time 
+
+- Caching:
+so the first time we get the data from the backend it will store in the cache
+and stay for period of time so next time we want that data we don`t have to Call the 
+Server again 
+
+and this improve the performance of our application
+
