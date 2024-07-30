@@ -67,3 +67,33 @@ PS: do not use Redux for caching
 and if we want to maintaine old project with Redux see if you can replace it with React Query
 
 
+*** 3-_Setting_Up_React_Query ***
+to install React Query in our application we install it
+using command line 
+-------------------code----------------------
+npm i @tanstack/react-query@4.28
+-------------------code----------------------
+
+then we go to main.tsx
+-------------------code----------------------
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+-------------------code----------------------
+
+QueryClient: is the core object for managing and caching data in React Query
+
+so we create instacne of QueryClient
+-------------------code----------------------
+const queryClient = new QueryClient()
+-------------------code----------------------
+
+then we wrap App component with QueryClientProvider component and set the client property
+to the queryClient
+
+-------------------code----------------------
+<React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+</React.StrictMode>
+-------------------code----------------------
+
