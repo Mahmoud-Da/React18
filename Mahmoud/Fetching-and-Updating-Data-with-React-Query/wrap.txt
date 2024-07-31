@@ -378,3 +378,64 @@ const {
 in useQuery everything is taking care of error , loading we don`t have to write it 
 separatly 
 
+*** 7-_Creating_a_Custom_Query_Hook ***
+now in our implomantaion we have problem we don`t have the separation of concerns
+coz our Query logic is inside our component
+
+to separate our frontend and backend code we create inside react-qurey folder 
+a hooks folder 
+and inside we create useTodos.ts 
+
+inisde the useTodos.ts  we create constant and export it as default
+object
+-------------------code----------------------
+const useTodos = () => {
+  
+};
+
+export default useTodos;
+-------------------code----------------------
+
+- now back to our component and copy the fetchTodos function and the Todo interface
+and we import axios
+-------------------code----------------------
+import axios from "axios";
+
+interface Todo {
+  id: number;
+  title: string;
+  userId: number;
+  completed: boolean;
+}
+
+const useTodos = () => {
+  const fetchTodos = () =>
+    axios
+      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => res.data);
+};
+
+export default useTodos;
+-------------------code----------------------
+
+now we in useTodos hook we should call the useQuery hook and return qurey object
+so we copy the useQuery from our component and return 
+-------------------code----------------------
+const useTodos = () => {
+  const fetchTodos = () =>
+    axios
+      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => res.data);
+  return useQuery<Todo[], Error>({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+};
+-------------------code----------------------
+
+now all we do in our component is to call useTodos()
+-------------------code----------------------
+const { data: todos, error, isLoading } = useTodos();
+-------------------code----------------------
+
+finally we remove the unnecessary import statements
