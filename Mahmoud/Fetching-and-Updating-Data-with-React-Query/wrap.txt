@@ -439,3 +439,52 @@ const { data: todos, error, isLoading } = useTodos();
 -------------------code----------------------
 
 finally we remove the unnecessary import statements
+
+
+*** 8-_Using_React_Query_DevTools ***
+React Query comes with own dev tools 
+in our terminal
+-------------------code----------------------
+npm i @tanstack/react-query-devtools@4.28
+-------------------code----------------------
+
+now in the main.tsx 
+-------------------code----------------------
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+-------------------code----------------------
+
+PS: when import select the second one with blue icon 
+
+then we should add to our component after rendering App
+-------------------code----------------------
+QueryClientProvider client={queryClient}>
+  <App />
+  <ReactQueryDevtools />
+</QueryClientProvider>
+-------------------code----------------------
+
+so this is will only be included in our development and when we build 
+our project for production it will not be included
+
+now in our Browser we can see Red Icon and have the content of our cache
+
+now if click on out todos qurey
+we can see 
+Observers: 1
+
+Observers: is the number of components that use this qurey
+
+now if the this 1 component in not mounted (removed from the screen) Observers will be 0 and the query will
+be inactive 
+inactive qures will eventually get garbage collected and removed from the cache
+
+we have multi Actions:
+we can refetch it or invalidate it or reset it 
+and we can even trigger loading or erros 
+
+Data Explorer:
+with Data we can see data Exploere we can use our data 
+
+Query Explorer:
+we can see multi opttion like cacheTime: 300000
+we can see that the cache will be removed after 5 minutes
