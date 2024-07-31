@@ -286,3 +286,75 @@ Server again
 
 and this improve the performance of our application
 
+*** 5-_Handling_Errors ***
+
+useQuery also have property called error to handle the errors for tracking the error may happen 
+when fetching the data 
+-------------------code----------------------
+const { data: todos, error } = useQuery({
+  queryKey: ["todos"],
+  queryFn: fetchTodos,
+});
+-------------------code----------------------
+
+no we uncommit our error statement
+-------------------code----------------------
+if (error) return <p>{error}</p>;
+-------------------code----------------------
+
+but we have complation error says:
+-------------------code----------------------
+Type '{}' is not assignable to type 'ReactNode'.
+-------------------code----------------------
+
+so React doesn`t know how render the error object
+but why if we looked the type of error property of useQuery we can`t see it as unknown
+so React Qurey doesn`nt know the type of error may not happen while fetching data coz that is depends
+a about how we fetch the data (are we using axios or default fetch method or another librariy)
+
+now we are using axios so in axios all the errors are instacnes of the Error interface that is available
+in all the Browsers 
+
+now if we type in useQuery <
+ex:
+-------------------code----------------------
+useQuery<
+-------------------code----------------------
+
+we can see all the default type generic 
+-------------------code----------------------
+useQuery<TQueryFnData = unknown, TError = unknown,
+ TData = TQueryFnData, 
+ TQueryKey extends QueryKey = QueryKey>(options:
+  Omit<UseQueryOptions<TQueryFnData, TError, TData
+  , TQueryKey>, "initialData">
+   & { initialData?: () => undefined; })
+   : UseQueryResult<TData, TError>
+-------------------code----------------------
+
+TQueryFnData: is the type generic of the data which we fetched from the backend
+TError: type of errors
+
+and know we can leave the other values for default and change only TQueryFnData, and TError
+-------------------code----------------------
+const { data: todos, error } = useQuery<Todo[], Error>({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+-------------------code----------------------
+
+now if we hove on the error we can see the type is Error | null 
+
+finally we can fix the error object by render one of the Error properties in 
+-------------------code----------------------
+if (error) return <p>{error.message}</p>;
+-------------------code----------------------
+
+finally we go to App.tsx and return TodoList 
+-------------------code----------------------
+function App() {
+  return <TodoList />;
+}
+-------------------code----------------------
+
+finally we run "npm run dev" to check our project
