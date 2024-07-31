@@ -358,3 +358,23 @@ function App() {
 -------------------code----------------------
 
 finally we run "npm run dev" to check our project
+
+*** 6-_Showing_a_Loading_Indicator ***
+
+the use Query have another property called isLoading 
+-------------------code----------------------
+const {
+    data: todos,
+    error,
+    isLoading,
+  } = useQuery<Todo[], Error>({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+  });
+
+  if (isLoading) return <p>is Loading ...</p>;
+-------------------code----------------------
+
+in useQuery everything is taking care of error , loading we don`t have to write it 
+separatly 
+
