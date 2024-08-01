@@ -605,3 +605,8 @@ const useTodos = () => {
   });
 };
 -------------------code----------------------
+
+
+*** 10-_Exercise-_Fetching_Data ***
+use the React Query for PostList.tsx 
+
