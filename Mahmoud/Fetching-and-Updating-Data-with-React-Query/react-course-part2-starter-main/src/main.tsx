@@ -8,6 +8,20 @@ import "./index.css";
 
 const queryClient = new QueryClient();
 
+// change the qures defualt settigs globally
+// const queryClient = new QueryClient({
+//   defaultOptions: {
+//     queries: {
+//       retry: 3,
+//       cacheTime: 300_000, // 5 minutes
+//       staleTime: 10 * 1000, // 10 seconds
+//       refetchOnWindowFocus: false,
+//       refetchOnReconnect: false,
+//       refetchOnMount: false,
+//     },
+//   },
+// });
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

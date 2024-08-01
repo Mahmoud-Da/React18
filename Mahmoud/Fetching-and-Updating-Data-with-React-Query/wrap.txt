@@ -488,3 +488,120 @@ with Data we can see data Exploere we can use our data
 Query Explorer:
 we can see multi opttion like cacheTime: 300000
 we can see that the cache will be removed after 5 minutes
+
+*** 9-_Customizing_Query_Settings ***
+our Qurey has settings that set to default but we can also customize this settings
+
+in main.tsx when we created an instacne of QueryClient we can pass configration
+object 
+first we pass the object with defaultOptions then we pass another object
+called queries
+with that we can overwrite the default settings
+-------------------code----------------------
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+
+    }
+  }
+});
+-------------------code----------------------
+
+*************
+options
+1- retry: 3 
+that means of the queries failed to read the data it will try 3 times
+
+to check it we change the endpoint by adding x to the endpoint
+-------------------code----------------------
+.get<Todo[]>("https://xjsonplaceholder.typicode.com/todos")
+-------------------code----------------------
+now we can see in Network tab 4 requests 
+the first one is initial and 3 tries 
+
+2- cacheTime: 300_000 // 5 minutes 
+the value in miliseconds and the default value is 5 minutes and here
+ where we set the the cashe time after 5 minutes the cache will be invalid 
+ and it will be collected by the cache garbage
+
+
+3- staleTime: 0
+how long the data consider fresh the default value is 0 that means the moment we have
+some data it treated as old  so the next time we need the same piece of data ReactQuery 
+will fetch the data from the backend 
+to simulate it we change it value to 10 * 1000 // 10 seconds 
+and we press in the red icon we can see the todos in orange 
+
+PS: the data Auto Refresh
+- when the Network is reconnected 
+- when the component is mounted
+- when the window is refocused (when we open another tap in the Browser
+and go back to our original tab)
+
+to disapled we change the default value (true) to false 
+4- refetchOnReconnect: false
+5- refetchOnMount: false
+6- refetchOnWindowFocus: false
+
+*************
+
+How Refetching in React Query:
+
+when data is stale(old):
+React Query  -------------->   Backend
+    |        fetch the data
+    |
+    |   while at the same time return the 
+    |   stale data to the cache  application
+    ↓
+Component
+
+with this approch we can show the user the cashe data immediately while also
+getting the latest data in the background  
+
+
+React Query  -------------->   Backend
+    |        
+    |        <--------------
+    |      when we have the updated data
+    |        React Query will update the cache and notify 
+    |      our component that a new data is available
+    |
+    ↓
+Component   => finally our component we will render with fresh data 
+
+normally we don`t have to play with all the settings but the most changed one 
+is staleTime and that depends on our queries
+
+-------------------code----------------------
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      cacheTime: 300_000, // 5 minutes
+      staleTime: 10 * 1000, // 10 seconds
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+    },
+  },
+});
+-------------------code----------------------
+
+in our application we will remove the global settings instead 
+in useTodos.ts we set the staleTime for only todos
+so remmber we can overwrite the settings globally using main.tsx
+or for each endpoint diffrently 
+-------------------code----------------------
+const useTodos = () => {
+  const fetchTodos = () =>
+    axios
+      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => res.data);
+  return useQuery<Todo[], Error>({
+    queryKey: ["todos"],
+    queryFn: fetchTodos,
+    staleTime: 10 * 1000,
+  });
+};
+-------------------code----------------------
