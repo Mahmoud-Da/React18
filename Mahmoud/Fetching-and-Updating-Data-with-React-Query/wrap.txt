@@ -610,3 +610,137 @@ const useTodos = () => {
 *** 10-_Exercise-_Fetching_Data ***
 use the React Query for PostList.tsx 
 
+*** 11-_Parameterized_Queries ***
+how we can fetch nested resources  exaple we have 
+a selected form for 3 users when we select each one
+we see diffrent posts 
+
+so first in PostList.tsx we add select element with bootstrap class to make nice
+-------------------code----------------------
+<select className="form-select mb3"></select>
+-------------------code----------------------
+
+
+for this demo we will hard code the user not fetching
+but in the real application we fetch it from the backend
+-------------------code----------------------
+<select className="form-select mb3">
+  <option value=""></option>
+  <option value="1">User1</option>
+  <option value="2">User2</option>
+  <option value="3">User3</option>
+</select>
+-------------------code----------------------
+
+- now we need to declear a static varible to keep track 
+of the selected user so when the user select we should 
+filter the post according to that user 
+
+-------------------code----------------------
+const [userId, setUserID] = useState<number>();
+-------------------code----------------------
+
+- next we should handle the event chages
+-------------------code----------------------
+<select
+  onChange={(event) => setUserID(parseInt(event.target.value))}
+  className="form-select mb3"
+>
+  <option value="">All Users</option>
+  <option value="1">User1</option>
+  <option value="2">User2</option>
+  <option value="3">User3</option>
+</select>
+-------------------code----------------------
+
+PS: we used parseInt coz the user id should be number but the value 
+in the option element is string 
+
+next we should set the value props to the userId so in the next render 
+the right option  got selected
+-------------------code----------------------
+<select
+  onChange={(event) => setUserID(parseInt(event.target.value))}
+  value={userId}
+  className="form-select mb3"
+>
+  <option value=""></option>
+  <option value="1">User1</option>
+  <option value="2">User2</option>
+  <option value="3">User3</option>
+</select>
+-------------------code----------------------
+
+- now the last part which is filter
+curruntly we are using the usePosts hook we shuold pass the 
+userId as parameter so we can filter posts by that ids 
+
+first we pass userId as argument 
+-------------------code----------------------
+const { data: posts, error, isLoading } = usePosts(userId);
+-------------------code----------------------
+
+then add as parameter. user may not be selected that why we add or undefined
+-------------------code----------------------
+const usePosts = (userId: number | undefined)
+-------------------code----------------------
+
+now we have to handle the queryKey 
+we handle same as we design out API URLs
+we start with top level object which called users 
+ex:
+/users/1/posts
+-------------------code----------------------
+queryKey: ["users", userId, "posts"],
+-------------------code----------------------
+
+with that everytime the userId changed React will fetch the posts 
+for that user 
+- finally we pass it to backend
+way1
+-------------------code----------------------
+.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`)
+-------------------code----------------------
+
+but better to use this way 
+-------------------code----------------------
+.get("https://jsonplaceholder.typicode.com/posts", {
+        params: {
+          userId,
+        },
+      })
+-------------------code----------------------
+
+now we can check our cashe tools
+when we select User2 
+-------------------code----------------------
+1 ["users",2,"posts"]
+0 ["users",null,"posts"]
+-------------------code----------------------
+
+the cashe ["users",2,"posts"] will be 1 which means active 
+
+when reselect All Users 
+["users",null,"posts"] will be 1
+and 
+["users",2,"posts"] will be 0
+
+now another issue when we have all users 
+-------------------code----------------------
+["users",null,"posts"]
+-------------------code----------------------
+is a little ugly and it`s better to be only posts 
+when the user is empty
+-------------------code----------------------
+["posts"]
+-------------------code----------------------
+
+to fix that 
+-------------------code----------------------
+queryKey: userId ? ["users", userId, "posts"] : ["posts"],
+-------------------code----------------------
+
+one last thing when we select the User for the first time we see 
+loading indicator coz the first time we select a user we fetch the data 
+from the backend while the next time we select the same user 
+we no longer see the loading indicator coz we get the data from the cashe
