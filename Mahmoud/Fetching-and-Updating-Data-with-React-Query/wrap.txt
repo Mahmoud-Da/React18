@@ -860,3 +860,165 @@ queryKey: ["posts", query],
     staleTime: 1 * 60 * 1000, // 1m
     keepPreviousData: true,
 -------------------code----------------------
+
+*** 13-_Infinite_Queries ***
+to show Infinite Queries first we use useInfiniteQurey instead of useQuery
+-------------------code----------------------
+ return useInfiniteQuery<Post[], Error>({
+    queryKey: ["posts", query],
+    queryFn: fetchPosts,
+    staleTime: 1 * 60 * 1000, // 1m
+    keepPreviousData: true,
+  });
+-------------------code----------------------
+
+when we use useInfiniteQuery we can`t use page hook to track the page number 
+cause useInfiniteQuery handle the pagination automaticly and using page hook 
+with useInfiniteQuery may lead to issue with caches and data constantly
+
+- so we will remove page from our interface and usePosts hook and the page use state 
+
+so how we will calculate the page number for that we will use getNextPageParam
+getNextPageParam is take two parameter the first one is lastPage and the second is allPages
+allPages it contains multi array each array has group of posts 
+so to move from page one to page two we take the length of allPages and add 1 to it 
+-------------------code----------------------
+return useInfiniteQuery<Post[], Error>({
+    queryKey: ["posts", query],
+    queryFn: fetchPosts,
+    staleTime: 1 * 60 * 1000, // 1m
+    keepPreviousData: true,
+    getNextPageParam: (lastPage, allPages) => {
+      // 1 - 2
+      return allPages.length + 1;
+    },
+  });
+-------------------code----------------------
+
+now we don`t want to incrument the allPages forever, we want to to incrument the pages 
+until the last page 
+for jsonplaceholder the lastpage is empty array so we can write expertion like that 
+we do that hard experition cause jsonplaceholder doesn`t povide us with number of pages
+-------------------code----------------------
+getNextPageParam: (lastPage, allPages) => {
+  // 1 - 2
+  return lastPage.length > 0 ? allPages.length + 1 : undefined;
+},
+-------------------code----------------------
+
+- now when the user press on the loadbutton ReactQuery call the getNextPageParam to get the 
+next page number then it will pass the page number for the query function 
+
+as best practice we should pass pageParam to 1 to start from the first page 
+-------------------code----------------------
+const fetchPosts = ({ pageParam = 1 }) =>
+    axios
+      .get("https://jsonplaceholder.typicode.com/posts", {
+        params: {
+          userId: query.userId,
+          _start: (pageParam - 1) * query.pageSize,
+          _limit: query.pageSize,
+        },
+      })
+      .then((res) => res.data);
+-------------------code----------------------
+
+- now in PostList we have multi errors 
+first we remove the Previous button 
+and for the next button we replace Next with Load 
+and instead of incrument the page manually 
+-------------------code----------------------
+() => setPage(page + 1)
+-------------------code----------------------
+
+we call fetchNextPage 
+
+- first we call the property from the usePost
+-------------------code----------------------
+const {
+    data: posts,
+    error,
+    isLoading,
+    fetchNextPage,
+  } = usePosts({ userId, pageSize });
+-------------------code----------------------
+
+- then 
+-------------------code----------------------
+<button
+  className="btn btn-primary my-3 ms-1"
+  onClick={() => fetchNextPage()}
+>
+  Load
+</button>
+-------------------code----------------------
+
+- next we should disable the button if we are fetching the next page so we call another 
+property calles isFetchingNextPage
+-------------------code----------------------
+const {
+    data: posts,
+    error,
+    isLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = usePosts({ userId, pageSize });
+-------------------code----------------------
+
+- and add it to the button 
+and we make our Loading statement more dynamicly
+-------------------code----------------------
+<button
+  className="btn btn-primary my-3 ms-1"
+  disabled={isFetchingNextPage}
+  onClick={() => fetchNextPage()}
+>
+  {isFetchingNextPage ? "Loading" : "LoadMore"}
+</button>
+-------------------code----------------------
+
+- next we have error where we map the posts 
+-------------------code----------------------
+{data.map((post) => (
+  <li key={post.id} className="list-group-item">
+    {post.title}
+  </li>
+))}
+-------------------code----------------------
+
+- cause posts we no longer have array of posts 
+instead we have an instance of InfiniteData
+-------------------code----------------------
+const posts: InfiniteData<Post[]> 
+-------------------code----------------------
+
+- so we map posts.pages then we map each post the previous same 
+li before PS: we used React.Fragment cause we don`t wan to add div between each element
+-------------------code----------------------
+<ul className="list-group">
+  {posts.pages.map((page) => (
+    <React.Fragment>
+      {page.map((post) => (
+        <li key={post.id} className="list-group-item">
+          {post.title}
+        </li>
+      ))}
+    </React.Fragment>
+  ))}
+</ul>
+-------------------code----------------------
+
+next we need to add key for each page cause we are using map 
+and cause the page is array we used index
+PS: we shoukd set the key for each map 
+-------------------code----------------------
+{posts.pages.map((page, index) => (
+  <React.Fragment key={index}>
+    {page.map((post) => (
+      <li key={post.id} className="list-group-item">
+        {post.title}
+      </li>
+    ))}
+  </React.Fragment>
+))}
+-------------------code----------------------
