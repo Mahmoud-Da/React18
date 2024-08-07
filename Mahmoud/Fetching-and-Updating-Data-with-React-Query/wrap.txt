@@ -744,3 +744,119 @@ one last thing when we select the User for the first time we see
 loading indicator coz the first time we select a user we fetch the data 
 from the backend while the next time we select the same user 
 we no longer see the loading indicator coz we get the data from the cashe
+
+*** 12-_Paginated_Queries ***
+
+first we should declear a state varible to keep track of currunt page
+and insilize it to 1 (first page)
+-------------------code----------------------
+const [page, setPage] = useState(1);
+-------------------code----------------------
+
+cause the page size doesn`t change we don`t a state varible for page size
+we can define a normal constant 
+-------------------code----------------------
+const pageSize = 10
+-------------------code----------------------
+
+- now we don`t want to give multi parameter to usePosts hook
+it will make our code ugly and hard to maintaine instade we define 
+query object 
+
+-------------------code----------------------
+const { data: posts, error, isLoading } = usePosts(userId);
+-------------------code----------------------
+
+- so we go usePosts.ts and define interface called PostQuery{}
+-------------------code----------------------
+interface PostQuery {
+  userId: number | undefined;
+  page: number;
+  pageSize: number;
+}
+-------------------code----------------------
+
+and set the parameter for usePosts hook 
+-------------------code----------------------
+const usePosts = (query: PostQuery) => {
+
+}
+-------------------code----------------------
+
+- set the params 
+-------------------code----------------------
+axios
+    .get("https://jsonplaceholder.typicode.com/posts", {
+      params: {
+        userId: query.userId,
+        _start: (query.page - 1) * query.pageSize,
+        _limit: query.pageSize,
+      },
+    })
+-------------------code----------------------
+
+- now back to our component we call the queryObjects inside the usePosts 
+-------------------code----------------------
+const {
+    data: posts,
+    error,
+    isLoading,
+  } = usePosts({ userId, page, pageSize });
+-------------------code----------------------
+
+- now if we back to our Browser we can see only ten posts 
+
+- next we add button for pagination 
+now the Previous should be disable if we are in the first page
+and when clicked we go back one page 
+-------------------code----------------------
+<button
+  disabled={page === 1}
+  className="btn btn-primary"
+  onClick={() => setPage(page - 1)}
+>
+  Previous
+</button>
+-------------------code----------------------
+
+ 
+- the same thing for nextPage 
+here we removed the disable property coz placeHolder API doesn`t
+tell the last page number 
+-------------------code----------------------
+<button className="btn btn-primary" onClick={() => setPage(page + 1)}>
+  Next
+</button>
+-------------------code----------------------
+
+now cause the button is too close we give them a vertical margin 
+and we give the next buttn margin left (in bootstrap 5 its ms (means margin start))
+-------------------code----------------------
+<button
+  disabled={page === 1}
+  className="btn btn-primary my-3 "
+  onClick={() => setPage(page - 1)}
+>
+  Previous
+</button>
+<button
+  className="btn btn-primary my-3 ms-1"
+  onClick={() => setPage(page + 1)}
+>
+  Next
+</button>
+-------------------code----------------------
+
+- now one problem is that when press the next button the loading indicator
+shows and the page move to the top
+we can have a improve the experience for the user by shiping the data in the 
+current page while waiting for the new data 
+and when the new data is available we swap the data of the current page 
+
+it easy to do, by setting keepPreviousData to true 
+-------------------code----------------------
+queryKey: ["posts", query],
+    queryFn: fetchPosts,
+    staleTime: 1 * 60 * 1000, // 1m
+    keepPreviousData: true,
+-------------------code----------------------
