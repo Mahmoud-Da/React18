@@ -1257,3 +1257,36 @@ queryClient.setQueryData<Todo[]>(["todos"], (todos) => [
 -------------------code----------------------
 
 - now we test our code 
+
+*** 16-_Handling_Mutation_Errors ***
+when our request fails 
+
+in TodoForm.tsx we add dic with className called alert and alert dangaer
+- when we type addTodo.error we can`t see the type 
+-------------------code----------------------
+{addTodo.error && <div className="alert alert-danger">
+{addTodo.error}</div>}
+-------------------code----------------------
+
+- so we add type generic to useMutation
+useMutation<TData = unknown, TError = unknown, TVariables = void
+TData: the data that we got from the backend
+TError: Error class we set it Error
+TVariables: the data that we send to the backend
+
+-------------------code----------------------
+useMutation<Todo, Error, Todo>
+-------------------code----------------------
+
+- now we can see the message of the addTodo.error
+-------------------code----------------------
+{addTodo.error && (
+        <div className="alert alert-danger">{addTodo.error.message}</div>
+      )}
+-------------------code----------------------
+
+- we test our implomantaion by simulate errro adding x to our endpoint
+-------------------code----------------------
+.post<Todo>("https://jsonplaceholder.typicode.com/todosx", todo)
+-------------------code----------------------
+
