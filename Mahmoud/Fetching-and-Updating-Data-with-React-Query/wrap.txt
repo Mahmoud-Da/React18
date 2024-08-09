@@ -1290,3 +1290,35 @@ useMutation<Todo, Error, Todo>
 .post<Todo>("https://jsonplaceholder.typicode.com/todosx", todo)
 -------------------code----------------------
 
+
+*** 17-_Showing_Mutation_Progress ***
+now saving data may take a time to improve the user experience 
+we should show a spinner or indicator while the prosses
+
+the same way as useQuery object 
+-------------------code----------------------
+<button disabled={addTodo.isLoading} className="btn btn-primary">
+  {addTodo.isLoading ? "Adding..." : "Add"}
+</button>
+-------------------code----------------------
+
+- now when after we press adding the value stays in the input value and removed to fix that 
+we use ref to clear the value input field
+
+-------------------code----------------------
+onSuccess: (savedTodo, newTodo) => {
+      // first way
+      // queryClient.invalidateQueries({
+      //   queryKey: ["todos"],
+      // });
+
+      // second way
+      queryClient.setQueryData<Todo[]>(["todos"], (todos) => [
+        savedTodo,
+        ...(todos || []),
+      ]);
+
+      if (ref.current) ref.current.value = "";
+    },
+  });
+-------------------code----------------------
