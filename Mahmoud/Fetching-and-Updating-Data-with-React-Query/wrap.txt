@@ -1322,3 +1322,163 @@ onSuccess: (savedTodo, newTodo) => {
     },
   });
 -------------------code----------------------
+
+*** 18-_Optimistic_Updates ***
+we want to improve the user experience by adding optimistic updates
+so we will assume our backend calles gonna works fine so instead of waiting for responese
+we can update the UI right away. with that the frontend will be faster 
+
+
+now in TodoForm.tsx we have two functions mutationFn and onSuccess now we will add another 
+function called onMutate
+onMutate: this function is called before our mutation is excuted 
+
+now onMutate take variables parameter and variables in ReactQuery refer 
+to the input (the data that we send to the backend)
+-------------------code----------------------
+(property) onMutate?: ((variables: Todo) => unknown) | undefined
+-------------------code----------------------
+
+we will called newTodo, now in onMutate function we should update the cache right away
+so we copy all the code inside the onSuccess and we don`t have access to savedTodo so we 
+change it with newTodo
+-------------------code----------------------
+onMutate(newTodo: Todo) {
+      queryClient.setQueryData<Todo[]>(["todos"], (todos) => [
+        newTodo,
+        ...(todos || []),
+      ]);
+
+      if (ref.current) ref.current.value = "";
+    }
+-------------------code----------------------
+
+- now let`s test our implomantaion until this point 
+we can see when type somthing in the form and press tab the it added the UI
+veryfast 
+
+- now we have to handle the success and the failure casses so if the request is successful
+we should replace the todo in the UI from the one from the backend
+ex:
+we write in the form "test" and press add 
+the "test" todo is not yet register in the backend and when it registerd we want to replace
+the "test" of the backend with "test" of the UI coz the "test" of the UI doesn`t have the id (of the backend)
+
+to do that is very easy 
+we call queryClient with setQueriesData method and add type generic of Todo[] the setQueriesData take two parameters
+the first one is the qurey key and the second one is function
+in this function we say if the todo in the backend is equal to the newTodo return the savedTodo (which means replace the 
+to do of the UI with the one in the backend)
+other wise return the todo 
+-------------------code----------------------
+onSuccess: (savedTodo, newTodo) => {
+      queryClient.setQueriesData<Todo[]>(["todo"], (todos) =>
+        todos?.map((todo) => (todo === newTodo ? savedTodo : todo))
+      );
+    },
+-------------------code----------------------
+
+to recap 
+in the onSuccess we have two parameter the data:savedTodo(data from the backend) and variables:newTodo(the input data that we send 
+to backend)
+we iterate the all the todos object and check if the todo === to the newTodo (the data in the UI) we return the 
+data from the backend which is savedata other wise we return the same todo (that`s why we said will assume our backend calles gonna works)
+
+
+- but now what if the request failed
+in this case we shuold roleback and return the UI to the previos state 
+so we use onError 
+-------------------code----------------------
+(property) onError?: ((error: Error, variables: Todo, context: unknown) => Promise<unknown> | unknown) | undefined
+-------------------code----------------------
+
+it have three parameters first one is error, we set to the error and second one is variables which is the input
+data newTodo 
+the third one is context
+
+context: is an object that we create to pass data in between our callbacks 
+so we need the context object that include the previos data(todos) before update our cashe
+
+so before that we need to return the the previos data from onMutate to be able to access it 
+to do that 
+inside the onMutate we get the pervios data 
+-------------------code----------------------
+const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]);
+-------------------code----------------------
+
+and return it 
+-------------------code----------------------
+onMutate(newTodo: Todo) {
+      const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]);
+      queryClient.setQueryData<Todo[]>(["todos"], (todos) => [
+        newTodo,
+        ...(todos || []),
+      ]);
+
+      if (ref.current) ref.current.value = "";
+      return { previousTodos };
+    }
+-------------------code----------------------
+
+now we can access it in the onError property
+but until now the onError doesn`t know the type of the context so we need to specifiy it the same as useMutation
+ex:
+-------------------code----------------------
+useMutation<Todo, Error, Todo>
+-------------------code----------------------
+
+to do that we define interface called AddTodoContext that takes previousTodos property of type Todo[]
+-------------------code----------------------
+interface AddTOdoContext {
+  previousTodos: Todo[];
+}
+-------------------code----------------------
+
+now in the useMutation we add the forth Type TContext to AddTOdoContext
+-------------------code----------------------
+const addTodo = useMutation<Todo, Error, Todo, AddTOdoContext>
+-------------------code----------------------
+
+the error cause in the 
+-------------------code----------------------
+const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]);
+-------------------code----------------------
+
+because const previousTodos: Todo[] | undefined 
+previousTodos maybe undefined
+
+so we fix it 
+if the previousTodos is empty we will have empty array 
+-------------------code----------------------
+const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]) || [];
+-------------------code----------------------
+
+now back to our onError property now we can see the type of context 
+-------------------code----------------------
+(property) onError?: ((error: Error, variables: Todo, context: AddTOdoContext | undefined)
+-------------------code----------------------
+
+now in the Error we check if the context is undefined or falsy
+-------------------code----------------------
+onError(error, newTodo, context) {
+      if (!context) return;
+
+      queryClient.setQueriesData<Todo[]>(["todos"], context.previousTodos);
+    },
+-------------------code----------------------
+
+- so we test our implomantaion by add x to the API
+-------------------code----------------------
+axios
+    .post<Todo>("https://jsonplaceholder.typicode.com/todosx", todo)
+    .then((res) => res.data),
+-------------------code----------------------
+
+ToRecap:
+to implomant an optimistic update first we should implomant onMutate callback 
+in this function we update the query cashe so the UI get updated right away 
+at the end of onMutate we return a context object that include the previos data
+then we will use the context in case our request faild 
+so we handle onError property and use previosTodos of context to update the cashe 
+finally if the request is successful we replase the newTodo with savedTodo that we get from the backend
+
