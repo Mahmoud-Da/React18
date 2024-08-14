@@ -1482,3 +1482,167 @@ then we will use the context in case our request faild
 so we handle onError property and use previosTodos of context to update the cashe 
 finally if the request is successful we replase the newTodo with savedTodo that we get from the backend
 
+
+*** 19-_Creating_a_Custom_Mutation_Hook ***
+now in our TodoForm.tsx we have the query code next to our rendering code
+to make our code more cleaner we will separate our mutation code and the rendering
+so we will move our query code to reusable custom mutation hook 
+
+we create file called useAddTodo.ts 
+we copy all the query related hook from the TodoForm.tsx 
+PS: we remain the ref cause ref is related to updating the UI while the other 
+constants related to data managment
+
+in useAddTodo.ts  first we create constant and export it 
+-------------------code----------------------
+const useAddTodo = () => {
+  
+};
+
+export default useAddTodo;
+-------------------code----------------------
+
+then we copy all the related query code to inside it 
+-------------------code----------------------
+const useAddTodo = () => {
+  const queryClient = useQueryClient();
+  const addTodo = useMutation<Todo, Error, Todo, AddTOdoContext>({
+    mutationFn: (todo: Todo) =>
+      axios
+        .post<Todo>("https://jsonplaceholder.typicode.com/todos", todo)
+        .then((res) => res.data),
+    onMutate(newTodo: Todo) {
+      const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]) || [];
+      queryClient.setQueryData<Todo[]>(["todos"], (todos) => [
+        newTodo,
+        ...(todos || []),
+      ]);
+
+      if (ref.current) ref.current.value = "";
+      return { previousTodos };
+    },
+
+    onSuccess: (savedTodo, newTodo) => {
+      queryClient.setQueriesData<Todo[]>(["todo"], (todos) =>
+        todos?.map((todo) => (todo === newTodo ? savedTodo : todo))
+      );
+    },
+
+    onError(error, newTodo, context) {
+      if (!context) return;
+
+      queryClient.setQueriesData<Todo[]>(["todos"], context.previousTodos);
+    },
+  });
+};
+
+export default useAddTodo;
+-------------------code----------------------
+
+- now we have multi issue to deal with 
+import useQueryClient and useMutation 
+* next import Todo interface which is defined in the useTodo.ts and that is a little 
+ugly cause our two hook state variables should be independent from eaah others
+but we will fix it later 
+
+next we need the AddTodoContext interface so we will move it from our FormTodo.tsx
+
+then we import axios 
+
+now we have this logic
+-------------------code----------------------
+if (ref.current) ref.current.value = "";
+-------------------code----------------------
+
+this ref statement is related to the UI and we should avoid inside oud hook cause it make our hook 
+less usable cause the hole porpose of this hook to make our hook more reusble
+only for capsilate the data and save it into the cache so this hook should 
+only focus on our data managment only 
+
+so to make our hook more reusable we should move the ref statment logic to the consumer
+component which is TodoForm.tsx
+
+so first we will comment the ref statement line and give our hook a call back function that function
+so our component is gonna pass a function then our hook is gonna call that function back to move control
+to our component 
+
+so we give the component a parameter we called onAdd and that function return void
+-------------------code----------------------
+const useAddTodo = (onAdd: () => void) => 
+-------------------code----------------------
+
+and we called instead of the ref statement
+-------------------code----------------------
+onAdd();
+  // if (ref.current) ref.current.value = "";
+-------------------code----------------------
+
+we that we let the consumer of this hook decide what will happen in this moment (this line of code)
+
+now we copy our ref comment and inside the TodoForm.tsx we call the useAddTodo and copy that ref comment inside tha function
+argument
+-------------------code----------------------
+useAddTodo(() => {
+    if (ref.current) ref.current.value = "";
+  });
+-------------------code----------------------
+
+- now we call that function addTodo 
+-------------------code----------------------
+const addTodo = useAddTodo(() => {
+    if (ref.current) ref.current.value = "";
+  });
+-------------------code----------------------
+
+- now we have bunch of error to fix cause our addTodo is not returning anything we can see the type of addTodo us 
+void
+
+to fix that we return the useMutation
+-------------------code----------------------
+return useMutation<Todo, Error, Todo, AddTOdoContext>({
+    mutationFn: (todo: Todo) =>
+      axios
+      ... 
+  })
+-------------------code----------------------
+
+now we have small issue inside the useAddTodo
+
+first 
+-------------------code----------------------
+queryClient.setQueryData<Todo[]>(["todos"], (todos) => [
+        newTodo,
+        ...(todos || []),
+      ]);
+-------------------code----------------------
+
+instead of this (todos || []) cause todos maybe undefined we can do the same 
+thing by insilize the todo argument to empty array 
+-------------------code----------------------
+queryClient.setQueryData<Todo[]>(["todos"], (todos = []) => [
+        newTodo,
+        ...todos,
+      ]);
+-------------------code----------------------
+
+this way is more cleaner 
+
+the next issue is the duplicattion of the queryKey ["todos"] in all the places 
+beside we using too inside the useTodos.ts so in future may type error occure 
+so is better to but the keys in a separate files in the react-query folder 
+we create constants.ts file 
+inisde we export todo cache key 
+-------------------code----------------------
+export const CACHE_KEY_TODOS = ["todos"];
+-------------------code----------------------
+
+now we replace it inside the useTodo.ts + useAddTodo.ts 
+
+finally in the TodoForm.tsx we press cmd + shift + P (command palat)
+-------------------code----------------------
+organize Imports
+-------------------code----------------------
+
+now we have three file FormTodo.tsx for handling the UI and useTodo.ts for fetching the data
+and finally useAddTodo for data managment
+that`s what we call separation of concern
