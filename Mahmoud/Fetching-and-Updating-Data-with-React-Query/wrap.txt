@@ -1627,7 +1627,7 @@ queryClient.setQueryData<Todo[]>(["todos"], (todos = []) => [
 
 this way is more cleaner 
 
-the next issue is the duplicattion of the queryKey ["todos"] in all the places 
+the next issue is the duplication of the queryKey ["todos"] in all the places 
 beside we using too inside the useTodos.ts so in future may type error occure 
 so is better to but the keys in a separate files in the react-query folder 
 we create constants.ts file 
@@ -1646,3 +1646,323 @@ organize Imports
 now we have three file FormTodo.tsx for handling the UI and useTodo.ts for fetching the data
 and finally useAddTodo for data managment
 that`s what we call separation of concern
+
+*** 20-_Creating_a_Reusable_API_Client ***
+now the other issue that we have in our implomantaion that we duplicate our endpoint
+in two separate function useTodo.ts and useAddTodo.ts
+we can save the Url in constant and used in the two hooks but that will not solve the underline problem
+the issue that we have that the query logic has leak to our hook 
+so in this two files 
+useTodo.ts
+-------------------code----------------------
+axios
+  .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+  .then((res) => res.data);
+-------------------code----------------------
+
+useAddTodo.ts
+-------------------code----------------------
+axios
+  .post<Todo>("https://jsonplaceholder.typicode.com/todos", todo)
+  .then((res) => res.data)
+-------------------code----------------------
+
+we can see everyTime that we want to get the data we need to mange or get the data we need to call 
+axios then http method and repeat the same endpoint then get the data this will lead to too much duplication in future
+and maintaine. 
+to solve this problem we should extract the Query logic  and implomant it onece for all.
+(we did the same thing in the first part create reusable api client)
+
+now to implomant reusable api client
+- under the react-qurey folder we create  folder 
+
+- inside it we create apiClient.ts or (we can use kebab case api-client.ts)
+- now inside the apiClient.ts 
+- we import axios 
+- now cause we use only jsonplaceholder as endpoint we don`t want to repeat every time 
+so we create default axios instacne and set the base URL to jsonplaceholder
+-------------------code----------------------
+import axios from "axios";
+
+axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+});
+-------------------code----------------------
+
+- this return axios instacne which we store it in axiosInstance constant
+-------------------code----------------------
+const axiosInstance = axios.create({
+  baseURL: "https://jsonplaceholder.typicode.com",
+});
+-------------------code----------------------
+
+- we define a class called APIClient we will use ths class to send multi type of HTTP 
+requests to particular endpoint
+
+and insilize it using constarctor 
+-------------------code----------------------
+class APIClient {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+}
+-------------------code----------------------
+
+- inside the class we need various methods for getting data or post data or patching data 
+
+-------------------code----------------------
+class APIClient {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  getAll() {
+    return axiosInstance.get(this.endpoint).then((res) => res.data);
+  }
+}
+-------------------code----------------------
+
+
+this logic where was duplicated in our code.
+-------------------code----------------------
+axiosInstance.get(this.endpoint).then((res) => res.data);
+-------------------code----------------------
+
+- now if we hover on getAll we have type any and that not we want so we should add type 
+parameter (get T[] cause it return array of parameters)
+-------------------code----------------------
+ getAll<T>() {
+    return axiosInstance.get<T[]>(this.endpoint).then((res) => res.data);
+  }
+-------------------code----------------------
+
+- now we need similar method for posting the data 
+-------------------code----------------------
+class APIClient {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  getAll<T>() {
+    return axiosInstance.get<T[]>(this.endpoint).then((res) => res.data);
+  }
+
+  post<T>(data: T) {
+    return axiosInstance.post<T>(this.endpoint, data).then((res) => res.data);
+  }
+}
+-------------------code----------------------
+
+- but now we duplicate the <T> so we can apply to the class itself to remove the duplication
+-------------------code----------------------
+class APIClient<T> {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  getAll() {
+    return axiosInstance.get<T[]>(this.endpoint).then((res) => res.data);
+  }
+
+  post(data: T) {
+    return axiosInstance.post<T>(this.endpoint, data).then((res) => res.data);
+  }
+}
+-------------------code----------------------
+
+finally we should export our APIClient class
+-------------------code----------------------
+class APIClient<T> {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  getAll() {
+    return axiosInstance.get<T[]>(this.endpoint).then((res) => res.data);
+  }
+
+  post(data: T) {
+    return axiosInstance.post<T>(this.endpoint, data).then((res) => res.data);
+  }
+}
+
+export default APIClient;
+-------------------code----------------------
+
+- now we will use it in our code 
+inisde the todos 
+- import the APIClient
+- craete instacne of that class and set the endpoint and te type generic
+-------------------code----------------------
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import APIClient from "../services/apiClient";
+import { CACHE_KEY_TODOS } from "../constants";
+
+const apiClient = new APIClient<Todo>("/todos");
+-------------------code----------------------
+
+
+- now we remove the fetchTodos method and instead of reference the fetchTodos we reference
+the getAll of apiClient
+-------------------code----------------------
+const useTodos = () => {
+  return useQuery<Todo[], Error>({
+    queryKey: CACHE_KEY_TODOS,
+    queryFn: apiClient.getAll,
+    staleTime: 10 * 1000,
+  });
+};
+
+-------------------code----------------------
+
+
+call VS reference
+*************************************************************
+Do you want it to execute NOW? Then call it.
+
+a=hello() means "Call hello() ASAP, and set its return value to a".
+
+On the other hand, a=hello means "a is an alias for hello. If you call a(),
+you get the same results as calling hello()"
+
+You use the latter for callbacks, etc, 
+where you want to tell the browser what you want to happen after an event occurs.
+For example, you may want to say "call hello() when the user clicks" 
+(as in the example). Or, "When the AJAX query returns a result, 
+call the callback() function on the returned data".
+*************************************************************
+
+
+now let`s test our code 
+we blank page now if we check the console we see 
+-------------------code----------------------
+TypeError: todos?.map is not a function
+    at TodoList (TodoList.tsx:11:15)
+-------------------code----------------------
+
+now we click on 
+-------------------code----------------------
+TodoList.tsx:11:15
+-------------------code----------------------
+
+we see the error 
+-------------------code----------------------
+ return (
+    <ul className="list-group">
+      {todos?.map((todo) => (  =======> Error line 
+        <li key={todo.id} className="list-group-item">
+          {todo.title}
+        </li>
+      ))}
+    </ul>
+-------------------code----------------------
+
+- we press on the line for debugging then cmd + R for refresh with removing the cashe
+we can see the todos is HTML element not array
+-------------------code----------------------
+todos:  "\n<!DOCTYPE html>\n<html lang=\"en\">\
+-------------------code----------------------
+
+- so what is happening 
+
+we go to the Network tab and we can see instead of getting the data we have the homepage 
+of jsonplaceholder 
+so our endpoint is missing the /todos part 
+
+now to debug the problem in our code 
+in the apiClient.ts under the getAll method we add debugger 
+-------------------code----------------------
+getAll() {
+    debugger;
+    return axiosInstance.get<T[]>(this.endpoint).then((res) => res.data);
+  }
+-------------------code----------------------
+
+now in the devTool in Source we of we hover on the endpoint we can see it undefined
+
+PS: to debug in react 
+*************************************************************
+Method1: use debugger where you want to debug then cmd + R
+
+Method2: select the line where the error then cmd + R
+*************************************************************
+
+
+- why endpoint is undefined 
+when we reference the getAll the "this" keyword inside getAll losses its context 
+and becames undefined 
+-------------------code----------------------
+queryFn: apiClient.getAll,
+-------------------code----------------------
+
+to solve it we have two options 
+1- to bind(connect) this function to the containing object which is apiClient
+-------------------code----------------------
+queryFn: apiClient.getAll.bind(apiClient),
+-------------------code----------------------
+
+not good practice cause in this line we repeat apiClient twice
+
+2- to use arrow function the methods inside APIClient class 
+cause arrow function doesn`t thier own "this" constant so the "this" keyword
+will only be refer to the class constarctor itself 
+-------------------code----------------------
+class APIClient<T> {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  getAll = () => {
+    return axiosInstance.get<T[]>(this.endpoint).then((res) => res.data);
+  };
+
+  post = (data: T) => {
+    return axiosInstance.post<T>(this.endpoint, data).then((res) => res.data);
+  };
+}
+-------------------code----------------------
+
+- now we no longer need axios insie useTodo.ts so we remove it 
+- we do the same thing inside useAddTodo.ts 
+
+first create an instacne
+-------------------code----------------------
+import APIClient from "../services/apiClient";
+import { CACHE_KEY_TODOS } from "../constants";
+
+const apiClient = new APIClient<Todo>("/todos");
+-------------------code----------------------
+
+then  we reference it 
+-------------------code----------------------
+mutationFn: apiClient.post,
+-------------------code----------------------
+
+- now simple fix when we add data the label Add change to Adding while add the data 
+is little ugly we fixed 
+in TodoForm.tsx
+we remove 
+-------------------code----------------------
+<button disabled={addTodo.isLoading} className="btn btn-primary">
+  {addTodo.isLoading ? "Adding..." : "Add"}
+</button>
+
+-------------------code----------------------
+
+and change it to Add 
+-------------------code----------------------
+<button className="btn btn-primary">Add</button>
+-------------------code----------------------
