@@ -1966,3 +1966,67 @@ and change it to Add
 -------------------code----------------------
 <button className="btn btn-primary">Add</button>
 -------------------code----------------------
+
+*** 21-_Creating_a_Reusable_HTTP_Service ***
+
+curruntly we duplicate our endpoint client in two files 
+useAddTodo.ts and useTodos.ts
+-------------------code----------------------
+const apiClient = new APIClient<Todo>("/todos");
+-------------------code----------------------
+
+so if we have a type check our code is not going to work to solve that problem
+so to solve this issue we should create a single apiClient instacne and shared in multi places 
+this will make our code not duplicated and more maintainable 
+
+to do that:
+- inside the service folder we create todoService.ts 
+here where we are going to create single instacne of apiClient 
+
+- so we copy this instacne to the inside of todoService.ts
+-------------------code----------------------
+const apiClient = new APIClient<Todo>("/todos");
+-------------------code----------------------
+
+- now we import the APIClient
+- we can now import the Todo interface but now in our implomantaion
+the Todo interface defined in the useTodos.ts and useAddTodo.ts are import it 
+the implomantaion is a little ugly so for to make our code more maintainable we move the interface
+to the todoService.ts
+-------------------code----------------------
+import APIClient from "./apiClient";
+
+export interface Todo {
+  id: number;
+  title: string;
+  userId: number;
+  completed: boolean;
+}
+const apiClient = new APIClient<Todo>("/todos");
+-------------------code----------------------
+
+- last step we export it as default object
+-------------------code----------------------
+export default new APIClient<Todo>("/todos");
+-------------------code----------------------
+
+- now we clean up our hooks files 
+
+in useAddTodo.ts 
+- first we remove unused imported statement
+- then import todoService
+-------------------code----------------------
+import todoService from "../services/todoService";
+-------------------code----------------------
+
+- now change apiClient to the todoService 
+-------------------code----------------------
+mutationFn: todoService.post,
+-------------------code----------------------
+and import the todo interface 
+
+same thing wiht useTodos.ts 
+
+now we test our application 
+
+
