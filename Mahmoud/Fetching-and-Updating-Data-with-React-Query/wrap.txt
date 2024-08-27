@@ -2030,3 +2030,20 @@ same thing wiht useTodos.ts
 now we test our application 
 
 
+*** 22-_Understanding_the_Application_Layers ***
+let`s take a closer look of our application and how it works togather 
+
+from buttom to top
+Components: [TodoForm, TodoList] which use our hooks to fetch the updated data              
+                  ↑
+Custom Hooks: [usetodos.ts, useAddTodos.ts] use HTTP services to fetch and update data
+              in this hooks we have all the logic of maneging the data in the cache
+                  ↑
+HTTP Service: [todoService.ts] which instacnes of API clinets dedicated to work with specific 
+              object in our case (todoService to word with todos) and we can also have postService
+              to work with post 
+                  ↑
+API Client:  [apiClient.ts] which handle HTTP REQUESTS for backend 
+
+with splite our code to this architecture we can easily maintain our code caze each layer 
+has separate concern
