@@ -3766,3 +3766,207 @@ to
 -------------------code---------------------
 <title>GameShop</title>
 -------------------code---------------------
+
+*** Fetching and Updating Data with React Query ***
+
+*** 24-_Exercise-_Fetching_Genres *** 
+
+first we are going to fetch genre using React Query 
+
+- we setup the react query 
+-------------------code----------------------
+npm i @tanstack/react-query@4.28
+npm i @tanstack/react-query-devtools@4.28
+-------------------code----------------------
+
+
+- next we go to main.tsx 
+--import the the nessery component for using React Query in our application
+-------------------code----------------------
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+-------------------code----------------------
+
+PS: there is two ReactQueryDevtools we import the one with blue icon 
+
+-- craete a new instance of QueryClient
+-------------------code----------------------
+const queryClient = new QueryClient();
+-------------------code----------------------
+
+-- wrap our application with QueryClientProvider and give it the client that we created
+-------------------code----------------------
+<QueryClientProvider client={queryClient}>
+  <App />
+</QueryClientProvider>
+-------------------code----------------------
+
+-- finally we add our ReactQueryDevtools to our component tree 
+-------------------code----------------------
+<QueryClientProvider client={queryClient}>
+  <App />
+  <ReactQueryDevtools />
+</QueryClientProvider>
+-------------------code----------------------
+
+now we run our application and open the console to make sure everything works without any error 
+
+- now we go to useGenre.ts 
+we can see the object that we return from this hook has three properties 
+data, isLoading, error 
+
+-- the good thing here is that this object has same shape as the object we return from ReactQuery
+so we can easily replace it with useQurey 
+PS: we call useQurey make sure to import from transtack not chakraUI 
+
+-- we call the queryKey genres and set queryFn for simplicity geting only the data  
+-------------------code----------------------
+const useGenres = () =>
+  useQuery({
+    queryKey: ["genres"],
+    queryFn: () => apiClient.get("/genres").then((res) => res.data),
+  });
+-------------------code----------------------
+
+- now we go to GenreList.tsx to check that we don`t have any error 
+we see error where we mapping the genre 
+-------------------code----------------------
+{data.map((genre) => ...)}
+-------------------code----------------------
+the error says
+-------------------code----------------------
+Parameter 'genre' implicitly has an 'any' type.t
+-------------------code----------------------
+
+-- so if hover in the data 
+-------------------code----------------------
+const { data, isLoading, error } = useGenres();
+-------------------code----------------------
+we can see the type of data is any 
+
+-- to solve that we got to the useGenre.ts and provide a type generic 
+-------------------code----------------------
+queryFn: () => apiClient.get<Genre[]>("/genres").then((res) => res.data),
+-------------------code----------------------
+
+-- now we can see the type of data is genre array 
+
+-- but we have another error says 
+-------------------code----------------------
+'data' is possibly 'undefined'.
+-------------------code----------------------
+and that make a sense cause the call to the server could be failed 
+
+so we should use optional chaning 
+-------------------code----------------------
+{data?.map((genre) => (...))}
+-------------------code----------------------
+
+- now we check our application we can see it`s crashed we can see in the console 
+-------------------code----------------------
+TypeError: data?.map is not a function at GenreList (GenreList.tsx:31:16)
+-------------------code----------------------
+
+-- so we press on the 
+-------------------code----------------------
+GenreList.tsx:31:16
+-------------------code----------------------
+
+-- to move to the file inside the Browser and we add break point on the same line 
+then refresh with cmd/ctrl + shift + R
+
+-- we can see the data is object with 4 properties
+and we can`t iterate over this for properties cause that impossible what we want is to iterate
+over the result property 
+-------------------code----------------------
+data: 
+ count: 19
+ next: null
+ previou: null
+ results: Array(19)
+ 0: {id: 4, name: 'Action', slug: 'action', games_count: 181941, image_background: 'https://media.rawg.io/media/games/b8c/b8c243eaa0fbac8115e0cdccac3f91dc.jpg', …}
+ 1: {id: 51, name: 'Indie', slug: 'indie', games_count: 68616, image_background: 'https://media.rawg.io/media/games/d0f/d0f91fe1d92332147e5db74e207cfc7a.jpg', …}
+ 2: {id: 3, name: 'Adventure', slug: 'adventure', games_count: 141620, image_background: 'https://media.rawg.io/media/games/48c/48cb04ca483be865e3a83119c94e6097.jpg', …}
+....
+-------------------code----------------------
+
+
+-- now if we put result we see error 
+-------------------code----------------------
+{data?.result.map((genre) => ()...)}
+-------------------code----------------------
+-------------------code----------------------
+roperty 'result' does not exist on type 'Genre[]'.
+-------------------code----------------------
+
+-- so we made mistake instead of using Genre[] 
+-------------------code----------------------
+queryFn: () => apiClient.get<Genre[]>("/genres").then((res) => res.data),
+-------------------code----------------------
+
+-- we should use the type of the response
+ (FetchResponse with 4 properties that we defined before in useData.ts) 
+at that time we add only count and results cause we are not going to use next and previous
+
+-- so we export the FetchResponse from the useData.ts 
+-------------------code----------------------
+apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
+-------------------code----------------------
+PS: we don`t have to add Genre[] cause we already add type genrec and called with array with result 
+-------------------code----------------------
+results: T[]
+-------------------code----------------------
+
+now we render the genre of the results 
+-------------------code----------------------
+{data?.results.map((genre) => () ...)}
+-------------------code----------------------
+
+- now we check out implomantaion and we can see it works fine 
+
+- we impove our code 
+cause genre is hardly coding we want to put the staleTime to 24hours 
+
+24 * 60minutes * 60seconds * 1000 milisecond
+-------------------code----------------------
+staleTime: 24 * 60 * 60 * 1000, // 24hours
+-------------------code----------------------
+
+we will improve the way we write it later but now we want to focus on the implomantaion 
+
+
+- next we set the Initial data to the static data that we shiped in our application
+-------------------code----------------------
+initialData: genres
+-------------------code----------------------
+
+- we have compilation error in queryKey says 
+-------------------code----------------------
+No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'queryKey' does not exist in type 'readonly unknown[]'.
+-------------------code----------------------
+
+the error happned cause 
+-------------------code----------------------
+apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
+-------------------code----------------------
+
+we tell the React qurey that we suppose to have data with type FetchResponse but the initialData that we defined 
+in the genres.ts
+doesn`t have count and result properties  only array 
+to solve that we have two ways
+1- 
+-------------------code----------------------
+initialData: { count: genres.length, results: genres },
+-------------------code----------------------
+
+2- inside the genres.ts we add count and results but that will take more works 
+so we will go with step one 
+
+- now we check our application
+we don`t see a spinner cause our initial data inserted in the query 
+beside the data will be stale after 24 hours so no request we go the backend to fetch the genre 
+
+
+
