@@ -3970,3 +3970,47 @@ beside the data will be stale after 24 hours so no request we go the backend to 
 
 
 
+*** 25-_Exercise-_Fetching_Platforms ***
+
+next we are going to fetch the platform using React Query 
+
+this one is similar to the way we do in useGenre.ts 
+- in usePlatforms.ts
+-------------------code----------------------
+const usePlatforms = () =>
+  useQuery({
+    queryKey: ["platforms"],
+    queryFn: () =>
+      apiClient
+        .get<FetchResponse<Platforms>>("/platforms/lists/parents")
+        .then((res) => res.data),
+  });
+-------------------code----------------------
+
+- PlatformSelector.tsx we fix the mapping of data same as genre 
+-------------------code----------------------
+{data?.results.map((platform) => ()..)}
+-------------------code----------------------
+
+- now we test our code 
+
+- next we improve our implomantaion
+
+PS: i forgot to ship the platform as static data so same as genre we create data/platforms.ts and 
+add the data 
+
+-------------------code----------------------
+const usePlatforms = () =>
+  useQuery({
+    queryKey: ["platforms"],
+    queryFn: () =>
+      apiClient
+        .get<FetchResponse<Platforms>>("/platforms/lists/parents")
+        .then((res) => res.data),
+    staleTime: 24 * 60 * 60 * 1000, // 24hours
+    initialData: { count: platforms.length, results: platforms },
+  });
+-------------------code----------------------
+
+now if we open the console we can see that we only have one API request to the games
+
