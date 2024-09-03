@@ -4014,3 +4014,135 @@ const usePlatforms = () =>
 
 now if we open the console we can see that we only have one API request to the games
 
+*** 26-_Exercise-_Fetching_Games *** 
+
+now we will replace useData hook use useQuery cause everything all the functionality that implomentent in data hook
+is already build in better way in query hook 
+
+so we will replace data hook with query hook then remove data hook from the project
+
+as we did before we use in useGames.ts
+- we rewrite usedata with useQuery
+-------------------code----------------------
+const useGames = (gameQuery: GameQuery) =>
+  useQuery({
+    queryKey: ["games", gameQuery],
+    queryFn: () =>
+      apiClient
+        .get<FetchResponse<Game>>("/games", {
+          params: {
+            genres: gameQuery.genre?.id,
+            parent_platforms: gameQuery.platform?.id,
+            ordering: gameQuery.sortOrder,
+            search: gameQuery.searchText,
+          },
+        })
+        .then((res) => res.data),
+  });
+-------------------code----------------------
+
+- clean the import statement 
+
+
+- now we have duplication in our code we used  interface Platform in to two places useGames and usePlatforms
+but now we want to focus in current implomantaion and as a good software engineer we should have a note while we coding 
+and write in that note for example fix the deplication of our interfaces so we back later to fix it 
+(for me i will add TODO)
+
+-------------------code----------------------
+// TODO: fix the duplication of the Platform interface
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+}
+-------------------code----------------------
+
+
+- now we test our code 
+
+we see white screen wo we opne the console to see the errors 
+-------------------code----------------------
+Uncaught TypeError: Cannot read properties of undefined (reading 'map')
+    at GameGrid (GameGrid.tsx:30:13)
+-------------------code----------------------
+
+
+as we did in PlatformList 
+-------------------code----------------------
+{data?.results.map((game) => (
+        <GameCardContainer key={game.id}>
+          <GameCard game={game} />
+        </GameCardContainer>
+      ))}
+-------------------code----------------------
+
+
+- now we see in the GameGrid.tsx another error 
+-------------------code----------------------
+<Text>{error}</Text>;
+-------------------code----------------------
+
+Type '{}' is not assignable to type 'ReactNode'.ts(2322)
+
+- to fix it we go to useGames.ts and add type genric to the useQuery
+-------------------code----------------------
+const useGames = (gameQuery: GameQuery) =>
+  useQuery<FetchResponse<Game>, Error>({
+..})
+-------------------code----------------------
+
+- then we go to the GameGrid and render error.message 
+-------------------code----------------------
+<Text>{error.message}</Text>;
+-------------------code----------------------
+
+- now we test our code 
+we click on Action genre the on Indie genre 
+now if reclick on Action we can see it refresh faster cause the cashe 
+
+
+- now we remove we useData to remove the useData hook 
+PS: before removing any block of code it`s better to check if it reference in another place 
+so it will not effect another place
+so we go useData and right click on "Go to Refrences"
+
+so we after clicked we can see it refrence in only one place which is the same file so it`s save to remove 
+
+so we can simply remove it 
+
+- now in useData we stil have FetchResponse interface and if press on "Go to Refrences" 
+we can see it refrence in 8 diffrent places 
+
+but it doesn`t make any sense to make a useData file to conatain only this function 
+cause this file is for data hook
+so the right place to move it the apiClient.ts 
+-------------------code----------------------
+import axios from "axios";
+
+export interface FetchResponse<T> {
+  count: number;
+  results: T[];
+}
+
+export default axios.create({
+  baseURL: "https://api.rawg.io/api",
+  params: {
+    key: import.meta.env.VITE_API_KEY,
+  },
+});
+-------------------code----------------------
+
+as a result of that our import statements will break in multi files 
+for now we will remove useData.ts 
+then fix the import statement in each file 
+
+after fix all the files to make sure that we don`t have error anywhere else 
+
+cmd + shift + p
+and search for Build 
+and select 
+"Tasks: Run Build Task"
+
+and select npm run vite with our Application location
+now we can see we have no errors 
