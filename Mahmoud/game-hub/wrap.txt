@@ -4171,3 +4171,136 @@ import usePlatforms, { Platform } from "../hooks/usePlatforms";
 - finally we remove it 
 
 - and to make sure there is no error we build our project
+
+
+*** 28-_Exercise-_Creating_a_Reusable_API_Client *** 
+in all our hooks inside useQurey we dublicate our fetching code 
+-------------------code----------------------
+apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
+-------------------code----------------------
+so we want to resolve this by ceating reusble API Client 
+
+- in api-client.ts instead of export the axios instance we change to contant 
+-------------------code----------------------
+const axiosInstance = axios.create({
+  baseURL: "https://api.rawg.io/api",
+  params: {
+    key: import.meta.env.VITE_API_KEY,
+  },
+});
+-------------------code----------------------
+
+then we create Class we call it APIClient and give it type generic 
+-------------------code----------------------
+class APIClient <T>{
+
+}
+-------------------code----------------------
+
+- now we give it property called endpoint and insilize it using constractor 
+-------------------code----------------------
+class APIClient<T> {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+}
+-------------------code----------------------
+
+- now in this class we want only one method we called getAll 
+and as same as apiClient.get<FetchResponse<Genre>
+-------------------code----------------------
+class APIClient<T> {
+  endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  getAll() {
+    return axiosInstance.get<FetchResponse<T>>(this.endpoint);
+  }
+}
+-------------------code----------------------
+
+- now we call the the logic of  apiClient.get<FetchResponse<Genre> only ones 
+
+now because we use params in useGames we call the config optional property if we hover 
+on the get method we can see it 
+then we call then method 
+
+-------------------code----------------------
+ getAll(config: AxiosRequestConfig) {
+    return axiosInstance
+      .get<FetchResponse<T>>(this.endpoint, config)
+      .then((res) => res.data);
+  }
+-------------------code----------------------
+
+PS: to aviod this problem we change the getAll to arrow function 
+
+-------------------code----------------------
+getAll = (config: AxiosRequestConfig) => {
+    return axiosInstance
+      .get<FetchResponse<T>>(this.endpoint, config)
+      .then((res) => res.data);
+  };
+-------------------code----------------------
+
+finally we export the class as default
+-------------------code----------------------
+export default APIClient;
+-------------------code----------------------
+
+
+- now we update our hooks one by one 
+
+- in useGenre.ts we change the import statement to APIClient and remove FetchResponse
+cause we no longer need it 
+-------------------code----------------------
+import APIClient from "../services/api-client";
+-------------------code----------------------
+
+
+- then we create instance of that class and give it the endpoint
+-------------------code----------------------
+const apiClient = new APIClient<Genre>("/genres");
+-------------------code----------------------
+
+finally we replace queryFn with apiClient.getAll 
+
+now we do the same thing with platform 
+-------------------code----------------------
+import APIClient from "../services/api-client";
+-------------------code----------------------
+
+then 
+-------------------code----------------------
+const apiClient = new APIClient<Platform>("/platforms/lists/parents");
+-------------------code----------------------
+
+finally 
+-------------------code----------------------
+queryFn: apiClient.getAll,
+-------------------code----------------------
+
+- now we change useGames 
+
+but in useGame we can`t call apiClient.getAll cause we have params we we should called in this way 
+inside the queryFn function and give it param as argument
+-------------------code----------------------
+queryFn: () =>
+      apiClient.getAll({
+        params: {
+          genres: gameQuery.genre?.id,
+          parent_platforms: gameQuery.platform?.id,
+          ordering: gameQuery.sortOrder,
+          search: gameQuery.searchText,
+        },
+      }),
+-------------------code----------------------
+
+- now we do test to our code 
+
+then commit our code 
