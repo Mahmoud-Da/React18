@@ -4146,3 +4146,28 @@ and select
 
 and select npm run vite with our Application location
 now we can see we have no errors 
+
+
+*** 27-_Exercise-_Removing_Duplicate_Interfaces ***
+we have Platform interface in two places useGames.ts and usePlatforms.ts
+we will remove the duplication from our code 
+
+- as before we said before removing an interface or any method we see it all the Refrences
+right click and "Go To Refrences"
+
+first in App.tsx 
+- we change import Platform from useGames to usePlatforms
+-------------------code----------------------
+import { Platform } from "./hooks/usePlatforms";
+-------------------code----------------------
+
+and the same for other refrence places
+
+PS: in PlatformSelctor we fix to be like that 
+-------------------code----------------------
+import usePlatforms, { Platform } from "../hooks/usePlatforms";
+-------------------code----------------------
+
+- finally we remove it 
+
+- and to make sure there is no error we build our project
