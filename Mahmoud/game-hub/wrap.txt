@@ -4304,3 +4304,158 @@ queryFn: () =>
 - now we do test to our code 
 
 then commit our code 
+
+*** 29-_Exercise-_Implementing_Infinite_Queries ***
+
+now we will take the application to the next level and imploment Infinite qureys
+so we will add button for loading more games 
+
+- in useGames.ts we should change the useQuery wiht useInfiniteQuery 
+-------------------code----------------------
+useInfiniteQuery<FetchResponse<Game>, Error>({
+  queryKey: ["games", gameQuery],
+  queryFn: () => ..}) 
+-------------------code----------------------
+
+- next we have queryFn to resive our page number as parameter 
+so we destruct the parameter to take pageParam and set to 1 
+-------------------code----------------------
+queryFn: ({ pageParam = 1 }) => ...
+-------------------code----------------------
+
+- now if go to the api documentation we can see it have query parameter called page 
+which support pagination 
+so we grap it and set it to pageParam
+-------------------code----------------------
+queryFn: ({ pageParam = 1 }) =>
+      apiClient.getAll({
+        params: {
+          genres: gameQuery.genre?.id,
+          parent_platforms: gameQuery.platform?.id,
+          ordering: gameQuery.sortOrder,
+          search: gameQuery.searchText,
+          page: pageParam,
+        },
+      }),
+-------------------code----------------------
+
+- next we should call the getNextPageParam un useInfiniteQuery to compute next page number 
+this function should take two parameter last page and all pages 
+all pages contains tha data for each page we have retrive  so to compute the next page number 
+we return all pages number + 1 
+-------------------code----------------------
+useInfiniteQuery<FetchResponse<Game>, Error>({
+    queryKey: ["games", gameQuery],
+    queryFn: ({ pageParam = 1 }) =>
+      apiClient.getAll({
+        params: {
+          genres: gameQuery.genre?.id,
+          parent_platforms: gameQuery.platform?.id,
+          ordering: gameQuery.sortOrder,
+          search: gameQuery.searchText,
+          page: pageParam,
+        },
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      return allPages.length + 1;
+    },
+  });
+-------------------code----------------------
+
+- now in getNextPageParam we still increament until we hit last page and that time 
+query paramter of page will be defined so we need write code says if we reach the last page 
+
+back to the api documentation from the responese we can see that we 
+count 
+next 
+previous
+results
+until now we only imploment count and results
+but if we see next we can see next to it string<ui> Nullable
+which means when we reach the last page 
+page query paramter => undefined
+next (from the fetch responese) => null 
+
+- so we press cmd + t and go to FetchResponse interface 
+and add next property 
+-------------------code----------------------
+export interface FetchResponse<T> {
+  count: number;
+  next: string | null;
+  results: T[];
+}
+-------------------code----------------------
+
+- now we wirte condition says if the lastPage is truthy return all page number + 1 other wise undefined
+-------------------code----------------------
+getNextPageParam: (lastPage, allPages) => {
+    return lastPage.next ? allPages.length + 1 : undefined;
+  },
+-------------------code----------------------
+
+- next we go to GameGrid.tsx 
+now we have error here cause the data shape was changed 
+-------------------code----------------------
+{data?.results.map((game) .....)}
+-------------------code----------------------
+
+now we should map each page to React fragment and then map each page result to game card container 
+
+-------------------code----------------------
+{data?.pages.map((page, index) => (
+  <React.Fragment key={index}>
+    {page.results.map((game) => (
+      <GameCardContainer key={game.id}>
+        <GameCard game={game} />
+      </GameCardContainer>
+    ))}
+  </React.Fragment>
+))}
+-------------------code----------------------
+
+- next we import the functions of InfinityQurey pages 
+-------------------code----------------------
+const {
+    data,
+    error,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useGames(gameQurey);
+-------------------code----------------------
+
+- next we add Button component and we want to render only if there is a next page 
+-------------------code----------------------
+{hasNextPage && <Button></Button>}
+-------------------code----------------------
+
+- next we want to show the button dynamically
+-------------------code----------------------
+<Button>{isFetchingNextPage ? "isLoading" : "Load More"}</Button>
+-------------------code----------------------
+
+- finally we should handle the click event 
+-------------------code----------------------
+<Button onClick={() => fetchNextPage()}>
+  {isFetchingNextPage ? "Loading" : "Load More"}
+</Button>
+-------------------code----------------------
+
+- the button is a little close to the button to we add vertical margin
+-------------------code----------------------
+<Button onClick={() => fetchNextPage()} marginY={5}>
+  {isFetchingNextPage ? "Loading" : "Load More"}
+</Button>
+-------------------code----------------------
+
+- aligin our button to Grid but before we add padding="10px" to the SimpleGrid 
+now to aviod repetitive we change the fragment to Box and add padding 10px to it 
+and remove it form SimpleGrid 
+-------------------code----------------------
+<Box padding="10px">
+<SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} spacing={6}>
+-------------------code----------------------
+
+now we test our InfinityQurey with another geenre and check if we got the right page 
+using devtool 
