@@ -4459,3 +4459,138 @@ and remove it form SimpleGrid
 
 now we test our InfinityQurey with another geenre and check if we got the right page 
 using devtool 
+
+
+*** 30-_Exercise-_Implementing_Infinite_Scroll ***
+
+now we will make the application better by show games while scroling not clicking a Button 
+to do that we are gonna use popular librariy called react-infinite-scroll-component
+try read the documentation and imploment it 
+
+- install the librariy
+-------------------code----------------------
+npm i react-infinite-scroll-component@6.1
+-------------------code----------------------
+
+- we go to the GameGrid.tsx and warap SimpleGrid component with InfiniteScroll component
+-------------------code----------------------
+<InfiniteScroll>
+  <SimpleGrid 
+  ....
+  </SimpleGrid>
+</InfiniteScroll>
+-------------------code----------------------
+
+- the InfiniteScroll component has multi property we should set 
+dataLength: we have to put the number of data that we fetch so far 
+
+- so we define a constat we called fetchedGamesCount and use reduce method 
+to reduce this array of pages into a number are present the total number og games 
+we have fetch so far, we know that each page of games contain an array og games
+
+
+
+ex of reduce method 
+-------------------code----------------------
+const array1 = [1, 2, 3, 4];
+
+// 0 + 1 + 2 + 3 + 4
+const initialValue = 0;
+const sumWithInitial = array1.reduce(
+  (accumulator, currentValue) => accumulator + currentValue,
+  initialValue,
+);
+
+console.log(sumWithInitial);
+// Expected output: 10
+-------------------code----------------------
+
+
+- so we want to combine the games we have in the array 
+reduce have two paramter we call the first paramter acc and that refer to the or call it total
+the second parameter is the element of the array which is page 
+so now in each iteration we have to count the games to that page and add to the total and as 
+second argument we should give it the insilize value which is 0 
+-------------------code----------------------
+const fetchdGamesCount = data?.pages.reduce(
+    (total, page) => total + page.results.length,
+    0
+  );
+-------------------code----------------------
+
+- now we can use fetchdGamesCount to set the dataLength prop 
+-------------------code----------------------
+<InfiniteScroll dataLength={fetchdGamesCount}>
+-------------------code----------------------
+
+- now we got compilation error says 
+-------------------code----------------------
+Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+-------------------code----------------------
+
+- cause data?.pages is a result of fetching and could be undefined
+to fix that we give fetchdGamesCount a default value of 0 
+-------------------code----------------------
+const fetchdGamesCount =
+    data?.pages.reduce((total, page) => total + page.results.length, 0) || 0;
+-------------------code----------------------
+
+- now the next property called hasMore we set it to hasNextPage
+-------------------code----------------------
+<InfiniteScroll dataLength={fetchdGamesCount} hasMore={hasNextPage}>
+-------------------code----------------------
+
+we have compilation error cause hasMore only accept boolean while hasNextPage has type of boolean | undefined
+-------------------code----------------------
+Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
+-------------------code----------------------
+
+- now to fix that we !! before hasNextPage to convert it to actual boolean value 
+so if it undefined that means it`s falsy so the result will be false 
+-------------------code----------------------
+<InfiniteScroll dataLength={fetchdGamesCount} hasMore={!!hasNextPage}>
+-------------------code----------------------
+
+- next we add the next props and call the fetchNextPage
+-------------------code----------------------
+<InfiniteScroll
+  dataLength={fetchdGamesCount}
+  hasMore={!!hasNextPage}
+  next={() => fetchNextPage()}
+>
+-------------------code----------------------
+
+- finally we set the loader method is what to show the user while fetching the games 
+so we set to Spinner 
+-------------------code----------------------
+ <InfiniteScroll
+        dataLength={fetchdGamesCount}
+        hasMore={!!hasNextPage}
+        next={() => fetchNextPage()}
+        loader={<Spinner />}
+      >
+-------------------code----------------------
+
+- now we test our implomantaion
+
+- finally we don`t need the Load Button anymore so we remove it 
+and that`s also means we don`t need the Box component anymore  so we move the padding to our 
+SimpleGrid and remove the Box component 
+-------------------code----------------------
+<SimpleGrid
+          columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+          spacing={6}
+          padding="10px"
+        >
+-------------------code----------------------
+
+- finally we remove unnecessary import statements by pressing orginize the import statement
+
+- one more thing to add staleTime to the useGames hook 
+-------------------code----------------------
+ staleTime: 24 * 60 * 60 * 1000, // 24h
+-------------------code----------------------
+
+now we commit our code 
