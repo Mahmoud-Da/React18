@@ -4594,3 +4594,332 @@ SimpleGrid and remove the Box component
 -------------------code----------------------
 
 now we commit our code 
+
+
+*** 31-_Exercise-_Simplifying_Query_Objects ***
+
+the next step we want to improve is the game query object 
+in our application we select a genre for example indie then we open the dev tool 
+-------------------code----------------------
+[
+  "games",
+  {
+    "genre": {
+      "id": 51,
+      "name": "Indie",
+      "slug": "indie",
+      "games_count": 66814,
+      "image_background": "https://media.rawg.io/media/games/baf/baf9905270314e07e6850cffdb51df41.jpg",
+      "games": [
+        {
+          "id": 1030,
+          "slug": "limbo",
+          "name": "Limbo",
+          "added": 13436
+        }, ...
+      ]}
+  }
+]
+-------------------code----------------------
+
+in our object where we store the games we have over complexity  we have games at first then genre then again a games 
+obviously we don`t need any of this stuff here to filter games by genre all we need is the genre id 
+
+- in App.tsx when we select a geenre 
+-------------------code----------------------
+onSelectedGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+-------------------code----------------------
+
+we return this all (genre) complex object
+what we want to do is to replace all the genre object with genre id 
+
+the same thing we want to do for the platform 
+-------------------code----------------------
+onSelectPlatform={(platform) =>
+                  setGameQuery({ ...gameQuery, platform })
+                }
+-------------------code----------------------
+
+- now when the user select the genre we want to store the genre id in our game qurey object
+
+- first we look at the gameQurey interface 
+-------------------code----------------------
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+
+- before change the genre we right click on genre and check for the refrences 
+we can see there is only 3 places where it used 
+
+so we change it to number 
+-------------------code----------------------
+export interface GameQuery {
+  genre: number | null;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+
+- why we put instaed of null an undefined
+undefined: the absence of a value 
+null: the intenational absence of a value 
+
+******************************************************************
+undefined and null represent different concepts regarding the 
+absence of a value:
+
+undefined:
+This indicates that a variable has been declared
+but has not yet been assigned a value. It is the default state of uninitialized variables.
+Example:
+-------------------code----------------------
+let x; // x is declared but not initialized
+console.log(x); // Output: undefined
+-------------------code----------------------
+
+null:
+This is an intentional assignment of "no value." It is used to explicitly indicate that a variable should have no value.
+Example:
+let y = null; // y is explicitly set to have no value
+console.log(y); // Output: null
+******************************************************************
+
+- in this case in our application we can use undefined
+initially our user doen`t select the genre yet 
+but ones set select the genre they can`t unselected it 
+so platform and genre could be undefined instad of null 
+
+-------------------code----------------------
+export interface GameQuery {
+  genre: number | undefined;
+  platform: Platform | undefined;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+
+PS: we can simple our code by add ? optional chain 
+-------------------code----------------------
+export interface GameQuery {
+  genre?: number;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+
+
+******************************************************************
+
+In TypeScript, when you declare a property like genre?: number, it means that the property is optional and can be either:
+- number
+- undefined
+
+This is equivalent to number | undefined. The ? indicates that the property may not be present at all,
+which results in it being undefined if it is not provided.
+
+If you want to allow the property to be null as well, you would declare it like this:
+-------------------code----------------------
+genre: number | null | undefined;
+-------------------code----------------------
+
+In summary:
+genre?: number means number | undefined.
+genre: number | null | undefined means it can be a number, null, or undefined.
+
+we can check the type by hover on the genre?: 
+******************************************************************
+
+- before refactor the platform we will refactor the genre then we will refactor
+the platform 
+
+- now for making the property more clarify we change it name genreId so the we 
+can know that we should apply id 
+-------------------code----------------------
+export interface GameQuery {
+  genreId?: number;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+
+- now we go the other refrence for updating 
+
+(App.tsx) we change it to genreId 
+-------------------code----------------------
+<GenreList
+  selectedGenre={gameQuery.genreId}
+  onSelectedGenre={(genre) => setGameQuery({ ...gameQuery, genreId })}
+/>
+-------------------code----------------------
+
+
+- we still have error 
+
+Type 'number | undefined' is not assignable to type 'Genre | null'.
+  Type 'undefined' is not assignable to type 'Genre | null'.
+
+- by Clicking to GenreList we go to GenreList.tsx
+the error happing here because we compary the genre.id with all selectedGenre.id
+but after we changeed the value of genre to only genre id 
+our code right now 
+selectedGenre = genreIdd so it`s like id.id?
+-------------------code----------------------
+fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+-------------------code----------------------
+
+- to fix that we change the selectedGenre of Props 
+first we rename it to selectedGenreId then we set the type to number optional chain (number | undefined)
+-------------------code----------------------
+interface Props {
+  onSelectedGenre: (genre: Genre) => void;
+  selectedGenreId?: number;
+}
+-------------------code----------------------
+
+- then fix the props in the function 
+-------------------code----------------------
+const GenreList = ({ selectedGenreId, onSelectedGenre }: Props) => { ..}
+-------------------code----------------------
+
+- finally fix the code where we render the font size 
+-------------------code----------------------
+fontWeight={genre.id === selectedGenreId ? "bold" : "normal"}
+-------------------code----------------------
+
+- now we back to App.tsx 
+we fix the property name to selectedGenreId 
+and fix genreId of setGameQuery to genreId: genre.id 
+-------------------code----------------------
+<GenreList
+  selectedGenreId={gameQuery.genreId}
+  onSelectedGenre={(genre) =>
+    setGameQuery({ ...gameQuery, genreId: genre.id })
+  }
+/>
+-------------------code----------------------
+
+- now we back to the GameQuery interface and go to the genreId refrence 
+next we go to GameHeading.tsx 
+
+******************************************************************
+PS: when we open the Refrences first the first time don`t close it until fix all the refrence
+but if close it accidently rewrite the property name ex:
+-------------------code----------------------
+export interface GameQuery {
+  genre: number,
+  genreId?: number;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+******************************************************************
+
+- in GameHeading.tsx we have error where we are getting the name of genre 
+-------------------code----------------------
+const heading = `${gameQuery?.platform?.name || ""} 
+  ${gameQuery.genre?.name || ""}
+-------------------code----------------------
+
+we can fix by take the name using hook 
+- so we call the useGenres hook and rename the data to genres for clarifying 
+-------------------code----------------------
+const { data: genres } = useGenres();
+const genre = genres?.results.find((g) => g.id === gameQuery.genreId);
+-------------------code----------------------
+
+- finally we render it name 
+-------------------code----------------------
+${genre?.name || ""}
+-------------------code----------------------
+
+- now we go to the next refrence and remove the genre: number, we set it 
+next refrence is useGames and fix to genre id 
+-------------------code----------------------
+params: {
+          genres: gameQuery.genreId,
+          ...}
+-------------------code----------------------
+
+- now before apply the same refactor to the platform the check if our code is working
+
+our code work fine and our qurey object is simpilar 
+-------------------code----------------------
+["games",{"genreId":3}]
+-------------------code----------------------
+
+
+- now we apply the same thing to our platform qurey
+- first we open the refrence and keep it then we change the interface property name 
+-------------------code----------------------
+export interface GameQuery {
+  genreId?: number;
+  platformId?: number;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+
+
+- we fix the first refrence in App.tsx same as genre
+-------------------code----------------------
+<PlatformSelector
+  selectedPlatformId={gameQuery.platformId}
+  onSelectPlatform={(platform) =>
+    setGameQuery({ ...gameQuery, platformId: platform.id })
+  }
+></PlatformSelector>
+-------------------code----------------------
+
+the go to PlatformSelector.tsx fix the Props 
+-------------------code----------------------
+interface Props {
+  onSelectPlatform: (platform: Platform) => void;
+  selectedPlatformId?: number;
+}
+-------------------code----------------------
+
+
+- selcet the platform from the hook 
+-------------------code----------------------
+const selectedPlatform = data?.results.find(
+    (p) => p.id === selectedPlatformId
+  );
+-------------------code----------------------
+
+- next we go the next refrence GameHeading.tsx we replay the code 
+from PlatformSelector where we use the hook for now, next we will refactor our entire code 
+
+-------------------code----------------------
+const { data: platforms } = usePlatforms();
+  const selectedPlatform = platforms?.results.find(
+    (p) => p.id === gameQuery.platformId
+  );
+-------------------code----------------------
+
+
+- next we go the next refrence useGames.ts amd chnage the params 
+-------------------code----------------------
+params: {
+          genres: gameQuery.genreId,
+          parent_platforms: gameQuery.platformId, ..}
+-------------------code----------------------
+
+now we test the code 
+
+our qurey object
+-------------------code----------------------
+["games",{"platformId":4}]
+-------------------code----------------------
+
+- finally in all the file we use optimize imports 
+
+
+
