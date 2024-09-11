@@ -5154,3 +5154,70 @@ const usePlatforms = () =>
 
 and test our code 
 
+
+*** 33-_Exercise-_Simplifying_Time_Calculations ***
+
+- we have two issue when we set the staleTime 
+first: we need to remmber to add commnet, if we forgot it will be unreadable 
+second: even if we add a comment we can`t know which one is of the numbers is seconds or minutues and so 
+
+- we can simplify the time using librariy called "ms"
+https://www.npmjs.com/package/ms
+
+it`s very popular if we saw the weekly downloads (PS: when using a librariy make sure that it famous so 
+it`s updates frequency )
+
+- we can arguing that why we need to add a new librariy for only simplify our time readability 
+is not the best way and it will incerase the bundle that we shiped to the client 
+but in the documentation we can see the the size is only 6.72 kb so the impcat is minimum
+beside we can create methods to simplify the time without librariy but we are going to study how 
+to use "ms" librariy 
+
+- PS: it`s very simple try to do it by your self so to learn how to imploment a package
+while reading the documentation
+
+- how to set it
+
+- we install it by using npm 
+-------------------code----------------------
+npm i ms@2.1.3
+-------------------code----------------------
+
+
+- now we go to useGenres.ts 
+-------------------code----------------------
+import ms from "ms"
+-------------------code----------------------
+
+- but we go error cause ms is not support the types of TypeScript so we need to install the type
+seperately
+-------------------code----------------------
+ms' is declared but its value is never read.ts(6133)
+Could not find a declaration file for module 'ms'. '/Users/mahmouddabbbagh/moody/React18/Mahmoud/game-hub/node_modules/ms/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/ms` if it exists or add a new declaration (.d.ts) file containing `declare module 'ms';
+-------------------code----------------------
+
+- we install type and we want to add the types only for development
+cause in production the TypeScript compiled to JavaScript 
+-------------------code----------------------
+npm i --save-dev @types/ms 
+// or we can use -D
+npm i --D @types/ms
+-------------------code----------------------
+
+- now the error if import statement goes away
+-------------------code----------------------
+const useGenres = () =>
+  useQuery({
+    queryKey: ["genres"],
+    queryFn: apiClient.getAll,
+    staleTime: ms("24h"),
+    initialData: genres,
+  });
+-------------------code----------------------
+
+- we need to do the same thing to the other hooks 
+
+useGames and usePlatforms
+
+then we comment our code 
