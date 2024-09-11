@@ -4923,3 +4923,234 @@ our qurey object
 
 
 
+*** 32-_Exercise-_Creating_Lookup_Hooks ***
+we have this logic in two places 
+- GameHeading.tsx 
+- PlatformSelctor.tsx
+-------------------code----------------------
+const { data: platforms } = usePlatforms();
+  const selectedPlatform = platforms?.results.find(
+    (p) => p.id === gameQuery.platformId
+  );
+-------------------code----------------------
+
+- for avioding the complexity we will incapsulate this logic inisde custom reusble hook 
+and we can use it for platform and even genre 
+-------------------code----------------------
+const { data: genres } = useGenres();
+const genre = genres?.results.find((g) => g.id === gameQuery.genreId);
+-------------------code----------------------
+
+- inside the hooks folder we create file called usePlatform.ts 
+we define function that take id as parameter then we export at the end 
+-------------------code----------------------
+const usePlatform = (id: number) => {
+  
+};
+
+export default usePlatform;
+-------------------code----------------------
+
+- now inside we should have the logic of looking to platform by id 
+so we will copy the code from GameHeading looking of id and paste inside usePlatform hook 
+-------------------code----------------------
+const usePlatform = (id: number) => {
+  const { data, error } = usePlatforms();
+  const selectedPlatform = data?.results.find(
+    (p) => p.id === selectedPlatformId
+  );
+};
+
+export default usePlatform;
+-------------------code----------------------
+
+- we import usePlatforms hook and change the selectedPlatformId with id 
+-------------------code----------------------
+import usePlatforms from "./usePlatforms";
+
+const usePlatform = (id: number) => {
+  const { data: platforms } = usePlatforms();
+  const selectedPlatform = platforms?.results.find(
+    (p) => p.id === gameQuery.platformId
+  );
+};
+
+export default usePlatform;
+-------------------code----------------------
+
+instead of define selectedPlatform we return it immediately
+
+-------------------code----------------------
+const usePlatform = (id: number) => {
+  const { data: platforms } = usePlatforms();
+  return platforms?.results.find((p) => p.id === id);
+};
+-------------------code----------------------
+
+- now we go to GameHeading.tsx and call usePlatform and give it gameQuery.platformId
+as parameter and it return object we save in platform constant
+-------------------code----------------------
+const platform = usePlatform(gameQuery.platformId);
+-------------------code----------------------
+
+we got type error says gameQuery.platformId should be defined so we set the id 
+parameter of usePlatform to optional
+-------------------code----------------------
+const usePlatform = (id?: number) => {
+  const { data: platforms } = usePlatforms();
+  return platforms?.results.find((p) => p.id === id);
+};
+-------------------code----------------------
+
+-  then we callit instad of selectedPlatform
+-------------------code----------------------
+const heading = `${platform?.name || ""} 
+-------------------code----------------------
+
+- now we do the same thing for PlatformSelector
+instead of this code 
+-------------------code----------------------
+  const selectedPlatform = data?.results.find(
+    (p) => p.id === selectedPlatformId
+  );
+-------------------code----------------------
+
+we call usePlatform and the same way as GameHeading.tsx 
+-------------------code----------------------
+const platform = usePlatform(selectedPlatformId);
+-------------------code----------------------
+
+then we fix where we render the name 
+-------------------code----------------------
+{platform?.name || "Platforms"}
+-------------------code----------------------
+
+
+
+- next we will write the same way to lock to the genre by id 
+
+- create useGenre.ts and take the code from the GameHeading.tsx and return 
+immediately
+
+-------------------code----------------------
+import useGenres from "./useGenres";
+
+const useGenre = (id?: number) => {
+  const { data: genres } = useGenres();
+  return genres?.results.find((g) => g.id === id);
+};
+
+export default useGenre;
+-------------------code----------------------
+
+- we call it in GameHeading
+-------------------code----------------------
+const genre = useGenre(gameQuery.genreId);
+-------------------code----------------------
+
+- now we test our code 
+if platform name and genre rendering without a problems 
+
+
+- now we had a previous problem in the genre hook 
+we have error at the queryKey property
+there is no wrong with the key the problem is somewher else in queryFn or initialData 
+
+
+-  we hover on apiClient.getAll  we see 
+-------------------code----------------------
+(property) APIClient<Genre>.getAll: (config: AxiosRequestConfig) => Promise<FetchResponse<Genre>>
+-------------------code----------------------
+
+so it return fetch object of type Response and this the object that will store in the cache
+of genres key 
+
+and if check of the type of initialData we can see it 
+-------------------code----------------------
+(property) initialData?: (() => undefined) | undefined
+-------------------code----------------------
+
+and it`s diffrent from the fetch Response so here we have initial data type diffrent from the fetch Response type 
+so if commnet out the initialData property the error goes away 
+
+- we can add next: null and error goes
+-------------------code----------------------
+useQuery({
+    queryKey: ["genres"],
+    queryFn: apiClient.getAll,
+    staleTime: 24 * 60 * 60 * 1000, // 24hours
+    initialData: { count: genres.length, results: genres, next: null },
+  });
+-------------------code----------------------
+
+- but this is a hack so what if we decide in future to add more property to the FetchResponse interface
+again we have to remmber to come here and fix the issue 
+
+- so a better approach is to modify the static data and make exacly same as the response we get it 
+from our backend so currently in static data we have only the array of genre and next and result 
+and previous and count property are missing 
+
+
+- so we commnet out the initial values first 
+-------------------code----------------------
+// initialData: { count: genres.length, results: genres, next: null },
+-------------------code----------------------
+
+- then we go the application and refresh then we go to the genre request and click on "Response" tab 
+then copy everything then export it 
+-------------------code----------------------
+export default {
+  count: 19,
+  next: null,
+  previous: null,
+  results: [
+    {
+      id: 4,
+    ... } ]}
+-------------------code----------------------
+
+
+- finally we set the initial data to genres
+-------------------code----------------------
+  useQuery({
+    queryKey: ["genres"],
+    queryFn: apiClient.getAll,
+    staleTime: 24 * 60 * 60 * 1000, // 24hours
+    initialData: genres,
+  });
+-------------------code----------------------
+
+
+- now we have the same issue with platforms
+so we comment the initial data and copy the data from the "Response" 
+
+-------------------code----------------------
+export default {
+  count: 14,
+  next: null,
+  previous: null,
+  results: [
+    {
+      id: 1,
+      name: "PC",
+      slug: "pc",
+      platforms: [
+        {... } ]} ] }
+-------------------code----------------------
+
+
+- then we set the initial data 
+-------------------code----------------------
+const usePlatforms = () =>
+  useQuery({
+    queryKey: ["platforms"],
+    queryFn: apiClient.getAll,
+    staleTime: 24 * 60 * 60 * 1000, // 24hours
+    initialData: platforms,
+  });
+-------------------code----------------------
+
+- finally we orginize the imports to all the changed files 
+
+and test our code 
+
