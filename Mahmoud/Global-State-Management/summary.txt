@@ -1,0 +1,46 @@
+Terms:
+Client state            Reducer
+Context                 Server state
+Prop drilling           State management libraries
+Provider
+
+
+Summary
+• Most React applications have some state to be managed, which can be server or client
+state.
+
+• React Query helps us manage and cache server state in a simple, elegant way.
+
+• We can define local state in our components using the state or reducer hooks.
+
+• If state management logic becomes too complex and scattered, we can consolidate it
+using a reducer, which is a pure function that takes the current state and an action, and
+returns the new state.
+
+• To share state between components, we can lift the state up to the closest parent and
+pass it down as props, but this can lead to prop drilling in larger, more complex trees.
+
+• Context allows components to share data without having to pass it down manually
+through each level of the component tree.
+
+• Providers are components that wrap a group of child components and provide them
+with access to a specific context object.
+
+• We can use custom hooks to access context in a more readable and reusable way.
+
+• When an object contained by a context is updated, all components using that context
+will re-render.
+
+• To minimize unnecessary re-renders, we should split up a context into smaller, more
+focused ones with a single responsibility. However, too finely grained contexts can
+result in complex, hard to maintain component trees.
+
+• If splitting up a context doesn’t make sense and we need more control over state
+updates and component rendering, we can use a state management library.
+
+• There are many state management libraries for React apps. Examples are Redux, MobX,
+recoil, xState, Zustand, and more.
+
+• These days, React Query and Zustand can replace the need for Redux in many
+applications.
+

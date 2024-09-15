@@ -1,0 +1,129 @@
+*** 2-_Consolidating_State_Logic_with_a_Reducer ***
+Reducer: a function that allows us to centralize state updates in a component
+
+the underline meaning we will see it in action 
+- now we have component called counter for increment and decrement a number 
+in the component we two components where we update the state 
+-------------------code----------------------
+onClick={() => setValue(value + 1)}  // when increment 
+onClick={() => setValue(0)} className="btn btn-primary mx-1" // when decrement 
+-------------------code----------------------
+
+- there is nothing terrible here but as the component gets complex 
+keeping track if how the state is updated can get a little challenging here where we can use the 
+Reducer, using the Reducer we can take all the management logic outside this component and centralized it 
+in a single function 
+
+- how to do that 
+- inside the state-management folder we create reducers folder inside it we create a file called "counterReducer"
+the Reducer function must have two parameters the first parameter the state and the second one it`s action 
+action: is an object that describe what is the user is trying to do 
+so the reducer take state and action and return a new state 
+-------------------code----------------------
+const counterReducer = (state, action) => {};
+
+export default counterReducer;
+-------------------code----------------------
+
+- so what the type of state we go back the Counter.tsx and the initial value to the useState is 0 which means 
+the type is number 
+
+- for action there is no rule, we can use simple string but by convention we use type property that 
+describe the action we create interface with type string and called Action.
+
+-------------------code----------------------
+interface Action {
+  type: string;
+}
+
+const counterReducer = (state: number, action: Action) => {
+  
+};
+-------------------code----------------------
+
+- we give the function a return type of number so if we made a mistake the compiler while yell at us 
+
+-------------------code----------------------
+const counterReducer = (state: number, action: Action): number => {};
+-------------------code----------------------
+
+- when we set the return value to number we immediately got an error cause we didn`t set the return value 
+if we return a 0 the error will go away 
+
+- now we write condition like 
+-------------------code----------------------
+const counterReducer = (state: number, action: Action): number => {
+  if (action.type === "INCREMENT") return state + 1;
+};
+-------------------code----------------------
+
+- the same thing for the reset 
+-------------------code----------------------
+const counterReducer = (state: number, action: Action): number => {
+  if (action.type === "INCREMENT") return state + 1;
+  if (action.type === "RESET") return 0;
+};
+-------------------code----------------------
+
+- but what if the action is a different type
+some people said we should thew error 
+
+-------------------code----------------------
+const counterReducer = (state: number, action: Action): number => {
+  if (action.type === "INCREMENT") return state + 1;
+  if (action.type === "RESET") return 0;
+  throw new Error("Action is not supported");
+};
+-------------------code----------------------
+
+- but cause TS is already have type checking for the function and we set it number no need to throw error just return the state
+-------------------code----------------------
+const counterReducer = (state: number, action: Action): number => {
+  if (action.type === "INCREMENT") return state + 1;
+  if (action.type === "RESET") return 0;
+  return state;
+};
+-------------------code----------------------
+
+- now we go back to the Counter.tsx we no more need the useState instead we use useReducer hook that 
+hook take two arguments the first one is reducer function the second one is second argument is the initial value
+-------------------code----------------------
+// const [value, setValue] = useState(0);
+useReducer(counterReducer, 0);
+-------------------code----------------------
+
+and this hook similar to state hook will return an array with two elements the first element is the 
+current state "value" as before the second element is a function configuring changes called dispatch means send in english 
+-------------------code----------------------
+const [value, dispatch] = useReducer(counterReducer, 0);
+-------------------code----------------------
+
+- when user click a that button so instead of set the value we send an action using dispatch with object
+contain type property of INCREMENT
+-------------------code----------------------
+onClick={() => dispatch({ type: "INCREMENT" })}
+-------------------code----------------------
+
+- so when we dispatch an action we trying to tell React that the user is trying to increment the value 
+React will go to the counterReducer function and return state + 1
+
+
+- now back to our component similarly when the user click on the reset button we set the type to RESET
+-------------------code----------------------
+onClick={() => dispatch({ type: "RESET" })}
+-------------------code----------------------
+
+- now we have a little issue if write reset in lower case or add space after the word our useReducer
+will not work to fix that
+
+by setting the type property to this two values
+-------------------code----------------------
+interface Action {
+  type: "INCREMENT" | "RESET";
+}
+-------------------code----------------------
+
+- now with our reducer we have better separation of concern and we can reuse this producer in other Components
+that works with our counter
+
+now we test our implementation 
