@@ -1,0 +1,18 @@
+*** 2-_Consolidating_State_Logic_with_a_Reducer ***
+Reducer: a function that allows us to centralize state updates in a component
+
+the underline meaning we will see it in action 
+- now we have component called counter for increment and decrement a number 
+in the component we two components where we update the state 
+-------------------code----------------------
+onClick={() => setValue(value + 1)}  // when increment 
+onClick={() => setValue(0)} className="btn btn-primary mx-1" // when decrement 
+-------------------code----------------------
+
+- there is nothing terrible here but as the component gets complex 
+keeping track if how the state is updated can get a little challenging here where we can use the 
+Reducer, using the Reducer we can take all the management logic outside this component and centralized it 
+in a single function 
+
+- how to do that 
+- inside the state-management folder we create reducers folder inside it we create a file called 
