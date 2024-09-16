@@ -598,3 +598,8 @@ TaskList.tsx
 -------------------code----------------------
 
 test our code when login the name of user should be render
+
+*** 7-_Debugging_with_React_DevTools *** 
+
+we can debug React Context using the dev tool and press on the component Context.Provider
+with authDispatch and when we login we the user name updated
