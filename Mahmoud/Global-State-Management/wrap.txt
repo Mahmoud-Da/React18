@@ -655,3 +655,25 @@ export default AuthProvider;
 
 
 so now our AuthProvider has our state and it`s own provider so our code is more maintainable and modular
+
+*** 9-_Creating_a_Hook_to_Access_Context ***
+as we can create a costume Provider we can create a costume hook to access the Context
+
+we create hooks folder and inside we create useAuth.ts 
+-------------------code----------------------
+import { useContext } from "react";
+import AuthContext from "../contexts/authContext";
+
+const useAuth = () => useContext(AuthContext);
+
+export default useAuth;
+-------------------code----------------------
+
+and replace use const { user, dispatch } = useContext(AuthContext);
+with 
+-------------------code----------------------
+const { user, dispatch } = useAuth();
+-------------------code----------------------
+
+with that we clean our import statement
+
