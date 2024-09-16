@@ -4,14 +4,14 @@ import AuthContext from "./contexts/authContext";
 
 const TaskList = () => {
   // const [tasks, setTasks] = useState<Task[]>([]);
-  const { tasks, taskDispatch } = useContext(TaskContext);
+  const { tasks, dispatch } = useContext(TaskContext);
   const { user } = useContext(AuthContext);
   return (
     <>
       <p>User: {user}</p>
       <button
         onClick={() =>
-          taskDispatch({
+          dispatch({
             type: "ADD",
             task: { id: Date.now(), title: "Task " + Date.now() },
           })
@@ -29,7 +29,7 @@ const TaskList = () => {
             <span className="flex-grow-1">{task.title}</span>
             <button
               className="btn btn-outline-danger"
-              onClick={() => taskDispatch({ type: "DELETE", taskId: task.id })}
+              onClick={() => dispatch({ type: "DELETE", taskId: task.id })}
             >
               Delete
             </button>
