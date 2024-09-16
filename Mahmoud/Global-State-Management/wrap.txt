@@ -127,3 +127,153 @@ interface Action {
 that works with our counter
 
 now we test our implementation 
+
+*** 3-_Creating_Complex_Actions ***
+
+now we will try with more complex component we will render TaskList.tsx in App.tsx 
+inside the TaskList component there is two places where we update the state 
+where we add a task
+-------------------code----------------------
+setTasks([
+  { id: Date.now(), title: 'Task ' + Date.now() },
+  ...tasks,
+])
+-------------------code----------------------
+
+and where we delete a task
+-------------------code----------------------
+onClick={() =>
+  setTasks(tasks.filter((t) => t.id !== task.id))
+}
+-------------------code----------------------
+
+now we can do the same thing and define a reducers so in the reducers folder we create a new file we 
+call it tasksReducer.ts
+
+-------------------code----------------------
+const tasksReducer = (state, action) => {};
+
+export default tasksReducer;
+-------------------code----------------------
+
+now to set the type of state we got to TaskList.tsx and we can see the type of useState is Task[]
+-------------------code----------------------
+const [tasks, setTasks] = useState<Task[]>([]);
+-------------------code----------------------
+
+- so we set the reducer state type to Task[]
+-------------------code----------------------
+const tasksReducer = (state: Task[], action) => {};
+-------------------code----------------------
+
+- so now we need to access the Task interface so we move it to the tasksReducer.ts
+-------------------code----------------------
+interface Task {
+  id: number;
+  title: string;
+}
+
+const tasksReducer = (state: Task[], action) => {};
+-------------------code----------------------
+
+- now for clarity we name the state parameter to tasks, next we define the Action interface
+-------------------code----------------------
+interface Task {
+  id: number;
+  title: string;
+}
+
+type Action = {
+  type: "ADD" | "DELETE";
+};
+
+const tasksReducer = (tasks: Task[], action: Action) => {};
+
+export default tasksReducer;
+-------------------code----------------------
+
+- now we add the type of the return statement which Task[]
+-------------------code----------------------
+const tasksReducer = (tasks: Task[], action: Action) :Task[] 
+-------------------code----------------------
+
+- before we used if statement but we can use either switch and case 
+-------------------code----------------------
+const tasksReducer = (tasks: Task[], action: Action) :Task[] => {
+  switch (action.type) {
+    case "ADD":
+    return [{}, ...tasks]
+  }
+};
+-------------------code----------------------
+
+- when returning a new object [{}, ..tasks] we return the original array then we add the new tasks 
+so we need to access to the old tasks but that is not necessary when deleting the tasks 
+so we delete the interface Action and and two interfaces one for adding and one for deleting 
+-------------------code----------------------
+type AddTask = {
+  type: "ADD";
+  task: Task;
+};
+
+type DeleteTask = {
+  type: "DELETE";
+  taskId: number;
+};
+-------------------code----------------------
+
+- finally we define a type we called TaskAction and it can be reunion of the AddTask and DeleteTask 
+-------------------code----------------------
+type AddTask = {
+  type: "ADD";
+  task: Task;
+};
+
+type DeleteTask = {
+  type: "DELETE";
+  taskId: number;
+};
+
+type TaskAction = AddTask | DeleteTask;
+-------------------code----------------------
+
+- finally we write the return statements
+-------------------code----------------------
+const tasksReducer = (tasks: Task[], action: TaskAction): Task[] => {
+  switch (action.type) {
+    case "ADD":
+      return [action.task, ...tasks];
+    case "DELETE":
+      return tasks.filter((t) => t.id !== action.taskId);
+  }
+};
+-------------------code----------------------
+
+
+PS: in case ADD when we type action. the compiler show the task but not the taskId cause 
+it know we already work with AddTask interface cause the action.type is number 
+same thing for DELETE we see taskId but not task 
+
+
+- now we goes back to our TaskList to apply the useReducer
+-------------------code----------------------
+const [tasks, dispatch] = useReducer(tasksReducer, []);
+-------------------code----------------------
+
+- now when the user click on add button 
+-------------------code----------------------
+ onClick={() =>
+  dispatch({
+    type: "ADD",
+    task: { id: Date.now(), title: "Task " + Date.now() },
+  })}
+-------------------code----------------------
+
+
+- now when we delete a button 
+-------------------code----------------------
+onClick={() => dispatch({ type: "DELETE", taskId: task.id })}
+-------------------code----------------------
+
+now we test our code 
+
