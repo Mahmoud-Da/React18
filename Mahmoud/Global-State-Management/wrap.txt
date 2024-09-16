@@ -321,3 +321,174 @@ onClick={() => dispatch({ type: "LOGOUT" })}
 onClick={() => dispatch({ type: "LOGIN", userName: "moody" })}
 -------------------code----------------------
 
+*** 5-_Sharing_State_using_React_Context ***
+before we talk a bout sharing state:
+lift the state up to the closest parent and pass it down as props to child component
+
+but if have 
+-------------------code----------------------
+App
+HomePage   NavBar
+TaskList 
+-------------------code----------------------
+
+and want to share the state between the TaskList and NAVBAR we lift up to App but we have a problem 
+after pass it up to App component we have to pass it down to both HomePage and NavBar beside TaskList 
+knowing that we are not going to use it in HomePage
+
+- here where we can use ReactContext
+ReactContext: sharing data without passing down through many components in the middle
+
+- see it in action
+in TaskList component we are using the useReducer to maintain the local state 
+so both the state and the reducer hook are ways to maintain local state in the component
+
+so to share this state we have to lift it up to the App component and then we can provide it to a component
+using a context 
+
+- so first we move the useReducer code from the TaskList to the App.ts 
+-------------------code----------------------
+const [tasks, dispatch] = useReducer(tasksReducer, []);
+-------------------code----------------------
+
+- so we want to provide it to TaskList component using Context so inside the state-management folder 
+we create a folder we called it contexts inside it we create file we called it taskContext.ts
+
+- context is like a track inside that track is a state, so first we have to define the shape of that box
+so we define interface we called it 
+-------------------code----------------------
+interface TaskContextType {
+  
+}
+-------------------code----------------------
+
+
+- to know the shape of box we go to App.tsx and look to useReducer method 
+so we know we have array of tasks and dispatch function
+so we need to path this two object so we can access them anyWhere 
+
+- we export the Task interface and TaskAction type  form tasksReducer.ts 
+- and hover over the dispatch function to know the type and set it in the interface
+-------------------code----------------------
+interface TaskContextType {
+  tasks: Task[];
+  dispatch: Dispatch<TaskAction>;
+}
+-------------------code----------------------
+
+PS: if want to check the type of dispatch we click cmd + click to Dispatch import 
+-------------------code----------------------
+type Dispatch<A> = (value: A) => void;
+-------------------code----------------------
+
+we can see type Dispatch is take a generic type of A and return void
+
+- now we call React.Context to share the state and give it the type of the TaskContextType 
+that we define 
+
+-------------------code----------------------
+React.createContext<TaskContextType>();
+-------------------code----------------------
+
+- we have to give it argument as default value and now we have two options first to give it null 
+but in this case we have to set the type tp null either and that will not make a sense cause 
+we will end up sharing null statement 
+-------------------code----------------------
+React.createContext<TaskContextType | null>(null);
+-------------------code----------------------
+
+as a best practice is better to set the default value to empty object 
+-------------------code----------------------
+React.createContext<TaskContextType>({});
+-------------------code----------------------
+
+but will we will have error 
+-------------------code----------------------
+Argument of type '{}' is not assignable to parameter of type 'TaskContextType'.
+-------------------code----------------------
+
+so we can tell the compiler this empty object is an instance of a TaskContextType
+by using as keyword 
+-------------------code----------------------
+React.createContext<TaskContextType>({} as TaskContextType);
+-------------------code----------------------
+
+- finally we create a instance of that context and export it
+-------------------code----------------------
+const TaskContext = React.createContext<TaskContextType>({} as TaskContextType);
+
+export default TaskContext;
+-------------------code----------------------
+
+- now in our App component we call NavBar and HomePage components
+-------------------code----------------------
+<>
+  <NavBar></NavBar>
+  <HomePage></HomePage>
+</>
+-------------------code----------------------
+
+- then to pass the state to two of them we pass we wrap them inside a ReactContext.Provider component
+in our case TaskContext instance that we created 
+-------------------code----------------------
+<>
+  <TaskContext.Provider>
+    <NavBar></NavBar>
+    <HomePage></HomePage>
+  </TaskContext.Provider>
+</>
+-------------------code----------------------
+
+PS: we call the TaskContext as component that`s why we name it in capital letters 
+
+- now we need to provide a value to that component this value is the return state 
+which is tasks and dispatch
+-------------------code----------------------
+<>
+  <TaskContext.Provider value={{ tasks, dispatch }}>
+    <NavBar></NavBar>
+    <HomePage></HomePage>
+  </TaskContext.Provider>
+</>
+-------------------code----------------------
+
+- TaskContext.Provider is like a track that transporting the state that we provide inside the NavBar
+and the HomePage component
+
+- now to access this box inside the the TaskList component we call the useContext of type 
+TaskContext and return the context 
+-------------------code----------------------
+const context = useContext(TaskContext);
+-------------------code----------------------
+
+now context contain tasks and dispatch and is the box that we shipped using the React Context
+
+- so we access the property by destructuring the object
+-------------------code----------------------
+const { tasks, dispatch } = useContext(TaskContext);
+-------------------code----------------------
+
+- now let`s try to share the state using the useContext in NavBar to return the dynamic number of tasks 
+instead of 4 number 
+-------------------code----------------------
+<span className="badge text-bg-secondary">4</span>
+-------------------code----------------------
+
+- so first we call useContext and destructuring tasks and render the tasks length
+-------------------code----------------------
+const { tasks } = useContext(TaskContext);
+  return (
+    <nav className="navbar d-flex justify-content-between">
+      <span className="badge text-bg-secondary">{tasks.length}</span>
+      <LoginStatus />
+    </nav>
+  );
+-------------------code----------------------
+
+now we test our code 
+
+Recap:
+share state using React context
+1- lift the state up to the closest parent
+2- create a context (track transporting box which have our local state)
+3- we wrap ourComponent tree with TaskContext (where we want to use the state we call it using useContext)

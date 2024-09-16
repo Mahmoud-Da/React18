@@ -1,10 +1,9 @@
-import { useReducer } from "react";
-import tasksReducer from "./reducers/taskReducer";
+import { useContext, useReducer } from "react";
+import TaskContext from "./contexts/taskContext";
 
 const TaskList = () => {
   // const [tasks, setTasks] = useState<Task[]>([]);
-  const [tasks, dispatch] = useReducer(tasksReducer, []);
-
+  const { tasks, dispatch } = useContext(TaskContext);
   return (
     <>
       <button
