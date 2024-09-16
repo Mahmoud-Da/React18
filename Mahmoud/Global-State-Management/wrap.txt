@@ -277,3 +277,47 @@ onClick={() => dispatch({ type: "DELETE", taskId: task.id })}
 
 now we test our code 
 
+*** 4-_Exercise-_Working_with_Reducers ***
+as exercise will we create reducer for LoginStatus.tsx 
+- authReducer.ts 
+-------------------code----------------------
+type LoginAction = {
+  type: "LOGIN";
+  userName: string;
+};
+
+type LogoutAction = {
+  type: "LOGOUT";
+};
+
+type AuthAction = LoginAction | LogoutAction;
+
+const authReducer = (state: string, action: AuthAction): string => {
+  switch (action.type) {
+    case "LOGIN":
+      return action.userName;
+
+    case "LOGOUT":
+      return "";
+
+    default:
+      return state;
+  }
+};
+
+export default authReducer;
+-------------------code----------------------
+
+- LoginStatus
+-------------------code----------------------
+const [user, dispatch] = useReducer(authReducer, "");
+-------------------code----------------------
+
+-------------------code----------------------
+onClick={() => dispatch({ type: "LOGOUT" })}
+-------------------code----------------------
+
+-------------------code----------------------
+onClick={() => dispatch({ type: "LOGIN", userName: "moody" })}
+-------------------code----------------------
+
