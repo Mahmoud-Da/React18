@@ -677,3 +677,59 @@ const { user, dispatch } = useAuth();
 
 with that we clean our import statement
 
+*** 10-_Exercise-_Creating_a_Provider ***
+create a custom provider for access tasks and custom hook for accessing the custom tasks 
+
+- we make our code cleaner by adding TaskProvider component
+-------------------code----------------------
+import { ReactNode, useReducer } from "react";
+import TaskContext from "./contexts/taskContext";
+import tasksReducer from "./reducers/taskReducer";
+
+interface Props {
+  children: ReactNode;
+}
+
+const TaskProvider = ({ children }: Props) => {
+  const [tasks, dispatch] = useReducer(tasksReducer, []);
+
+  return (
+    <TaskContext.Provider value={{ tasks, dispatch }}>
+      {children}
+    </TaskContext.Provider>
+  );
+};
+
+export default TaskProvider;
+-------------------code----------------------
+
+- PS: change taskDispatch to dispatch in other files 
+
+- App.tsx
+no longer need to define hooks in App,tsx
+-------------------code----------------------
+function App() {
+  return (
+    <>
+      <AuthProvider>
+        <TaskProvider>
+          <NavBar></NavBar>
+          <HomePage></HomePage>
+        </TaskProvider>
+      </AuthProvider>
+    </>
+  );
+}
+-------------------code----------------------
+
+- now we create custom hook  useTasks return the useContext 
+-------------------code----------------------
+import { useContext } from "react";
+import TaskContext from "../contexts/taskContext";
+
+const useTasks = () => useContext(TaskContext);
+
+export default useTasks;
+-------------------code----------------------
+
+now in TaskList.tsx we can replace useContext(TaskContext) with useTasks
