@@ -852,3 +852,9 @@ export { TaskContext };
 export { default as TaskProvider } from "./TaskProvider";
 export { default as TaskContext } from "./TaskList";
 -------------------code----------------------
+
+
+*** 12-_Exercise-_Organizing_Code *** 
+we will do the same thing with auth for counter and auth
+
+now inside the state-management we only have auth and counter and tasks directories 
