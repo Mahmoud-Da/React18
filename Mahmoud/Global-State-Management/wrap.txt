@@ -733,3 +733,122 @@ export default useTasks;
 -------------------code----------------------
 
 now in TaskList.tsx we can replace useContext(TaskContext) with useTasks
+
+*** 11-_Organizing_Code_for_Scalability_and_Maintainability ***
+
+how we can organizing our code and make it more scalability and maintainable
+now we have multi blocks for working with tasks 
+we have contexts and hooks and reducers and the two components
+so we have are related files are spread all over our directory  so we should capsulate them inside module 
+or directory 
+ex:
+we don`t want our kitchen stuff to be around all rooms at the house instead we keep them around 
+in the kitchen where easily accessible and organized 
+
+- similarly we want to keep all the files related to tasks in one place so it make us easy to access them 
+so we create folder we called tasks and inside it we move 
+taskReducer.ts, useTasks.ts, taskContext.ts, and finally the TaskProvider.tsx and TaskList.tsx
+
+
+- now we are not done yet another example is the design of TV remote control 
+remote control has bunch of buttons outside and complex electronic world in the inside what is inside is irreverent
+to us as user or the consumer of the remote control all we care a bout is the button of the outside 
+with this design the manufacture of the remote control  can change easily he internes with out effecting 
+us as long as all this button that we are use still at the outside 
+this button at the outside represent teh "Public interface" of the remote control
+what inside is called "implementation Detail"
+
+- now we want to apply the same principle to the tasks package 
+so we want to certain peaces that related to the implementation and expose only the parts that the user need
+so we need expose only the TaskList.tsx and TaskProvider.tsx everything is cindering implementation detail 
+
+
+- now to take the project to the next level we can see inside the TaskProvider.tsx we use tasksReducer only
+inside it so we go to taskReducer and copy all the code an put it above the props (cause we want props to be close 
+to the component)
+-------------------code----------------------
+import { ReactNode, useReducer } from "react";
+import TaskContext from "./taskContext";
+
+export interface Task {
+  id: number;
+  title: string;
+}
+
+type AddTask = {
+  type: "ADD";
+  task: Task;
+};
+
+type DeleteTask = {
+  type: "DELETE";
+  taskId: number;
+};
+
+export type TaskAction = AddTask | DeleteTask;
+
+const tasksReducer = (tasks: Task[], action: TaskAction): Task[] => {
+  switch (action.type) {
+    case "ADD":
+      return [action.task, ...tasks];
+    case "DELETE":
+      return tasks.filter((t) => t.id !== action.taskId);
+  }
+};
+
+interface Props {
+  children: ReactNode;
+}
+
+const TaskProvider = ({ children }: Props) => {
+  const [tasks, dispatch] = useTasks();
+
+  return (
+    <TaskContext.Provider value={{ tasks, dispatch }}>
+      {children}
+    </TaskContext.Provider>
+  );
+};
+
+export default TaskProvider;
+
+-------------------code----------------------
+
+- now we delete the taskReducer file and fix the important statement inside taskContext.ts 
+
+
+- next we are going to see the useTasks inside it we only define useTasks and set it to useContext
+so we move it TaskList.tsx because we only using it there 
+-------------------code----------------------
+const useTasks = () => useContext(TaskContext);
+
+const TaskList = () => {
+  const { tasks, dispatch } = useTasks();
+  const { user } = useContext(AuthContext);
+
+  ... }
+-------------------code----------------------
+
+PS: before we learned that it`s better to reducer and context in different files but depends in 
+the project sometimes we change the structure and add them together so there is no right 
+or wrong it`s always depends on our project
+
+- now we may argue it was easy to find the reducer or useTasks hook using cmd + p but we can also use cmd + t for 
+the reducer name 
+
+now we test our code by build it to check if there error 
+
+- finally we create index.ts to expose what we want 
+-------------------code----------------------
+import TaskProvider from "./TaskProvider";
+import TaskContext from "./taskContext";
+
+export { TaskProvider };
+export { TaskContext };
+-------------------code----------------------
+
+- but better way we can import and export the code in one go 
+-------------------code----------------------
+export { default as TaskProvider } from "./TaskProvider";
+export { default as TaskContext } from "./TaskList";
+-------------------code----------------------
