@@ -858,3 +858,45 @@ export { default as TaskContext } from "./TaskList";
 we will do the same thing with auth for counter and auth
 
 now inside the state-management we only have auth and counter and tasks directories 
+
+
+*** 13-_Splitting_Contexts_for_Efficiency ***
+one thing we need to know a bout ReactContext that anytime something changes our component
+that use that context will render and that take to very important lesson 
+
+- React Context:
+a context should only hold values that are closely related and tend to change together 
+
+in other words a context should only have only single responsibly or single purpose
+
+example:
+we NavBar component that render of TaskContext or AuthContext 
+          TaskContext    AuthContext
+             |             |
+             ↓　　　　　　　　↓
+                　NavBar
+
+- let`s say in future we want only to render NavBar if AuthAction changes
+           TaskContext    AuthContext
+                            |
+               　　　　　　　　↓
+                　NavBar
+
+- but later we combine TaskContext and AuthContext in a single context we called Global Context
+          TaskContext    AuthContext
+             |             |
+             ↓　　　　　　　　↓
+
+                GlobalContext
+                    |  
+                    ↓　
+                　NavBar
+
+now if TaskContext  or AuthContext state changes the NavBar will render 
+
+
+- to fix that we should
+Minimizing Renders:
+split up a context into smaller and focused ones, each having a single responsibly
+
+- that`s why we split our context based of rendering to TaskContext and AuthContext
