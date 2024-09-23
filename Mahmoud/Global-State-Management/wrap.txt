@@ -900,3 +900,44 @@ Minimizing Renders:
 split up a context into smaller and focused ones, each having a single responsibly
 
 - that`s why we split our context based of rendering to TaskContext and AuthContext
+
+*** 14-_When_to_Use_Context ***
+when we should and shouldn`t use a context every React application has some state work data that 
+needs to be manged and shared between components 
+it could be Server state or Client state(UI)
+Server state: the data that we fetch from the backend
+Client state: the data that we fetch from the UI 
+
+- we should avoid context for the server state cause we we will end with too much contexts 
+each one hold certain type of object.
+for example
+in our gameHub project we will end with context for (Genres, Platforms, Games, Tags, Publisher, Creators, ...)
+so our component tree will grow up wild very quickly that why we should let React Query manage the state for us
+React Query is created for this purpose and give a lot of control of how the data stored and cached if we used Context
+we will end up writing thing that similar to React Query
+
+early we create context for Tasks but typically we fetch the Task from the backend and it was only a basic example
+to show us how we can use contexts 
+
+- on the other hand we can`t use useQuery for client state cause that in not what is designed for
+we can define local state and shared with child component using React context 
+fo the local state we can use state hook or reducer hook state is for simple logics and reducer is for complex logics 
+
+                             State
+Server State       ----------------------------->         React Query
+Client State       ----------------------------->   local state + React Context
+                                                      useState()
+                                                      useReducer()
+
+- now if we have a situation where splitting up a context doesn`t make any sense and we are dealing with 
+unnecessary rendering then we can use state management tool
+most of these tool allow our component to watch a piece of state and rerender only of that piece is changed
+example of state management tool:
+- Redux
+- MobX
+- Recoil
+- xState
+- zuStand 
+
+all these tool have the same purpose but different in features, and zuStand is the simplest so we will use it.
+ 
