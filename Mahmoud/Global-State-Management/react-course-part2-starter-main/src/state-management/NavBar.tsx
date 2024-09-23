@@ -5,7 +5,9 @@ import TaskContext from "./tasks/taskContext";
 
 const NavBar = () => {
   const { tasks } = useContext(TaskContext);
-  const { counter } = useCounterStore();
+  const counter = useCounterStore((s) => s.counter);
+
+  console.log("Render NavBar");
 
   return (
     <nav className="navbar d-flex justify-content-between">
