@@ -1089,3 +1089,6 @@ const NavBar = () => {
 };
 -------------------code----------------------
 
+*** 17-_Exercise-_Working_with_Zustand ***
+
+manage the user auth using zustand
