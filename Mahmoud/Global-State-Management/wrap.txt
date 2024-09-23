@@ -937,9 +937,9 @@ example of state management tool:
 - MobX
 - Recoil
 - xState
-- zuStand 
+- Zustand 
 
-all these tool have the same purpose but different in features, and zuStand is the simplest so we will use it.
+all these tool have the same purpose but different in features, and Zustand is the simplest so we will use it.
 
 *** 15-_Context_vs_Redux ***
 Does Context replace Redux? 
@@ -971,7 +971,121 @@ But what a bout client state?
 - consolidate state logic with a reducer
 - use a simpler state management tool if needed 
 
-- zuStand is good for almost the applications but there is no one size to fit all 
+- Zustand is good for almost the applications but there is no one size to fit all 
 for reality:
 we think that Redux has served it purpose there was a time better tools.
+
+*** 16-_Managing_Application_State_with_Zustand *** 
+install it 
+-------------------code----------------------
+npm i zustand@4.3.7
+-------------------code----------------------
+
+- next we are going to manage our Counter state using Zustand
+in the counter folder we create a file we call it store.ts
+
+inside we create store to manage the state of Counter 
+- first we define an interface to define the type of our store
+we call it counter store
+first we need counter and two functions one for increment and one for reset
+-------------------code----------------------
+interface CounterStore {
+  counter: number;
+  increment: () => void;
+  reset: () => void;
+}
+-------------------code----------------------
+
+- next we called create function of Zustand and set the shape of store which is CounterStore
+and we give function of parameters one of them is set which is a function for updating the store.
+and set function should return object which is the initial value of the store  
+-------------------code----------------------
+create<CounterStore>((set) => ({
+  counter: 0,
+  increment: () => set((store) => ({ counter: store.counter + 1 })),
+  reset: () => set((store) => ({ counter: 0 })),
+}));
+-------------------code----------------------
+
+- in reset we didn`t use the store property so we can remove it
+-------------------code----------------------
+create<CounterStore>((set) => ({
+  counter: 0,
+  increment: () => set((store) => ({ counter: store.counter + 1 })),
+  reset: () => set(() => ({ counter: 0 })),
+}));
+-------------------code----------------------
+
+- now we called create and this return a custom hook that we can use anywhere in our application
+we called useCounterStore and export it as default 
+-------------------code----------------------
+const useCounterStore = create<CounterStore>((set) => ({
+  counter: 0,
+  increment: () => set((store) => ({ counter: store.counter + 1 })),
+  reset: () => set(() => ({ counter: 0 })),
+}));
+
+export default useCounterStore;
+-------------------code----------------------
+
+- next we go our Counter.tsx and use the CounterStore
+we delete counterReducer cause the data management is done using the useCounterStore 
+now we called and destructure the property
+export default useCounterStore;
+-------------------code----------------------
+const { counter, increment, reset } = useCounterStore();
+-------------------code----------------------
+
+- then call the property instead the value and dispatch
+-------------------code----------------------
+<div>
+  Counter ({counter})
+  <button onClick={increment} className="btn btn-primary mx-1">
+    Increment
+  </button>
+  <button
+    onClick={reset}
+    className="btn btn-primary mx-1"
+  >
+    Reset
+  </button>
+</div>
+-------------------code----------------------
+
+******************************************************************************************************************************
+onClick={increment} vs onClick={() => increment()}
+PS:
+The difference between the two button onClick handlers is how the function is invoked:
+1. Using increment directly:
+-------------------code----------------------
+<button onClick={increment} className="btn btn-primary mx-1">
+-------------------code----------------------
+- This passes the increment function directly as a reference. React will call this function when the button is clicked.
+2. Using an arrow function:
+-------------------code----------------------
+<button onClick={() => increment()} className="btn btn-primary mx-1">
+-------------------code----------------------
+- This creates a new function that calls increment when the button is clicked. This is useful if you need to pass arguments to increment or perform additional logic before calling it.
+In most cases, if increment does not require any arguments or additional logic, the first approach is preferred for better performance.
+******************************************************************************************************************************
+
+- beside we can call the store anywhere in our application
+so we go to the NavBar and add Counter count 
+-------------------code----------------------
+const NavBar = () => {
+  const { tasks } = useContext(TaskContext);
+  const { counter } = useCounterStore();
+
+  return (
+    <nav className="navbar d-flex justify-content-between">
+      <div>
+        <span className="badge text-bg-secondary">{tasks.length}</span>
+        <span className="badge text-bg-secondary">{counter}</span>
+      </div>
+
+      <LoginStatus />
+    </nav>
+  );
+};
+-------------------code----------------------
 
