@@ -1149,3 +1149,40 @@ const counter = useCounterStore((s) => s.counter);
 
 - now this component only render of counter property changes and if we press the reset button NavBar
 will not render anymore
+
+*** 19-_Inspecting_Stores_with_Zustand_DevTools ***
+when build an application sometimes we want to inspect our store  especially when 
+something is not working there is a library for this called 
+simple-zustand-devtool
+
+first we install it 
+-------------------code----------------------
+npm i simple-zustand-devtools@1.1.0
+-------------------code----------------------
+
+- in the store id we import mount store devtool form the simple zustand library
+-------------------code----------------------
+import { mountStoreDevtool } from "simple-zustand-devtools";
+-------------------code----------------------
+
+- before export the our custom hook we check if we are in development environment
+-------------------code----------------------
+if (process)
+-------------------code----------------------
+
+before finishing the check we got error, cause process is one of node object and the typeScript compiler 
+can`t see so we need to download the type differently in development (-D)
+-------------------code----------------------
+npm i -D @types/node
+-------------------code----------------------
+
+- now we write we are in production we call mountStoreDevtool that takes two arguments one is 
+the store name and the second is the store itself 
+-------------------code----------------------
+if (process.env.NODE_ENV == "development") {
+  mountStoreDevtool("Counter Store", useCounterStore);
+}
+-------------------code----------------------
+
+- now we go to dev tool and Components then we can see devtool Counter Store and we inspect the values 
+of our useCounterStore
