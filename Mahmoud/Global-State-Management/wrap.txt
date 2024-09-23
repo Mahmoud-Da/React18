@@ -940,4 +940,38 @@ example of state management tool:
 - zuStand 
 
 all these tool have the same purpose but different in features, and zuStand is the simplest so we will use it.
- 
+
+*** 15-_Context_vs_Redux ***
+Does Context replace Redux? 
+
+before answer that we will talk a bout what is Redux is and what the problem which is solve.
+Redux:
+a widely-used state management library for javascript applications
+it provide a central store to store the application state.
+
+so instead of storing local state in our components we store all the state in single global store
+and had each component to access the piece of state that it needs this way we don`t have to pass data 
+by props throw multi components  
+so one of benefit that we use state management tools they helps us with
+Props Drilling
+
+- but Context is only store the state somewhere else so it`s only transport mechanism 
+
+so does Context replace Redux? 
+it depends on the situation before several years there wasn`t ReactQuery so developers 
+used redux instead (PS: redux is to complex and have too much features)
+so if we don`t want to use that features we can simply use React Query and Context 
+
+
+but as a good developer our goals is solve the problem and writing the code.
+But what a bout client state?
+- Many apps don`t have much client state.
+- Define local state.
+- share it with context
+- consolidate state logic with a reducer
+- use a simpler state management tool if needed 
+
+- zuStand is good for almost the applications but there is no one size to fit all 
+for reality:
+we think that Redux has served it purpose there was a time better tools.
+
