@@ -1092,3 +1092,60 @@ const NavBar = () => {
 *** 17-_Exercise-_Working_with_Zustand ***
 
 manage the user auth using zustand
+
+
+*** 18-_Preventing_Unnecessary_Renders_with_Selectors  ***
+one of benefit of the state management tool is that it`s give us more control
+over the state management and allow our component to rerender only if certain pieces updated
+now we will see an example
+
+- we go to our store in our Counter and add new property called max 
+-------------------code----------------------
+interface CounterStore {
+  counter: number;
+  max: number;
+  increment: () => void;
+  reset: () => void;
+}
+
+const useCounterStore = create<CounterStore>((set) => ({
+  counter: 0,
+  max: 5,
+  increment: () => set((store) => ({ counter: store.counter + 1 })),
+  reset: () => set(() => ({ counter: 0 })),
+}));
+-------------------code----------------------
+
+- now we are going to change our NavBar to render only if counter value changes 
+and now for the demo we will set the rest to max 10 (it doesn`t make any sense) but
+now we have increment to handle the value if counter and reset to handle the value of max
+-------------------code----------------------
+const useCounterStore = create<CounterStore>((set) => ({
+  counter: 0,
+  max: 5,
+  increment: () => set((store) => ({ counter: store.counter + 1 })),
+  reset: () => set(() => ({ max: 10 })),
+}));
+-------------------code----------------------
+
+- now to see when our NavBar component is render we add inside it log message
+-------------------code----------------------
+console.log("Render NavBar");
+-------------------code----------------------
+
+- in our implementation our NavBar will render when any value in the counter is changes
+increment or reset 
+
+- now let`s say we want our NavBar component to be render only of the counter property changes 
+so we give useCounterStore a parameter and call only counter 
+-------------------code----------------------
+const { counter } = useCounterStore((s) => s.counter);
+-------------------code----------------------
+
+- now instead of getting the counter object we get the actual counter property
+-------------------code----------------------
+const counter = useCounterStore((s) => s.counter);
+-------------------code----------------------
+
+- now this component only render of counter property changes and if we press the reset button NavBar
+will not render anymore
