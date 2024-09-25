@@ -1,5 +1,5 @@
 *** 1-_What_Well_Build ***
-we will build a tiny versoin of Rawg Site
+we will build a tiny version of Rawg Site
 https://rawg.io/
 
 when we build project or feature(method)
@@ -20,7 +20,7 @@ then run our project with npm run dev
 - we connect our project to gitHub
 1- initialize our project to  git repository
 git init 
-2- to add all the changes in our dirctory to staging 
+2- to add all the changes in our directory to staging 
 git add .
 to add our 
 3- we commit our changes 
@@ -36,40 +36,44 @@ for this project we will use ChakraUI
 https://v2.chakra-ui.com/
 
 PS: 
-1- to install it we press go started and chose the installion for Vite
+1- to install it we press go started and chose the installation for Vite
 2- we will not do the optional things right now ex: Customizing theme (Optional)
 -------------------code----------------------
 when we add 
 import { ChakraProvider } from "@chakra-ui/react";
 
-it`s better to orginze our import statment code 
+it`s better to organize our import statement code 
 ex: 
 - import the React libraries first 
 - import the third libraries
 - import the local files 
 -------------------code----------------------
 
-now after read the installion
+now after read the installation
 we check if ChakraUI is installed by adding a button 
 
 after remove everything in the App.tsx
 we add button (method: ChakraUI site)
 
 we see u ugly blue border around the button when we hover
-coz we havn`t remove the the code from the index.css (so we remove all the style the code inside it to fix that)
+coz we haven`t remove the the code from the index.css (so we remove all the style the code inside it to fix that)
 
 until this point we check the git tree of of our changes (always make sure to do that before commit to avoid commit unnecessary code )
-and we commnt our code  "install ChakraUI" 
+and we commit our code  "install ChakraUI" 
 
 to check our commit until this point we type
+-------------------code----------------------
 git log --oneline 
+-------------------code----------------------
 
 PS:to check the first three commit only 
+-------------------code----------------------
 git log --oneline -n 3 
+-------------------code----------------------
 
 
 5-_Creating_a_Responsive_Layout
-we want to add navbar to the top and side panal to the left and the main area in the middle
+we want to add navbar to the top and side panel to the left and the main area in the middle
 
 to do that we are going to use Grid component:
 first we remove the everything from the App component coz we don`t need it any more
@@ -95,7 +99,7 @@ now inside the Grid component we create GridItem and give an area from our four 
           Nav
 </GridItem>
 
-and give it a bg (backgroud) color to see it
+and give it a bg (background) color to see it
 
 we duplicate this component  with 3 times Nav  Aside with our four areas
 
@@ -113,14 +117,14 @@ we duplicate this component  with 3 times Nav  Aside with our four areas
 </Grid>
 -------------------code----------------------
 
-now on the mobile devices we want to hide the aside panal to do that 
+now on the mobile devices we want to hide the aside panel to do that 
 in the 
 -------------------code----------------------
 templateAreas={`"nav nav" "aside main"`}
 -------------------code----------------------
 
 we change string of templateAreas to object and inside it we can define the template area for each screen size
-PS: for better understaing visit Chakra UI then access to "Styled System" then click on "Responsive Styles" we can check the break points
+PS: for better understating visit Chakra UI then access to "Styled System" then click on "Responsive Styles" we can check the break points
 https://v2.chakra-ui.com/docs/styled-system/responsive-styles
 
 in our Project we will design our UI for two sizes normal and mobile
@@ -134,7 +138,7 @@ templateAreas={{
 we check our layout on the Devtool 
 we see the aside template still there coz we still render it on the screen 
 
-to make sure that Aside GridItem only render on the base tamplate
+to make sure that Aside GridItem only render on the base template
 we should wrap it with Show component and give a property of "above"
 -------------------code----------------------
 <Show above="lg">
@@ -149,27 +153,27 @@ here we commit our code
 
 
 *** 6-_Building_the_Navigation_Bar ***
-now we will wikr only on the basic layout for the navigation bar 
+now we will work only on the basic layout for the navigation bar 
 this how we build a project start with simple functionality then we move to the next step 
 
 - we create components folder inside the src folder 
-inside it we create NavBar.tsx and we use rafce
-we remove unused import React statment
+inside it we create NavBar.tsx and we use race
+we remove unused import React statement
 
 - now we want to layout our items in this component horizontally 
-to do that we can use Component in ChakraUI called HStack (whcih means horizontal stack)
+to do that we can use Component in ChakraUI called HStack (which means horizontal stack)
 
 - inside the HStach component we use Image component by typing Image we have two Image components
 we use the Image instance of ChakraUI
 *********************
-PS: to see that in options we type <Image munally 
-we have two instances one for normal interface and one is the Image of ChakaraUI
+PS: to see that in options we type <Image manually 
+we have two instances one for normal interface and one is the Image of ChakraUI
 *********************
 
 - we download the logo image from from GameHub Resources.zip and move the logo.webp to the assets
 ps: webp image are high optimize images for web 
 
-- in Image ChakaraUI Component we can`t use src={} with path intead we import the image as 
+- in Image ChakraUI Component we can`t use src={} with path instead we import the image as 
 JS module and use the imported object inside the src 
 -------------------code---------------------- 
 import logo from "../assets/logo.webp";
@@ -185,7 +189,7 @@ we change the NavBar word with NavBar Component
 -------------------code----------------------
 
 - we are using horizontal stack now if we add text in our navbar it should appear after our image
-to check that we add a Text component (instance of ChakaraUI)
+to check that we add a Text component (instance of ChakraUI)
 -------------------code----------------------
 <HStack>
   <Image src={logo} boxSize="60px"></Image>
@@ -193,7 +197,7 @@ to check that we add a Text component (instance of ChakaraUI)
 </HStack>
 -------------------code----------------------
 
-- now normally after building our layout component we remove the backgroud color coz we don`t need to check the layout
+- now normally after building our layout component we remove the background color coz we don`t need to check the layout
 anymore 
 so in the App.tsx we remove 
 -------------------code----------------------
@@ -205,12 +209,12 @@ now after review our code now we add commit to our repository
 
 
 *** 7-_Implementing_the_Dark_Mode ***
-in the documentation of the ChakaraUI we search for "color mode" in this page we can read how color 
-mode works in ChakaraUI to Implement the dark mode we have to do some steps we 
+in the documentation of the ChakraUI we search for "color mode" in this page we can read how color 
+mode works in ChakraUI to Implement the dark mode we have to do some steps we 
 don`t have to memorize it we can see it in the documentation.
 
 - in the src folder we create a file we called theme.ts
-here we are going to customize our default theme whcih come with ChakaraUI
+here we are going to customize our default theme which come with ChakraUI
 we copy all the code from the  and change the initialColorMode to dark 
 https://v2.chakra-ui.com/docs/styled-system/color-mode
 
@@ -227,8 +231,8 @@ ChakraProvider theme={theme}>   /=> first place
 <App />
 -------------------code----------------------
 
-- now if we refresh our page the page is still light coz ChakaraUI stores the selected mode 
-in the local storge so it can remmeber it in the future sessions
+- now if we refresh our page the page is still light coz ChakraUI stores the selected mode 
+in the local storage so it can remember it in the future sessions
 
 we can check that with dev tool and went to Application then Local Storage
 and delete the "light" key 
@@ -258,7 +262,7 @@ ex:
 </HStack>
 -------------------code----------------------
 
-to work with color mode we have to use custom Hook that defined in ChakaraUI 
+to work with color mode we have to use custom Hook that defined in ChakraUI 
 
 first we search on google 
 useColorMode 
@@ -267,7 +271,7 @@ and in documentation
 https://v2.chakra-ui.com/docs/styled-system/color-mode#changing-color-mode
 
 so according to the documentation:
-- first we import useColorMode hook from the ChakaraUI
+- first we import useColorMode hook from the ChakraUI
 - then we called useColorMode  and Destructuring (分割代入) toggleColorMode and colorMode
 -------------------code----------------------
 Destructuring object 分割代入は、中カッコ{}に取り出したいプロパティを指定することで、
@@ -327,7 +331,7 @@ bg={"dodgerblue"}
 -------------------code----------------------
 
 - finally we want to push the switch button the right side to do that 
-we go to our NavBar component this work exacly like flex container 
+we go to our NavBar component this work exactly like flex container 
 -------------------code----------------------
 <HStack justifyContent={"space-between"}>
 -------------------code----------------------
@@ -349,14 +353,14 @@ now we will fetch the game from rawg.io
 
 - install axios for sending api requests
 
-- now we need to create axios instance with custom configration, in that configration we will 
-include that API-KEY whcih we copied 
+- now we need to create axios instance with custom configuration, in that configuration we will 
+include that API-KEY which we copied 
 
 - inside the src we create services folder 
 inside we create api-client.ts 
 
 - inside the api-client first we import axios on the top then we call the create method to 
-create axios instance with custom configration inside we create params object and set the key to the API-Key from 
+create axios instance with custom configuration inside we create params object and set the key to the API-Key from 
 the rawg.io
 -------------------code----------------------
 import axios from "axios";
@@ -368,7 +372,7 @@ axios.create({
 });
 -------------------code----------------------
 
-- with this configration our API-Key will be included in every HTTP request we send
+- with this configuration our API-Key will be included in every HTTP request we send
 
 *********************************
 our API KEY should not pushed to the git hub so we should pass at environment variable
@@ -376,7 +380,7 @@ to do that:
 1- create .env file in the root of the project 
 2- add .env to .gitignore
 3- we pass the Key as VITE_SOME_NAME
-ps: we shuold start with VITE
+ps: we should start with VITE
 ex: VITE_API_KEY
 4- we call it using 
 import.meta.env.VITE_API_KEY
@@ -387,7 +391,7 @@ import.meta.env.VITE_API_KEY
 first we go to the https://api.rawg.io/docs/
 we have multi endpoints 
 we go to the games -> get a list of games 
-if we scrol down we can see the object that come back from the server (respone)
+if we scroll down we can see the object that come back from the server (response)
 -------------------code----------------------
 {
 "count": 0,
@@ -426,14 +430,14 @@ const [games, setGames] = useState();
 const [error, setError] = useState();
 -------------------code----------------------
 
-- then we should use Effect hool to send fetch request to the server/backend
+- then we should use Effect hook to send fetch request to the server/backend
 and inside we need to use apiClient so we import it from api-client.ts
 
 -------------------code----------------------
 import apiClient from "../services/api-client";
 -------------------code----------------------
 
-- now inside the useEffect we sent get request to ("/games") and if the responese goes well 
+- now inside the useEffect we sent get request to ("/games") and if the responses goes well 
 
 -------------------code----------------------
 useEffect(() => {
@@ -441,7 +445,7 @@ useEffect(() => {
   });
 -------------------code----------------------
 
-- we need to define the interface to grap the Response objects (count, next, previous, results)
+- we need to define the interface to grab the Response objects (count, next, previous, results)
 in this project we will not care a bout the (next, previous) at this point only we need number and results
 
 -------------------code----------------------
@@ -454,7 +458,7 @@ interface FetchGamesResponse {
 - now lets see what data we have in the response
 in https://api.rawg.io/docs/#operation/games_list if press on results 
 we can see the data like [id, slug, name, and so...]
-for now we only want to grap the [id, name ] later we will add another properties when we need them 
+for now we only want to grab the [id, name ] later we will add another properties when we need them 
 so we are not write code we will not use right now 
 -------------------code----------------------
 interface Game {
@@ -462,7 +466,7 @@ interface Game {
   name: string;
 }
 -------------------code----------------------
-- withthat we can see we set the results to type Game Array
+- with that we can see we set the results to type Game Array
 
 -------------------code----------------------
 interface FetchGamesResponse {
@@ -474,7 +478,7 @@ interface FetchGamesResponse {
 - now when we send get request to server we use <> to provide  generic type argument that is FetchGamesResponse
 with we can know the shape of res object {AxiosResponse<FetchGamesResponse,}, so if type setGames(res.) we can see 
 the property of the response that comes with axios here we need to access data property so we read the body
-of the responese setGames(res.data.) and here we can see the property that comes with the API so we have [count and results]
+of the responses setGames(res.data.) and here we can see the property that comes with the API so we have [count and results]
 -------------------code----------------------
 useEffect(() => {
     apiClient
@@ -500,7 +504,7 @@ useEffect(() => {
   });
 -------------------code----------------------
 
-- now to check id our implomantaion is currect we render the games names 
+- now to check id our implementation is correct we render the games names 
 
 -------------------code----------------------
 <ul>
@@ -531,17 +535,17 @@ we need to render it on the top of our markup
 
 *** 10-_Creating_a_Custom_Hook_for_Fetching_Games ***
 now in our GameGrid Component we are working with the backend ex:
-we have get method an later we have to use controler abort
-so our component knows about backend and frondend as the same time
+we have get method an later we have to use controller abort
+so our component knows about backend and frontend as the same time
 we need to make our component only responsible for our frontend (return markup and handle events) 
 
 here we have two options:
-1- move the logic that has HTTP request (get) to servise (ex: service/games-service.ts)
+1- move the logic that has HTTP request (get) to service (ex: service/games-service.ts)
 like we do in the previous section.
 
 2- the next option is to move all the entire logic (all useStates and useEffect) to custom hook 
 
-so we can create custom hook not for only specific handling but also to moduler our code and make it more useble
+so we can create custom hook not for only specific handling but also to modular our code and make it more useable
 so we will create custom Hook for fetching the games 
 
 - inside the src folder we create hooks folder 
@@ -576,7 +580,7 @@ export default useGames;
 
 - now we will resolve the errors 
 - first we move the Game and FetchGamesResponse interface to our custom hook and export them 
-- then we move the useState/useEffect import statment and apiClient to the custom hook 
+- then we move the useState/useEffect import statement and apiClient to the custom hook 
 - finally we have to return the error and games object to use them in our component
 
 -------------------code----------------------
@@ -610,8 +614,8 @@ export default useGames;
 -------------------code----------------------
 
 - now we go back to our component and clean some code 
-- first we remove unnecessary import statment
-- we import useGames hook and retrun games, and error objects
+- first we remove unnecessary import statement
+- we import useGames hook and return games, and error objects
 
 -------------------code----------------------
 const { games, error } = useGames();
@@ -619,11 +623,11 @@ const { games, error } = useGames();
 
 - now our component is cleaner and don`t know anything a bout HTTP request and only returning markup
 
-- next step to handle out cancelation 
+- next step to handle out cancellation 
 -------------------code----------------------
-1- const contoller = new AbortController();
-2- ("/games", { signal: contoller.signal })
-3- return () => contoller.abort();
+1- const controller = new AbortController();
+2- ("/games", { signal: controller.signal })
+3- return () => controller.abort();
 -------------------code----------------------
 
 - now in our markup we see canceled as the top 
@@ -633,7 +637,7 @@ canceled
 Grand Theft Auto V
 The Witcher 3: Wild Hunt
 Portal 2
-Counter-Strik
+Counter-Strike
 *********************
 
 to fix it 
@@ -647,7 +651,7 @@ to fix it
 - now if we refreshed our Browser we can see in the Network tab that we have two requests to the games api
  the first one canceled coz our react unmount our component at the first time coz the strict mode
 
-- now we commit our code untile this point
+- now we commit our code untie this point
 "Create a custom hook to fetch the games"
 
 
@@ -673,7 +677,7 @@ import { Game } from "../hooks/useGames";
 PS: importing interface from custom hook is kind ugly but we will fix it later
 
 - after creating Props we are going to pass Props as argument
-and we will return Card Component (import from Chakra UI ) and inside it Image component from ChakaraUI either.
+and we will return Card Component (import from Chakra UI ) and inside it Image component from ChakraUI either.
 
 -------------------code----------------------
 import { Game } from "../hooks/useGames";
@@ -759,12 +763,12 @@ than it`s container to fix this we need to set the overflow to hidden it just ba
 -------------------code----------------------
 
 - next we will fix our heading size is a little big  
-PS: we can see the size in ChakaraUI documentation
+PS: we can see the size in ChakraUI documentation
 -------------------code----------------------
 <Heading fontSize="2xl">{game.name}</Heading>
 -------------------code----------------------
 
-- next thig to do is the columns number in small devices we don`t want always to render 3 columns 
+- next thing to do is the columns number in small devices we don`t want always to render 3 columns 
 instead we want two columns on tablet and one column for mobile devices and 3 for large devices
 to do that 
 -------------------code----------------------
@@ -791,8 +795,8 @@ by using the dev tool [Network -> press the request -> preview] we check the req
 every game has platform objects called first called parent_platform and the second platforms
 
 ex: 
-parent_platform: we have only one object that present playstaion switch PC
-platforms: for diffrent versoin of playstaion ex: ps4, ps5 
+parent_platform: we have only one object that present playstation switch PC
+platforms: for different version of playstation ex: ps4, ps5 
 
 in this object we have  parent_platforms which has array with platform object which has platform property which has property object
 
@@ -813,7 +817,7 @@ slug: "pc"
 but in this cases we have to deal with it.
 
 now in our project the first thing we are add the platform_parent property to our Game interface
-shortcut cmd + t or ctrl + t we can search class, fuctions, component, interface any Symbol in our project
+shortcut cmd + t or ctrl + t we can search class, functions, component, interface any Symbol in our project
 
 now inside the useGame.ts we add 
 -------------------code----------------------
@@ -853,23 +857,23 @@ now we are going to render it step by step
 {game.parent_platforms.map((platform) => platform.platform.name)}
 -------------------code----------------------
 platform.platform.name to too ugly so we destruct (文割代入) platform
-then we add it between Text component of ChakaraUI
+then we add it between Text component of ChakraUI
 -------------------code----------------------
 {game.parent_platforms.map(({ platform }) => (
             <Text>platform.name</Text>
           ))}
 -------------------code----------------------
 
-now the next step is to render ths icons and for that we are going to user React Icon librariy
-in the terminl we install 
+now the next step is to render ths icons and for that we are going to user React Icon library
+in the terminal we install 
 -------------------code----------------------
 npm i react-icons@4.7.1
 -------------------code----------------------
 
 to render the icon we need mapping between the platform name and the icon we don`t we want to mapping the icon in the same CardComponent 
-component coz CardComponent is only related to the card implomantaion not the icons
+component coz CardComponent is only related to the card implementation not the icons
 
-so we will move all the logic of rendering the platform to seperate component
+so we will move all the logic of rendering the platform to separate component
 
 so in component folder we create component we called PlatformIconList.tsx 
 
@@ -882,7 +886,7 @@ interface Props {
 
 and now we need to export it from useGame.ts
 
-after add Props to our Component we will test it intergation by add this code to it 
+after add Props to our Component we will test it integration by add this code to it 
 -------------------code----------------------
 {game.parent_platforms.map(({ platform }) => (
             <Text>{platform.name}</Text>
@@ -902,7 +906,7 @@ const PlatformIconList = ({ platforms }: Props) => {
 };
 -------------------code----------------------
 
-now we don`t need  game.parent_platforms coz we maping only the platform so need either for destructuring
+now we don`t need  game.parent_platforms coz we mapping only the platform so need either for destructuring
 and import Text from ChakraUI we fix it 
 
 -------------------code----------------------
@@ -924,9 +928,9 @@ no in the GameCard we use our PlatformIconList Component
 />
 -------------------code----------------------
 
-now we check if our code is workicg until this point 
+now we check if our code is working until this point 
 
-now the last step is chage the platform labels {pc, Playstaion, ...} with icons  
+now the last step is cage the platform labels {pc, Playstation, ...} with icons  
 
 now inside the PlatformIconList we will import icons from React Icons libraries
 -------------------code----------------------
@@ -943,11 +947,11 @@ import { SiNintendo } from "react-icons/si";
 import { BsGlobe } from "react-icons/bs";
 -------------------code----------------------
 
-now we have to map our names to icons we are not using if statment coz it`s ugly instead we are going to use
+now we have to map our names to icons we are not using if statement coz it`s ugly instead we are going to use
 mapping object
 
 now every platform has name and slug property 
-for playstaion as example we have id: 2, name: "PlayStaion", slug: "playstaion"  the slug is more relayable coz is like id
+for playstation as example we have id: 2, name: "PlayStation", slug: "playstation"  the slug is more reliable coz is like id
 names may changes 
 
 -------------------code----------------------
@@ -990,7 +994,7 @@ now instead of writing the type of each Element
   };
 -------------------code----------------------
 
-shortcut way we grap the object inside arary [] and set all of them to same type
+shortcut way we grab the object inside arary [] and set all of them to same type
 -------------------code----------------------
 const iconMap: { [key: string] } = {
     pc: FaWindows,
@@ -1005,7 +1009,7 @@ const iconMap: { [key: string] } = {
   };
 -------------------code----------------------
 
-that`s means each key of iconMap is stirng 
+that`s means each key of iconMap is string 
 now to fix the error we set 
 -------------------code----------------------
 const iconMap: { [key: string]: IconType } = {
@@ -1038,7 +1042,7 @@ icons is darker to clean our interface
 <Icon as={iconMap[platform.slug]} color="gray.500"></Icon>
 -------------------code----------------------
 
-PS: to check the color of ChakaraUI we can go to ChakraUI doc => styled-system => theme
+PS: to check the color of ChakraUI we can go to ChakraUI doc => styled-system => theme
 
 now the next thing we want to improve is the space between the Game name and the icon currently they are too close
 
@@ -1046,7 +1050,7 @@ now the next thing we want to improve is the space between the Game name and the
 <HStack marginY={1}>
 -------------------code----------------------
 
-PS: marginY={1}> => result is them.space * 1  {the default chakara UI them space is 4px}
+PS: marginY={1}> => result is them.space * 1  {the default chakra UI them space is 4px}
 but sometimes we have to handle spece manually so we use marginY="10 px" for example
 
 now we commit our code "Displaying platform icons"
@@ -1056,7 +1060,7 @@ now we commit our code "Displaying platform icons"
 
 next we add path that contains the Score game metacritic (review)  (number between 0 to 100 )
 the patch color dependent on the score high score should be green , medium score should be yellow 
-now we don`t want to add this logic inside our game card component instead we will seperate it to another component
+now we don`t want to add this logic inside our game card component instead we will separate it to another component
 
 
 - we go to useGames.ts and add metacritic to our interface
@@ -1079,7 +1083,7 @@ interface Props {
 }
 -------------------code----------------------
 
-- to render the score we will use Badge component that defined in ChakaraUI
+- to render the score we will use Badge component that defined in ChakraUI
 -------------------code----------------------
 const CriticScore = ({ score }: Props) => {
   return (
@@ -1093,7 +1097,7 @@ const CriticScore = ({ score }: Props) => {
 now we check if it`s working 
 
 - next we want to move the patch to the right next to game platform 
-so we should grap the two component PlatformIconList and CriticScore inisde horizontal stack
+so we should grab the two component PlatformIconList and CriticScore inisde horizontal stack
 
 - next we justifyContent to space between (which means the space that left put between this elements)
 -------------------code----------------------
@@ -1165,7 +1169,7 @@ https://media.rawg.io/media/crop/600/400/games/4be/4be6a6ad0364751a96229c56bf69b
 -------------------code----------------------
 
 - to render optimized images by make our image smaller we need to add crop/600/400 to the image url that we take fromt the api 
-we don`t want to optimized images in our GameCard component instead of that we will do it seperately 
+we don`t want to optimized images in our GameCard component instead of that we will do it separately 
 
 so we need service to modify the image url so inside the service folder we create image-url.ts
 
@@ -1186,7 +1190,7 @@ const index = url.indexOf("media/");
 -------------------code----------------------
 
 now to insert the crop parameter after media we are gonna use the slice method 
-first we want to grap all the char from the begining until the media keyword
+first we want to grab all the char from the begining until the media keyword
 -------------------code----------------------
 url.slice(0, index);
 -------------------code----------------------
@@ -1241,7 +1245,7 @@ const getCroppedImageUrl = (url: string) => {
 export default getCroppedImageUrl;
 -------------------code----------------------
 
-now we to test our implomantaion we go to the GameCard.tsx and apply our method 
+now we to test our implementation we go to the GameCard.tsx and apply our method 
 -------------------code----------------------
 <Image src={getCroppedImageUrl(game.background_image)} />
 -------------------code----------------------
@@ -1274,9 +1278,9 @@ const useGames = () => {
 
   setLoading(true);
   useEffect(() => {
-    const contoller = new AbortController();
+    const controller = new AbortController();
     apiClient
-      .get<FetchGamesResponse>("/games", { signal: contoller.signal })
+      .get<FetchGamesResponse>("/games", { signal: controller.signal })
       .then((res) => {
         setGames(res.data.results);
         setLoading(false);
@@ -1287,14 +1291,14 @@ const useGames = () => {
         setLoading(false);
       });
 
-    return () => contoller.abort();
+    return () => controller.abort();
   }, []);
 
   return { games, error, isLoading };
 };
 -------------------code----------------------
 
-- now to render a skeletons we should render a seperate component
+- now to render a skeletons we should render a separate component
 that component is gonna looks like game card but it`s not a game card 
 
 - in otherword: 
@@ -1360,16 +1364,16 @@ GameCardSkeleton
 <Card width="250px" borderRadius={10} overflow="hidden">
 -------------------code---------------------
 
-- now we have an issue we declure two related width 250px not dynamically in too places 
-so if our styles in the future change and need to change the width we have to remmber to chnage it 
+- now we have an issue we declare two related width 250px not dynamically in too places 
+so if our styles in the future change and need to change the width we have to remmber to change it 
 in tow places 
 so we should fix this issue (but later) after finish deploying 
-first we make our code workds then we refactor it
+first we make our code works then we refactor it
 
 - now we test our code and we can see that the loading skeletons border not the same 
 radius as the game card to fix that 
 
-as we we can see  are diffrent so we should apply the same styles to each other
+as we we can see  are different so we should apply the same styles to each other
 GameCard
 -------------------code---------------------
 <Card width="250px">
@@ -1388,17 +1392,17 @@ GameCardSkeleton
 <Card width="250px" borderRadius={10} overflow="hidden">
 -------------------code---------------------
 
-now we done in and commit our code coz it`s working next step we will fix the duplicattion issus
+now we done in and commit our code coz it`s working next step we will fix the duplication issus
 "Show Loading skeleton"
 
 *** 16-_Refactor-_Removing_Duplicated_Styles ***
 
-to remove the duplicattion styles from the previous lesson we should create  
+to remove the duplication styles from the previous lesson we should create  
 another component that going to be the container of all the cards 
 then we will apply the styles (duplicated styles) to our component
 
 - so we create a component we called GameCardContainer.tsx 
-- in this component we will return a Box component (from ChakaraUI)  and give the common styles 
+- in this component we will return a Box component (from ChakraUI)  and give the common styles 
 from GameCard and GameCardSkeleton components
 
 with that we single place where we defined the the styled of card 
@@ -1426,7 +1430,7 @@ const GameCardContainer = ({ children }: Props) => {
 };
 -------------------code---------------------
 
-- finally in the GameGrid where we call GameCard and GameCardSkeleton we grap them with GameCardContainer
+- finally in the GameGrid where we call GameCard and GameCardSkeleton we grab them with GameCardContainer
 
 
 -------------------code---------------------
@@ -1447,7 +1451,7 @@ now we commit our code
 "Refactor: remove duplicated styles"
 
 *** 17-_Fetching_the_Genres ***
-now we will start to build the aside panal to display the Game genre when the user 
+now we will start to build the aside panel to display the Game genre when the user 
 select a specific genre the games will be filter by that genre 
 
 we will build it step by step the first step is to fetch the genre 
@@ -1473,12 +1477,12 @@ now to fix the error in our copied code
 first we import hooks like useState then instead of Game[] interface we create Genre interface
 
 so first to create the interface of Genre we go back to the documentation of rog
-to see the responese of Genre request
+to see the responses of Genre request
 
 https://api.rawg.io/docs/
 
 we go to the endpoint genres 
-in the Responeses section we see 
+in the Responses section we see 
 count
 next
 previous
@@ -1497,15 +1501,15 @@ for the simplicity we use only id and name
 -------------------code---------------------
 
 now we change the name of the interface to Genre[] then we fix the variables name 
-by using rename shortcut shift+2 (custome)  (f2 for fow windows) we rename the all the variable faster
+by using rename shortcut shift+2 (custom)  (f2 for fow windows) we rename the all the variable faster
 
 -------------------code---------------------
-const [genres, setGanres] = useState<Genre[]>([]);
+const [genres, setGenres] = useState<Genre[]>([]);
 -------------------code---------------------
 
-- next we define FetchGemresResponse interface and the same as useGames we add count and result 
+- next we define FetchGamesResponse interface and the same as useGames we add count and result 
 -------------------code---------------------
-interface FetchGemresResponse {
+interface FetchGamesResponse {
   count: number;
   results: Genre[];
 }
@@ -1513,7 +1517,7 @@ interface FetchGemresResponse {
 
 and finally change the endpoint to genres
 -------------------code---------------------
-.get<FetchGemresResponse>("/genres", { signal: contoller.signal })
+.get<FetchGamesResponse>("/genres", { signal: controller.signal })
 -------------------code---------------------
 
 - PS we rename by using f2 vsCode by default changed this return 
@@ -1567,13 +1571,13 @@ everywhere that we have reference to genre we should remove that reference or ma
 
 - so first we delete the Genre interface
 
-- interface FetchGemresResponse we will come to it later coz fetching the responese
+- interface FetchGamesResponse we will come to it later coz fetching the responses
 is similar in each Games hook and Genre hook 
 
 PS: use f2 (shift + 2 my custom shortcut) to rename the rename all the variables at same time in the file
 - next we should rename the function of useGenre to useData 
 
-- rename the genres and setGanres to data and setData
+- rename the genres and setGenres to data and setData
 
 - change the Genre[] with generic type parameter <T>
 -------------------code---------------------
@@ -1585,7 +1589,7 @@ const useData = () => {
 
 - error and loading no need to change coz we need to use it both the custom hooks 
 
-- now we when get the data we don`t want to use FetchGemresResponse interface instead we need a generic interface
+- now we when get the data we don`t want to use FetchGamesResponse interface instead we need a generic interface
 so we rename it to FetchResponse and change the results type to T[] and that means we have to generic type parameter <T>
 to the interface
 -------------------code---------------------
@@ -1600,7 +1604,7 @@ interface FetchResponse<T> {
 
 coz we defined FetchResponse as interface take <T> as parameter so we need add parameter to it
 -------------------code---------------------
-.get<FetchResponse<T>>("/genres", { signal: contoller.signal })
+.get<FetchResponse<T>>("/genres", { signal: controller.signal })
 -------------------code---------------------
 
 so this <T> is the same <T> that we had passed to our entire hook 
@@ -1614,7 +1618,7 @@ a parameter called endpoint with type string and use it when we get the data
 const useData = <T>(endpoint: string)
 
 
-.get<FetchResponse<T>>(endpoint, { signal: contoller.signal })
+.get<FetchResponse<T>>(endpoint, { signal: controller.signal })
 -------------------code---------------------
 
 - the final part that we don`t want to return genres but only data 
@@ -1645,9 +1649,9 @@ const { data } = useData<Genre>("/genres");
 our we need to pass "/genres" as endpoint inside GenreList but early we said we need to split backend code from the frontend 
 to fix that we got to Genre.ts 
 
-- we don`t need FetchGemresResponse so we remove it
+- we don`t need FetchGamesResponse so we remove it
 
-- remove all the code from inside the useGenre coz we already imploment it inside Data hook 
+- remove all the code from inside the useGenre coz we already implement it inside Data hook 
 and instead we pass Genre as  generic type parameter and "/genres" as endpoint parameter
 -------------------code---------------------
 const useGenres = () => useData<Genre>("/genres");
@@ -1693,7 +1697,7 @@ export interface Genre {
 }
 -------------------code---------------------
 
-- then in GenreList component we reolace ul with List component from ChakaraUI to render a list item
+- then in GenreList component we reolace ul with List component from ChakraUI to render a list item
 without bullet points and replace at the same time li with ListItem 
 -------------------code---------------------
 <List>
@@ -1717,7 +1721,7 @@ component a HStack element
 </List>
 -------------------code---------------------
 
-- now inside the HStach we add Image Component of the ChakaraUI and it should be small so we 
+- now inside the HStach we add Image Component of the ChakraUI and it should be small so we 
 set the boxSize to 32px and we want to apply radius at the same time so we set the borderRadius to 8 px
 and finally we set the src to the image (but same as image we don`t want to render the full size of the image 
 so we use the getCroppedImageUrl method that we created to take the small sized image)
@@ -1768,7 +1772,7 @@ in future if we add another component other than List we have to remmber to add 
 
 - next we want to apply a fixed width to the columns so if we have more read estate on the screen
 our game grid stretchs and takes up the available space 
-to define the width to our component we set the templateColumns to object coz we have two diffrent sernarios
+to define the width to our component we set the templateColumns to object coz we have two different sernarios
 where we have base(we have single columns) and lg(where we have multi columns) screen 
 for base we will set the width to 1fr which means one fraction so our columns scratches and takes up
 all the available space on lg devices we will have two columns one 200px and one 1fr
@@ -1812,7 +1816,7 @@ and commit our code
 *** 20-_Showing_a_Spinner ***
 now we want to add a spinner while waiting to our genre data to fetch from the server 
 
-- in our GenreList we grape isLoading from useGenres hook
+- in our GenreList we grabe isLoading from useGenres hook
 -------------------code---------------------
 const { data, isLoading } = useGenres();
 -------------------code---------------------
@@ -1828,7 +1832,7 @@ return (
 )
 -------------------code---------------------
 
-- now what if we had an error, we don`t want to throw too many diffrent errors on diffrent parts on the page
+- now what if we had an error, we don`t want to throw too many different errors on different parts on the page
 that way too much conforntint, so we want only to return null 
 -------------------code---------------------
 const { data, isLoading, error } = useGenres();
@@ -1849,7 +1853,7 @@ now we commit our code
 
 
 *** 21-_Filtering_Games_by_Genre ***
-we `re going to imploment filtering so when we press click on genre we only see the games that match
+we `re going to implement filtering so when we press click on genre we only see the games that match
 that genre 
 
 
@@ -1859,7 +1863,7 @@ click that genre set we set the variant to link to ou button looks like links
 <Button fontSize="lg" variant="link" >{genre.name}</Button>
 -------------------code---------------------
 
-- now we onClick event and for right now we will log the currect genre in the console 
+- now we onClick event and for right now we will log the correct genre in the console 
 -------------------code---------------------
 <Button
   fontSize="lg"
@@ -1920,7 +1924,7 @@ is selected we called selectedGenre
 const [selectedGenre, setSelectedGenre] = useState(null);
 -------------------code---------------------
 
-until this point we can`t set the selectedGenre to a diffrent value other than null coz TypeScript 
+until this point we can`t set the selectedGenre to a different value other than null coz TypeScript 
 compiler doesn`t know that this varible can store Genre object so we need to type a generic type
 argument 
 
@@ -1960,7 +1964,7 @@ const GenreList = ({ onSelectedGenre }: Props)
 <GenreList onSelectedGenre={(genre) => setSelectedGenre(genre)} />
 -------------------code---------------------
 
-- now let`s test out implomantaion until this point
+- now let`s test out implementation until this point
 in the Browser we select a Action genre for example 
 access to Components of dev tool and press on App component and we should see the selected state
 
@@ -1998,9 +2002,9 @@ to give it Axios request config object
 in this code the object that we passed as second argument ({signal: ....}) is what we call "Axios request config object"
 -------------------code---------------------
 apiClient
-    .get<FetchResponse<T>>(endpoint, { signal: contoller.signal })
+    .get<FetchResponse<T>>(endpoint, { signal: controller.signal })
 -------------------code---------------------
-in this second argument we can pass data or qurey stirng parameter
+in this second argument we can pass data or query string parameter
 
 - so we give our useData hook another paramter we called requestConfig 
 and set it to the type of AxiosRequestConfig and we make it optional 
@@ -2011,7 +2015,7 @@ const useData = <T>(endpoint: string, requestConfig?: AxiosRequestConfig) =>{
 }
 -------------------code---------------------
 
-- now to filter our games depend on genre we should pass the genre as qurey string parameter
+- now to filter our games depend on genre we should pass the genre as query string parameter
 
 *********************************************************************************************************
 What is Query string parameters:
@@ -2092,7 +2096,7 @@ Explanation:
 This URL is querying the articles endpoint to get the third page of results with a limit of 10 articles per page.
 *********************************************************************************************************
 
-- so when we should pass qurey parameter that depends of the api
+- so when we should pass query parameter that depends of the api
 if it support the query parameter string and in our API (it supported)
 we can see the genre as query parameter
 https://api.rawg.io/docs/#tag/games
@@ -2110,7 +2114,7 @@ to add any additional properties
 -------------------code---------------------
 apiClient
       .get<FetchResponse<T>>(endpoint, {
-        signal: contoller.signal,
+        signal: controller.signal,
         ...requestConfig,
       })
 -------------------code---------------------
@@ -2190,7 +2194,7 @@ this cause the app component to rerender
 - in our GameGrid we add a new props which is selectedGenre and inside the component we take the 
 value of the slected genre and pass it to our game hook 
 
-- now our game hook passes the selector genre as qurey string parameter to the data hook 
+- now our game hook passes the selector genre as query string parameter to the data hook 
 
 we commit our code 
 "Filter games by genre"
@@ -2202,7 +2206,7 @@ and in GenreList where we render the button we`ll set the font weight dynamicall
 so if yo`re rendreing the selected genre, we make the font bold. other wise we render it normal 
 
 
-to to imploment it
+to to implement it
 in GenreList
 - we add to Props selectedGenre
 -------------------code---------------------
@@ -2234,10 +2238,10 @@ here we commit our code
 "High light the selected genre"
 
 *** 23-_Building_Platform_Selector ***
-now we will just focus on rendreing this list and after we will imploment filtering
+now we will just focus on rendreing this list and after we will implement filtering
 
 - we create a component called PlatformSelector
-and inside we are going to return a Menu component of ChakaraUI and inside the Menu
+and inside we are going to return a Menu component of ChakraUI and inside the Menu
 Component we create MenuButton component as Button
 
 -------------------code---------------------
@@ -2376,7 +2380,7 @@ with that we notified our App component
 ></PlatformSelector>
 -------------------code---------------------
 
-now let`s test our implomantaion until this point
+now let`s test our implementation until this point
 
 now if we slected a platform nothing happens but we can see in the dev tool 
 when we go to components that the status has changed so our plumbing is working
@@ -2604,7 +2608,7 @@ const useGames = (gameQuery: GameQuery) =>
   );
 -------------------code---------------------
 
-- finaly we have in App.tsx error coz we changed the properties of GameGrid so we fix it 
+- finally we have in App.tsx error coz we changed the properties of GameGrid so we fix it 
 -------------------code---------------------
 <GameGrid gameQurey={gameQuery} />
 -------------------code---------------------
@@ -2622,7 +2626,7 @@ now we will only render the sort component later we will do the actual sorting
 - first we create a new component SortSelector 
 this component will be too much similar to our Platform component
 to save time we will copy the code (return statement) from Platform component
-and for label we will render somthing static like "Order by: Relevance"
+and for label we will render something static like "Order by: Relevance"
 and where we map the platform we render MenuItem*6
 -------------------code---------------------
 <Menu>
@@ -2787,7 +2791,7 @@ next we give it as parameter to SortSelector
 const SortSelector = ({ onSelectSortOrder }: Props) => {}
 -------------------code---------------------
 
-finaly we set the value that we want to notify it to App component
+finally we set the value that we want to notify it to App component
 -------------------code---------------------
 <MenuItem
   onClick={() => onSelectSortOrder(order.value)}
@@ -2868,7 +2872,7 @@ const getCroppedImageUrl = (url: string) => {
 now we test or code and if we sorted by name we can see the games withuot image
 we will fix this later 
 
-now let`s check our request in dev tool to see if we are sending the right qurey parameter
+now let`s check our request in dev tool to see if we are sending the right query parameter
 we can see
 -------------------code---------------------
 key: --------
@@ -2925,7 +2929,7 @@ we commit our code
 *** 28-_Handling_Games_without_an_Image ***
 
 to handle the games without image we will use default placehoder from GameHub Resources.zip
-and grap it inside the assets folder
+and grab it inside the assets folder
 
 we rename it to no-image-placeholder (make sure to webp)
 
@@ -2988,7 +2992,7 @@ we will add search input to the navbar to search the games
 -------------------code---------------------
 
 - now we can see that Dark Mode label is wrapped to fix it 
-we go to ColorModeSwitch component and chnage add to Text whitSpace="nowrap" (nowrap is just a standerd CSS)
+we go to ColorModeSwitch component and change add to Text whitSpace="nowrap" (nowrap is just a standard CSS)
 -------------------code---------------------
 <Text whiteSpace="nowrap">Dark Mode</Text>
 -------------------code---------------------
@@ -3002,7 +3006,7 @@ now we already have three so no need for it we remove it
 it will not make our UI better but it will make our code cleaner 
 
 - now we want to add Icon to the SearchInput component
-first we grap the Input componet with InputGroup component 
+first we grab the Input component with InputGroup component 
 then we add the InputLeftElement component and set the children to BsSearch component
 -------------------code---------------------
 <>
@@ -3019,10 +3023,10 @@ we commit our code
 "Build search input"
 
 *** 31-_Searching_Games ***
-to imploment the searching we`ll use the same approach as before 
-so when user type somthing in the search bar and press enter the SearchInput component
-will notify the App component take this search text, store it in our qurey object
-and pass it down to the GameGrid component exacly like platform and sort
+to implement the searching we`ll use the same approach as before 
+so when user type something in the search bar and press enter the SearchInput component
+will notify the App component take this search text, store it in our query object
+and pass it down to the GameGrid component exactly like platform and sort
 
 - fisrt in the SearchInput component we will wrap all the elements inside form element
 and we don`t need action instead we handle it manually using onSubmit
@@ -3057,7 +3061,7 @@ and then we associate this ref object with input components
 ></Input>
 -------------------code---------------------
 
-- next we say if ref.currect is truthy for now we log the ref to check if it works 
+- next we say if ref.correct is truthy for now we log the ref to check if it works 
 -------------------code---------------------
 <form
   onSubmit={(event) => {
@@ -3188,7 +3192,7 @@ const useGames = (gameQuery: GameQuery) =>
 
 
 - now we check our code and it works and we commit our code 
-"imploment Search"
+"implement Search"
 
 *** 32-_Adding_a_Dynamic_Heading ***
 next we will add a dynamic Header above the Platform and SortSelector components changes based on currunt
@@ -3198,8 +3202,8 @@ ex: if we select Action from Genre  we will have "Action Games" and if we select
 we will see "Xbox Action Games"
 
 - we will create new component called GameHeading.tsx and we can return h1 element
-but because we using ChakaraUI in all our project it`s better to use ChakaraUI components as much as possible
-so we will use Heading component from ChakaraUI
+but because we using ChakraUI in all our project it`s better to use ChakraUI components as much as possible
+so we will use Heading component from ChakraUI
 -------------------code---------------------
 <>
   <Heading as="h1"></Heading>
@@ -3341,7 +3345,7 @@ while preserving it aspect ratio
 />
 -------------------code---------------------
 
-- finaly we add Heading to our component says Genre
+- finally we add Heading to our component says Genre
 coz the heading is large we make it smaller and give it space between genres and the heading
 -------------------code---------------------
 <Heading fontSize="2xl" marginBottom={3}>
@@ -3416,7 +3420,7 @@ export interface Game {
 PS: in our API we have rating_top and rating the difference is between these two properties
 is rating is a floating point number, while rating_top is a whole number 
 
-- next we grap three images from GameHub Resources.zip to our assets
+- next we grab three images from GameHub Resources.zip to our assets
 
 1-bulls-eye.webp
 2-meh.webp
@@ -3464,7 +3468,7 @@ const emojiMap = {
   };
 -------------------code---------------------
 
-- next we render Image of chakaraUI 
+- next we render Image of chakraUI 
 -------------------code---------------------
 return (
     <>
@@ -3521,7 +3525,7 @@ now we commit our code
 
 *** 36-_Shipping_Static_Data ***
 
-in the currect implomantaion we show a spinner while we fetch the genere 
+in the correct implementation we show a spinner while we fetch the genere 
 and skeletons while we fetch the games.
 so we`re dynamically loading to different parts of the page and showing loading indicators.
 now whike this isn`t necessarily a bad thing, overusing this technique can negatively impact 
@@ -3529,7 +3533,7 @@ the user expression. it makes their eyes dart around the page.
 
 so as cool idea to improve things:
 we can ship the list of generes with our application. since the list of genres hardly 
-ever chnages we can treat the genres as static data and included with our app
+ever chanages we can treat the genres as static data and included with our app
 with that we don`t need to make extra request to our backend and the data will be available right away 
 so no need to wait and show a spinner 
 
@@ -3610,7 +3614,7 @@ now we commit our code
 *** 37-_Customizing_the_Chakra_Theme ***
 we want to Customizing the Chakra Theme to match rawg.io
 
-in Chakara documentation we got to "Styled System" and then in the menu we go to the "default Theme"
+in Chakra documentation we got to "Styled System" and then in the menu we go to the "default Theme"
 
 we can see see this line  
 "We recommend adding a palette that ranges from 50 to 900. Tools like Themera,
@@ -3704,7 +3708,7 @@ but what if we have a compiled error to simulate an error in SortSelector.tsx we
 >
 -------------------code---------------------
 
-we run an error we can see it the terminl we run "npm run build" another time 
+we run an error we can see it the terminal we run "npm run build" another time 
 *********************************************************************
 src/components/SortSelector.tsx:31:30 - error TS2552: Cannot find name 'xonSelectSortOrder'. Did you mean 'onSelectSortOrder'?
 
@@ -3922,7 +3926,7 @@ now we render the genre of the results
 {data?.results.map((genre) => () ...)}
 -------------------code----------------------
 
-- now we check out implomantaion and we can see it works fine 
+- now we check out implementation and we can see it works fine 
 
 - we impove our code 
 cause genre is hardly coding we want to put the staleTime to 24hours 
@@ -3932,7 +3936,7 @@ cause genre is hardly coding we want to put the staleTime to 24hours
 staleTime: 24 * 60 * 60 * 1000, // 24hours
 -------------------code----------------------
 
-we will improve the way we write it later but now we want to focus on the implomantaion 
+we will improve the way we write it later but now we want to focus on the implementation 
 
 
 - next we set the Initial data to the static data that we shiped in our application
@@ -3952,7 +3956,7 @@ the error happned cause
 apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
 -------------------code----------------------
 
-we tell the React qurey that we suppose to have data with type FetchResponse but the initialData that we defined 
+we tell the React query that we suppose to have data with type FetchResponse but the initialData that we defined 
 in the genres.ts
 doesn`t have count and result properties  only array 
 to solve that we have two ways
@@ -3994,7 +3998,7 @@ const usePlatforms = () =>
 
 - now we test our code 
 
-- next we improve our implomantaion
+- next we improve our implementation
 
 PS: i forgot to ship the platform as static data so same as genre we create data/platforms.ts and 
 add the data 
@@ -4016,7 +4020,7 @@ now if we open the console we can see that we only have one API request to the g
 
 *** 26-_Exercise-_Fetching_Games *** 
 
-now we will replace useData hook use useQuery cause everything all the functionality that implomentent in data hook
+now we will replace useData hook use useQuery cause everything all the functionality that implementent in data hook
 is already build in better way in query hook 
 
 so we will replace data hook with query hook then remove data hook from the project
@@ -4045,7 +4049,7 @@ const useGames = (gameQuery: GameQuery) =>
 
 
 - now we have duplication in our code we used  interface Platform in to two places useGames and usePlatforms
-but now we want to focus in current implomantaion and as a good software engineer we should have a note while we coding 
+but now we want to focus in current implementation and as a good software engineer we should have a note while we coding 
 and write in that note for example fix the deplication of our interfaces so we back later to fix it 
 (for me i will add TODO)
 
@@ -4112,7 +4116,7 @@ so we after clicked we can see it refrence in only one place which is the same f
 so we can simply remove it 
 
 - now in useData we stil have FetchResponse interface and if press on "Go to Refrences" 
-we can see it refrence in 8 diffrent places 
+we can see it refrence in 8 different places 
 
 but it doesn`t make any sense to make a useData file to conatain only this function 
 cause this file is for data hook
@@ -4307,7 +4311,7 @@ then commit our code
 
 *** 29-_Exercise-_Implementing_Infinite_Queries ***
 
-now we will take the application to the next level and imploment Infinite qureys
+now we will take the application to the next level and implement Infinite querys
 so we will add button for loading more games 
 
 - in useGames.ts we should change the useQuery wiht useInfiniteQuery 
@@ -4325,7 +4329,7 @@ queryFn: ({ pageParam = 1 }) => ...
 
 - now if go to the api documentation we can see it have query parameter called page 
 which support pagination 
-so we grap it and set it to pageParam
+so we grab it and set it to pageParam
 -------------------code----------------------
 queryFn: ({ pageParam = 1 }) =>
       apiClient.getAll({
@@ -4365,16 +4369,16 @@ useInfiniteQuery<FetchResponse<Game>, Error>({
 - now in getNextPageParam we still increament until we hit last page and that time 
 query paramter of page will be defined so we need write code says if we reach the last page 
 
-back to the api documentation from the responese we can see that we 
+back to the api documentation from the responses we can see that we 
 count 
 next 
 previous
 results
-until now we only imploment count and results
+until now we only implement count and results
 but if we see next we can see next to it string<ui> Nullable
 which means when we reach the last page 
 page query paramter => undefined
-next (from the fetch responese) => null 
+next (from the fetch responses) => null 
 
 - so we press cmd + t and go to FetchResponse interface 
 and add next property 
@@ -4464,10 +4468,10 @@ using devtool
 *** 30-_Exercise-_Implementing_Infinite_Scroll ***
 
 now we will make the application better by show games while scroling not clicking a Button 
-to do that we are gonna use popular librariy called react-infinite-scroll-component
-try read the documentation and imploment it 
+to do that we are gonna use popular library called react-infinite-scroll-component
+try read the documentation and implement it 
 
-- install the librariy
+- install the library
 -------------------code----------------------
 npm i react-infinite-scroll-component@6.1
 -------------------code----------------------
@@ -4573,7 +4577,7 @@ so we set to Spinner
       >
 -------------------code----------------------
 
-- now we test our implomantaion
+- now we test our implementation
 
 - finally we don`t need the Load Button anymore so we remove it 
 and that`s also means we don`t need the Box component anymore  so we move the padding to our 
@@ -4640,7 +4644,7 @@ onSelectPlatform={(platform) =>
                 }
 -------------------code----------------------
 
-- now when the user select the genre we want to store the genre id in our game qurey object
+- now when the user select the genre we want to store the genre id in our game query object
 
 - first we look at the gameQurey interface 
 -------------------code----------------------
@@ -4850,13 +4854,13 @@ params: {
 
 - now before apply the same refactor to the platform the check if our code is working
 
-our code work fine and our qurey object is simpilar 
+our code work fine and our query object is simpilar 
 -------------------code----------------------
 ["games",{"genreId":3}]
 -------------------code----------------------
 
 
-- now we apply the same thing to our platform qurey
+- now we apply the same thing to our platform query
 - first we open the refrence and keep it then we change the interface property name 
 -------------------code----------------------
 export interface GameQuery {
@@ -4905,7 +4909,7 @@ const { data: platforms } = usePlatforms();
 -------------------code----------------------
 
 
-- next we go the next refrence useGames.ts amd chnage the params 
+- next we go the next refrence useGames.ts amd change the params 
 -------------------code----------------------
 params: {
           genres: gameQuery.genreId,
@@ -4914,7 +4918,7 @@ params: {
 
 now we test the code 
 
-our qurey object
+our query object
 -------------------code----------------------
 ["games",{"platformId":4}]
 -------------------code----------------------
@@ -5070,7 +5074,7 @@ and if check of the type of initialData we can see it
 (property) initialData?: (() => undefined) | undefined
 -------------------code----------------------
 
-and it`s diffrent from the fetch Response so here we have initial data type diffrent from the fetch Response type 
+and it`s different from the fetch Response so here we have initial data type different from the fetch Response type 
 so if commnet out the initialData property the error goes away 
 
 - we can add next: null and error goes
@@ -5086,7 +5090,7 @@ useQuery({
 - but this is a hack so what if we decide in future to add more property to the FetchResponse interface
 again we have to remmber to come here and fix the issue 
 
-- so a better approach is to modify the static data and make exacly same as the response we get it 
+- so a better approach is to modify the static data and make exactly same as the response we get it 
 from our backend so currently in static data we have only the array of genre and next and result 
 and previous and count property are missing 
 
@@ -5161,19 +5165,19 @@ and test our code
 first: we need to remmber to add commnet, if we forgot it will be unreadable 
 second: even if we add a comment we can`t know which one is of the numbers is seconds or minutues and so 
 
-- we can simplify the time using librariy called "ms"
+- we can simplify the time using library called "ms"
 https://www.npmjs.com/package/ms
 
-it`s very popular if we saw the weekly downloads (PS: when using a librariy make sure that it famous so 
+it`s very popular if we saw the weekly downloads (PS: when using a library make sure that it famous so 
 it`s updates frequency )
 
-- we can arguing that why we need to add a new librariy for only simplify our time readability 
+- we can arguing that why we need to add a new library for only simplify our time readability 
 is not the best way and it will incerase the bundle that we shiped to the client 
 but in the documentation we can see the the size is only 6.72 kb so the impcat is minimum
-beside we can create methods to simplify the time without librariy but we are going to study how 
-to use "ms" librariy 
+beside we can create methods to simplify the time without library but we are going to study how 
+to use "ms" library 
 
-- PS: it`s very simple try to do it by your self so to learn how to imploment a package
+- PS: it`s very simple try to do it by your self so to learn how to implement a package
 while reading the documentation
 
 - how to set it
@@ -5190,7 +5194,7 @@ import ms from "ms"
 -------------------code----------------------
 
 - but we go error cause ms is not support the types of TypeScript so we need to install the type
-seperately
+separately
 -------------------code----------------------
 ms' is declared but its value is never read.ts(6133)
 Could not find a declaration file for module 'ms'. '/Users/mahmouddabbbagh/moody/React18/Mahmoud/game-hub/node_modules/ms/index.js' implicitly has an 'any' type.
