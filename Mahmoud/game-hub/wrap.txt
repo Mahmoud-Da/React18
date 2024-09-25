@@ -5534,3 +5534,10 @@ const useGames = () => {
 
 now we orginize the imports of our changed files
 and run build our code to check if there is not error and now we test our code
+
+*** 24-_Discussion-_Building_Reusable_Components ***
+- we make our code less by using Zustand but the cost is our components now in longer are 
+reusble cause when passing the props our component did`nt relay on any data 
+but now it relay on the genreId that comes from the store 
+So remmber there is no size fit all and that means there is no right way for everything 
+we have to know the project requirement and based on that chose the right tool 
