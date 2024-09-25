@@ -5225,3 +5225,37 @@ const useGenres = () =>
 useGames and usePlatforms
 
 then we comment our code 
+
+*** Global State Management ***
+
+*** 21-_Exercise-_Picking_the_Right_State_Management_Solution ***
+now we want to improve the way we manage the clinet state 
+
+we have the useState that we defined before
+-------------------code----------------------
+const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
+-------------------code----------------------
+
+we used inside the NavBar inside the onSearch property  and if go to the NavBar we can see we take this state 
+to pass time another time to Search Input component this is a real example of Props Drilling
+
+the second issue that we update the gameQuery object all over the component we update the platformId in the 
+PlatformSelector and update sortOrder in other place in SortSelector and update the gameQuery 
+inside the GameGrid component
+
+- to solve this problem we can use the Reducer hook to grab the hooks and pass to Context hook later to
+share it with other components but it`s not the best solution (cause the data is from the backend)
+and that is not the best practice cause useContext is not used for the backend side 
+
+beside if we using context will cause unnecessary rendering for example in our interface
+-------------------code----------------------
+export interface GameQuery {
+  genreId?: number;
+  platformId?: number;
+  sortOrder: string;
+  searchText: string;
+}
+-------------------code----------------------
+
+by using the Context if a user select a property our platform will render and sort order will render and NavBar which using 
+searchText will also will be rendered so the best solution is to use Zustand library
