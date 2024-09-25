@@ -5388,3 +5388,149 @@ const useGamesQueryStore = create<GameQueryStore>((set) => ({
 export default useGamesQueryStore;
 -------------------code----------------------
 
+*** 23-_Exercise-_Removing_Props ***
+now we need to pass the gameQuery object directly from the store instead of passing 
+in through the props
+so we need to modify each component 
+NavBar, GenreList, PlatformSelector, SortSelector
+
+in App component 
+- we remove the GameQuery interface and we don`t need the the state hook anymore
+so we remove it
+
+
+- we need to work on our NavBar first we delete the onSearch property
+-------------------code----------------------
+<NavBar />
+-------------------code----------------------
+
+- now inside the NavBar we delete the interface Props and remove the parameter and onSearch from 
+the SearchInput component
+-------------------code----------------------
+const NavBar = () => {
+return (
+  <>
+    <HStack padding="10px">
+      <Image src={logo} boxSize="60px"></Image>
+      <SearchInput />
+      <ColorModeSwitch />
+    </HStack>
+  </>
+);
+};
+-------------------code----------------------
+
+- next we go the SearchInput and delete the interface and the parameter too 
+now inside the SearchInput we need to set the value onSearch(ref.current.value)
+so we call the and we add (s) => s.setSearchText to let the store only render of this text changes 
+
+-------------------code----------------------
+const setSearchText = useGamesQueryStore((s) => s.setSearchText);
+-------------------code----------------------
+
+the we call it instead of onSearch props
+-------------------code---------------------- 
+if (ref.current) setSearchText(ref.current.value);
+-------------------code----------------------
+
+- next we need to do the same for the GenreList we delete the props
+-------------------code----------------------
+<GenreList />
+-------------------code----------------------
+
+- then we remove the props and now we need the selectedGenreId and onSelectedGenre
+and define selectedGenreId and setSelectedGenreId
+-------------------code----------------------
+const selectedGenreId = useGamesQueryStore((s) => s.gameQuery.genreId);
+const setSelectedGenreId = useGamesQueryStore((s) => s.setGenreId);
+-------------------code----------------------
+
+- then we call setSelectedGenreId with genre.id (cause we expect number not object)
+-------------------code----------------------
+onClick={() => setSelectedGenreId(genre.id)}
+-------------------code----------------------
+
+-next we remove the props from the GameHeading
+-------------------code----------------------
+<GameHeading />
+-------------------code----------------------
+
+- we clean our import statement and move to GameHeading
+- we define the genreId and platformId and orginize our code 
+-------------------code----------------------
+const genreId = useGamesQueryStore((s) => s.gameQuery.genreId);
+const genre = useGenre(genreId);
+
+const platformId = useGamesQueryStore((s) => s.gameQuery.platformId);
+const platform = usePlatform(platformId);
+-------------------code----------------------
+
+- we orginize our imports
+
+
+- next we go to PlatformSelector
+delete the props 
+-------------------code----------------------
+<PlatformSelector />
+-------------------code----------------------
+
+- we need to define the selectedPlatformId
+-------------------code----------------------
+const selectedPlatformId = useGamesQueryStore((s) => s.gameQuery.platformId);
+-------------------code----------------------
+
+- we need a function to update the platform
+-------------------code----------------------
+const setSelectedPlatformId = useGamesQueryStore((s) => s.setPlatformId);
+
+onClick={() => setSelectedPlatformId(platform.id)}
+-------------------code----------------------
+
+- orginize imports 
+
+- next we go to SortSelector component
+-------------------code----------------------
+<SortSelector />
+-------------------code----------------------
+
+- define the nessery values 
+-------------------code----------------------
+const setSortOrder = useGamesQueryStore((s) => s.setSortOrder);
+const sortOrder = useGamesQueryStore((s) => s.gameQuery.sortOrder);
+-------------------code----------------------
+
+- orginize the code 
+
+- finally we GameGrid
+
+- next the GameGrid 
+remove the props 
+
+now inside the GameGrid instead of define the gameQuery we can immediately define it inside the useGame hook 
+so first we remove the argument of useGames
+-------------------code----------------------
+const {
+    data,
+    error,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useGames();
+-------------------code----------------------
+
+
+inside the useGames hook 
+now with that evertime the gameQuery changes it will fetch the data from the backend
+and add return to useInfiniteQuery
+-------------------code----------------------
+const useGames = () => {
+  const gameQuery = useGamesQueryStore((s) => s.gameQuery);
+
+  return useInfiniteQuery<FetchResponse<Game>, Error>
+  ... }
+-------------------code----------------------
+
+
+now we orginize the imports of our changed files
+and run build our code to check if there is not error and now we test our code
