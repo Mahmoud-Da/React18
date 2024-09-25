@@ -5259,3 +5259,132 @@ export interface GameQuery {
 
 by using the Context if a user select a property our platform will render and sort order will render and NavBar which using 
 searchText will also will be rendered so the best solution is to use Zustand library
+
+*** 22-_Exercise-_Setting_Up_a_Zustand_Store *** 
+we are going to use Zustand to manage the client state in this Application
+
+- install Zustand
+-------------------code----------------------
+npm i zustand@4.3.7
+-------------------code----------------------
+
+- next to the App.tsx we create store.ts file 
+
+- first we define the interface of the store we called GameQueryStore
+we add the first property gameQuery if type GameQuery that defined in App.tsx
+-------------------code----------------------
+import { GameQuery } from "./App";
+
+interface GameQueryStore {
+  gameQuery: GameQuery
+}
+-------------------code----------------------
+
+but we don`t use the GameQuery in other place expect App.tsx so is better to move to store.ts 
+beside is not make any sense to add interface in the App.tsx  
+we don`t need the export keyword so we remove it
+-------------------code----------------------
+interface GameQuery {
+  genreId?: number;
+  platformId?: number;
+  sortOrder: string;
+  searchText: string;
+}
+
+interface GameQueryStore {
+  gameQuery: GameQuery;
+}
+-------------------code----------------------
+
+- now we need multi methods for update each value 
+-------------------code----------------------
+interface GameQueryStore {
+  gameQuery: GameQuery;
+  setSearchText: (searchText: string) => void;
+  setGenreId: (genreId: number) => void;
+  setPlatformId: (platformId: number) => void;
+  setSortOrder: (sortOrder: string) => void;
+}
+-------------------code----------------------
+
+
+- now as we learned before we use the create of Zustand and set parameter 
+
+-------------------code----------------------
+create<GameQueryStore>(set => ({
+  gameQuery: {}
+}))
+-------------------code----------------------
+
+- when we add the gameQuery to empty object we got type error 
+-------------------code----------------------
+Type '{}' is missing the following properties from type 'GameQuery': sortOrder, searchText
+-------------------code----------------------
+
+cause in our current implementation we didn`t set sortOrder and searchText to optional 
+the reason for that earlier we said for this properties we will use empty string of it null 
+but now to make all the properties in the same shape we change the interface to optional
+-------------------code----------------------
+interface GameQuery {
+  genreId?: number;
+  platformId?: number;
+  sortOrder?: string;
+  searchText?: string;
+}
+-------------------code----------------------
+
+- now we got different error 
+cause we didn`t set the methods yet 
+-------------------code----------------------
+Type '{ gameQuery: {}; }' is missing the following properties from type 'GameQueryStore': setSearchText, setGenreId, setPlatformId,}
+-------------------code----------------------
+
+- for search method if the user while search the game forget the genre selected that may cause not finding the 
+right game to aviod that we need only to change the gameQuery searchText
+-------------------code----------------------
+create<GameQueryStore>((set) => ({
+  gameQuery: {},
+  setSearchText: (searchText) => set(() => ({ gameQuery: { searchText } })),
+  setGenreId: (genreId) =>
+    set((store) => ({ gameQuery: { ...store.gameQuery, genreId } })),
+  setPlatformId: (platformId) =>
+    set((store) => ({ gameQuery: { ...store.gameQuery, platformId } })),
+  setSortOrder: (sortOrder) =>
+    set((store) => ({ gameQuery: { ...store.gameQuery, sortOrder } })),
+}));
+-------------------code----------------------
+
+next we save it in contant we called useGamesQueryStore
+
+-------------------code----------------------
+import { create } from "zustand";
+
+interface GameQuery {
+  genreId?: number;
+  platformId?: number;
+  sortOrder?: string;
+  searchText?: string;
+}
+
+interface GameQueryStore {
+  gameQuery: GameQuery;
+  setSearchText: (searchText: string) => void;
+  setGenreId: (genreId: number) => void;
+  setPlatformId: (platformId: number) => void;
+  setSortOrder: (sortOrder: string) => void;
+}
+
+const useGamesQueryStore = create<GameQueryStore>((set) => ({
+  gameQuery: {},
+  setSearchText: (searchText) => set(() => ({ gameQuery: { searchText } })),
+  setGenreId: (genreId) =>
+    set((store) => ({ gameQuery: { ...store.gameQuery, genreId } })),
+  setPlatformId: (platformId) =>
+    set((store) => ({ gameQuery: { ...store.gameQuery, platformId } })),
+  setSortOrder: (sortOrder) =>
+    set((store) => ({ gameQuery: { ...store.gameQuery, sortOrder } })),
+}));
+
+export default useGamesQueryStore;
+-------------------code----------------------
+
