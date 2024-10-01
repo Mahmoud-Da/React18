@@ -1,0 +1,12 @@
+*** 1-_Introduction ***
+we will talk a bout routing which is a way to allow the user go from one page 
+to another 
+to make that happen we will use a popular library called React Router
+we will learn all the key concepts including:
+- setting up router
+- Handling the errors
+- navigation between pages
+- dynamic routes 
+- nested routes 
+- private routes
+
