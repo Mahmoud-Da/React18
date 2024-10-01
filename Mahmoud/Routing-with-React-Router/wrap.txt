@@ -10,3 +10,88 @@ we will learn all the key concepts including:
 - nested routes 
 - private routes
 
+*** 2-_Setting_Up_Routing ***
+- first we install the React Router
+-------------------code----------------------
+npm i react-router-dom@6.10.0
+-------------------code----------------------
+
+PS: React Router has breaking changes when the version updated 
+so we will learn the concepts of it later if it changed we can read the documentation 
+
+- in src/routing we add file called routes.tsx 
+
+- inside we create a router using createBrowserRouter we also component 
+called BrowserRouter but it doesn`t support all the features
+
+- we called createBrowserRouter function and give it an array of object and each router 
+object should have two properties path and element to set which component rendered when 
+the user goes to that path 
+-------------------code----------------------
+import { createBrowserRouter } from "react-router-dom";
+import HomePage from "./HomePage";
+
+createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+]);
+-------------------code----------------------
+
+- we can another route for the user page 
+-------------------code----------------------
+createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/users",
+    element: <UserListPage />,
+  },
+]);
+
+-------------------code----------------------
+
+- now we store the result in router object and finally we export it 
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/users",
+    element: <UserListPage />,
+  },
+]);
+
+export default router;
+-------------------code----------------------
+
+- finally we go to the main file and replace App component with RouterProvider component
+and set the router property to the router that we export it from routers.tsx 
+-------------------code----------------------
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
+    <RouterProvider router={router}></RouterProvider>
+  </React.StrictMode>
+);
+-------------------code----------------------
+
+- so instead on rendering the App component we render the router component and let React Router 
+decide which component to render depends on the path
+
+now we test our application
+here we can see the home page
+-------------------code----------------------
+http://localhost:5173
+-------------------code----------------------
+
+and here we can see the users page 
+-------------------code----------------------
+http://localhost:5173/users
+-------------------code----------------------
+
+now we have multi pages in our application
