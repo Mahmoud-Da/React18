@@ -95,3 +95,69 @@ http://localhost:5173/users
 -------------------code----------------------
 
 now we have multi pages in our application
+
+*** 3-_Navigation  ***
+how to make the user navigation between the users 
+
+- currently in the HomePage we have link to the users if open the dev tool and click on the users 
+we full page reload why cause this is the default behavior of the anchor element of html <a>
+this is not the best way to let the user navigate 
+so instead of reload all the page we want to replace only the content of homepage component 
+with users component
+
+- to do that:
+- we go to the HomePage.tsx 
+
+- in React Router we component called Link it`s a replacement of regular anchor element
+so we replace a with Link element that takes to property where we set the target
+-------------------code----------------------
+<Link to="/users">Users</Link>
+-------------------code----------------------
+
+- now while open the dev tool if we clicked on the Users link we can see that no request send to the 
+backend because the content of the users list is already shipped to the client  
+so we don`t need go back to the server and fetch the entire page and this the benefit of using the 
+Link component of the react router  
+
+- we can render the user to another page after submitting a form 
+- inside the router.tsx  we add new route
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/users",
+    element: <UserListPage />,
+  },
+  {
+    path: "/contact",
+    element: <ContactPage />,
+  },
+]);
+-------------------code----------------------
+
+- now inside the ContactPage we have a form with button now let`s say when the user submit a form 
+we want to Redirect it to the home
+to do that we use the navigate hook 
+-------------------code----------------------
+const navigate = useNavigate();
+-------------------code----------------------
+
+- then we call it and give it the Redirect component as argument 
+-------------------code----------------------
+onSubmit={(event) => {
+        event.preventDefault();
+        // Redirect the user to the home page
+        navigate("/");
+      }
+}
+-------------------code----------------------
+
+now we test our code by going to
+-------------------code----------------------
+http://localhost:5173/contact
+-------------------code----------------------
+
+and press Button 
