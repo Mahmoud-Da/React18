@@ -1,0 +1,48 @@
+Routing
+
+Terms:
+Index routes                  Route parameters
+Layout routes                 Query string parameters
+Route
+
+
+Summary:
+• React Router is a popular routing library for React that allows us to handle navigation
+and rendering of different components based on the URL.
+
+• To create a router, we use the createBrowserRouter() function and provide an array of
+route objects.
+
+• Each route has two properties: path and element, where path is a string that defines the
+URL pattern and element is the component to be rendered when the path matches the
+current URL.
+
+• Route parameters are defined using a colon (e.g., /users/:userId) in the path of a route
+object, allowing us to capture dynamic values from the URL and pass them to our
+components.
+
+• The useParams() hook is used to retrieve the route parameters in the current route.
+
+• The useSearchParams() hook is used to retrieve and update the query string
+parameters of the current URL.
+
+• The <Link> component is used to create links between different routes.
+
+• The <NavLink> component works like the <Link> component, but it adds an active
+class to the current link by default. The name of this class can be customized by passing
+a function to the className prop.
+
+• The useNavigate() hook is used to redirect the user programmatically.
+
+• The errorElement property of the root route can be used to specify a component to
+render when a route is not found or an error occurs during rendering.
+
+• The <Outlet> component is used as a placeholder to render child component when
+working with nested routes.
+
+• Layout routes are useful to enforce a common layout or business rules across a group of
+routes. A layout route is a route without a path.
+
+• An index route represents the default component to render in the outlet of a parent
+route when the current URL matches the path of the parent route.
+
