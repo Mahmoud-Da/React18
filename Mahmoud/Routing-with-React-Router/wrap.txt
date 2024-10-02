@@ -161,3 +161,49 @@ http://localhost:5173/contact
 -------------------code----------------------
 
 and press Button 
+
+*** 4-_Passing_Data_with_Route_Parameters  ***
+sometimes we need to handle dynamic routes and pass data to our components throw the url 
+for example when we click on the user 
+when we click on the user need the url to have the number of id of that user
+-------------------code----------------------
+http://localhost:5173/users/1
+http://localhost:5173/users/2
+-------------------code----------------------
+
+- in the routers file we create a new route we called /users/:id
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/users",
+    element: <UserListPage />,
+  },
+  {
+    path: "/users/:id",
+    element: <UserDetailPage />,
+  },
+  {
+    path: "/contact",
+    element: <ContactPage />,
+  },
+]);
+-------------------code----------------------
+
+so every column should prefix with : 
+ex:
+-------------------code----------------------
+{
+  path: "/posts/:year/:id",
+  element: <Posts />,
+}
+-------------------code----------------------
+
+- now inside the UserListPage we change the anchor element with Link component
+and replace the :id with the dynamic part 
+-------------------code----------------------
+<Link to={`/users/${user.id}`}>{user.name}</Link>
+-------------------code----------------------
