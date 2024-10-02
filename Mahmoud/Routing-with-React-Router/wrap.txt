@@ -297,4 +297,110 @@ we have all the detail a bout the current route
 -------------------code----------------------
 
 - so using this three hooks we can get information about the current hook 
- 
+
+*** 6-_Nested_Routes ***
+in real world application typically we have navigation bar at the top and as the user navigate 
+between pages we render different components in our content area (user page) 
+
+how we can implement this
+- in our src we have component called layout in this component we have the navigation bar
+which is a basic bootstrap navigation bar  we have a couple of links to take the user to 
+users and home pages 
+now in our layout we have NavBar and div with main area 
+
+now to implement our scenario in the layout we add Outlet
+-------------------code----------------------
+const Layout = () => {
+  return (
+    <>
+      <NavBar />
+      <div id="main">
+        <Outlet />
+      </div>
+    </>
+  );
+};
+-------------------code----------------------
+
+- Outlet component:
+it`s placeholder for child component so at run time depends on the user location different component
+will render inside this Outlet component
+
+- next we go to the routes file and create a nested structure 
+we create a new route and set the path to \ which present the root of our website 
+and set the element to the layout and this route can get children 
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      
+    ]
+  },...])
+-------------------code----------------------
+
+- now we move the other routes inside the children array
+the path of these routes should be relative to the path of their parent 
+so we don`t need the / slash anymore 
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "",
+        element: <HomePage />,
+      },
+      {
+        path: "users",
+        element: <UserListPage />,
+      },
+      {
+        path: "users/:id",
+        element: <UserDetailPage />,
+      },
+      {
+        path: "contact",
+        element: <ContactPage />,
+      },
+    ],
+  },
+]);
+-------------------code----------------------
+
+
+- test our application
+
+- now back to our routes configuration component
+because the path for the HomePage is empty string we can replace with index: true 
+that means this is the default component when the user is inside the parent location 
+-------------------code----------------------
+children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+      ... ]
+-------------------code----------------------
+
+PS: there is no difference between empty path or index true (maybe index true is easier to notice)
+
+- so we done with nested routes the only thing that is left 
+is updating the length in the navigation bar so inside the NavBar.tsx we need to replace the current 
+anchor with Link component
+-------------------code----------------------
+<li className="nav-item">
+  <Link to="/" className="nav-link">
+    Home
+  </Link>
+</li>
+<li className="nav-item">
+  <Link to="/users" className="nav-link">
+    Users
+  </Link>
+</li>
+-------------------code----------------------
+
+- now we have fully functioning navigate bar 
