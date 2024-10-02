@@ -207,3 +207,94 @@ and replace the :id with the dynamic part
 -------------------code----------------------
 <Link to={`/users/${user.id}`}>{user.name}</Link>
 -------------------code----------------------
+
+
+*** 5-_Getting_Data_about_the_Current_Route ***
+sometimes we need to now which page we are or which values passed in the url
+we have bunch of hooks for that
+
+- the first hook we are gonna look for is called useParams
+with this hook we can extract parameter values from the url 
+
+- now inside the UserDetailPage we called the useParams and log it on the console
+-------------------code----------------------
+const UserDetailPage = () => {
+  const params = useParams();
+  console.log(params);
+  return <p>User</p>;
+};
+-------------------code----------------------
+
+
+- now we have a single property which is the id 
+and if we have multi parameters inside the console we will see more more properties
+so useParams return an object each property is each params from the url 
+-------------------code----------------------
+{id: '1'}
+-------------------code----------------------
+
+- and as we see the value of the id is string so if want to find user by that id we should 
+first parse it to integer
+
+
+- we have another hook called useSearchParams and with that we can access and update the query string parameter
+and similar to the state hook it returns two elements of array the first element is our current query parameter
+and the second element is function for updating it
+
+
+- so we called it and log it but before that we create custom url with query string parameter
+http://localhost:5173/users/1?name=Alice&age=25
+-------------------code----------------------
+const UserDetailPage = () => {
+  const params = useParams();
+  console.log(params);
+
+  const [searchParam, setSearchParam] = useSearchParams();
+  console.log("searchParam: ", searchParam);
+  return <p>User</p>;
+};
+-------------------code----------------------
+
+we got the size of the query string parameter
+-------------------code----------------------
+URLSearchParams {size: 2}
+-------------------code----------------------
+
+- if we want to show the query parameter we use toString method  
+-------------------code----------------------
+console.log("searchParam: ", searchParam.toString());
+-------------------code----------------------
+
+we can extract all the query parameter
+-------------------code----------------------
+name=Alice&age=25
+-------------------code----------------------
+
+- we can also individual parameter by using the get method and the name of parameter
+-------------------code----------------------
+console.log("searchParam: ", searchParam.get("name"));
+-------------------code----------------------
+
+- now we can see the Alice only
+-------------------code----------------------
+Alice
+-------------------code----------------------
+
+- now we can use setSearchParam to update the query string parameter but we have to be careful a bout that 
+cause it has side effect as we learn before the component should be pure so it should not have any side effect while rendering
+so we should called this function only inside event handler or inside an effect 
+
+
+- we have another hook called useLocation hook and with this we can access to the current location 
+-------------------code----------------------
+const location = useLocation();
+console.log(location);
+-------------------code----------------------
+
+we have all the detail a bout the current route 
+-------------------code----------------------
+{pathname: '/users/1', search: '?name=Alice&age=25', hash: '', state: null, key: 'default'}
+-------------------code----------------------
+
+- so using this three hooks we can get information about the current hook 
+ 
