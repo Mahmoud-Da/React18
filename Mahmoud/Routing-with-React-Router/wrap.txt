@@ -559,3 +559,76 @@ className={({ isActive }) =>
   isActive ? "nav-link active" : "nav-link"
 }
 -------------------code----------------------
+
+
+*** 9-_Handling_Errors ***
+now what if access invalid route 
+ex:
+http://localhost:5173/usersx
+
+we got a generic error page but we can easily change it with our own
+
+- in our src folder we have ErrorPage where we show a custom error page
+to use this page
+
+- we go to the routes.tsx and change the set the errorElement of the home page to 
+our component
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      ... ]
+  }])
+-------------------code----------------------
+
+- and this have another benefit where our application throw an error it React will catch the 
+error and it will render this page
+
+
+- to see that in action we go to Home component and threw a new error
+const HomePage = () => {
+  throw new Error("something failed!!");
+}
+-------------------code----------------------
+
+now if we hit our home page we can see our Error component is rendering 
+
+
+- in real world application we should grab the error and show ex: using sentry
+
+
+- how to grab our custom error we go to the Error page and use the useRouterError() hook 
+in real world application we used a third party to show error but for now 
+we will show only our custom error 
+
+
+now if we go to the HomePage we can see the error in the console
+-------------------code----------------------
+Error: something failed!!
+    at HomePage (HomePage.tsx:4:9)
+    at renderWithHooks (react-dom_client.js?v=74283c83:12169:26)
+    at updateFunctionComponent (react-dom_client.js?v=74283c83:14575:28)
+    at beginWork (react-dom_client.js?v=74283c83:15910:22)
+    at beginWork$1 (react-dom_client.js?v=74283c83:19747:22)
+-------------------code----------------------
+
+- now we want to take it to the next level now if the user hit the invalid route we want to tell that 
+the page is not exist and when the there is error to render that error 
+
+- we call function called isRouteErrorResponse we called it and pass our error 
+if it return true that means our user tried to access an invalid route 
+-------------------code----------------------
+<>
+  <h1>Oops...</h1>
+  <p>
+    {isRouteErrorResponse(error)
+      ? "Sorry, an Invalid page"
+      : "Sorry, an unexpected error has occurred."}
+  </p>
+</>
+-------------------code----------------------
+
+- now we test our code
