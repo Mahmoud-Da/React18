@@ -518,3 +518,44 @@ const { id } = useParams();
 
 return <p>User {id}</p>;
 -------------------code----------------------
+
+*** 8-_Styling_the_Active_Link ***
+we will style the Link in the navigation bar 
+
+- in the NavBar.tsx we change the Link component with NavLink component
+NavLink works exactly as Link component but when we applied the active class 
+to the selected link
+
+
+-------------------code----------------------
+<ul className="navbar-nav">
+  <li className="nav-item">
+    <NavLink to="/" className="nav-link">
+      Home
+    </NavLink>
+  </li>
+  <li className="nav-item">
+    <NavLink to="/users" className="nav-link">
+      Users
+    </NavLink>
+  </li>
+</ul>
+-------------------code----------------------
+
+- we test our code and we can see when we select Home or Users the selected link will be 
+more darker
+
+- now if go to the dev tool and check  the Home we can see the class is 
+nav-link and active  the active is added cause we change the Link to NavLink
+-------------------code----------------------
+<a class="nav-link active" href="/" aria-current="page">Home</a>
+-------------------code----------------------
+
+Ps: if we want to show another className when it active
+by access isActive property we can see if it selected and change the class depends 
+on that 
+-------------------code----------------------
+className={({ isActive }) =>
+  isActive ? "nav-link active" : "nav-link"
+}
+-------------------code----------------------
