@@ -404,3 +404,117 @@ anchor with Link component
 -------------------code----------------------
 
 - now we have fully functioning navigate bar 
+
+*** 7-_Exercise-_Working_with_Nested_Routes ***
+when we click on a user of Page Users we want to show the user id next 
+to it 
+
+in the Routes we create UsersPage.tsx 
+in this component we return .row>.col*2
+-------------------code----------------------
+<div className="row">
+  <div className="col">
+  </div>
+  <div className="col">
+  </div>
+</div>
+-------------------code----------------------
+
+- in the left column we add the UserListPage
+-------------------code----------------------
+<div className="row">
+  <div className="col">
+  <UserListPage></UserListPage>
+  </div>
+  <div className="col">
+  </div>
+</div>
+-------------------code----------------------
+
+- now UserListPage doesn`t represent a complete page so to make it name 
+more clearly we change it name to UserList 
+-------------------code----------------------
+const UserList = () => {
+  ...}
+-------------------code----------------------
+
+and we rename the file either
+
+- in the right component we add an OutLet because at run time we different
+instance of UserDetailPage component depending on the current route
+-------------------code----------------------
+<div className="row">
+  <div className="col">
+    <UserList></UserList>
+  </div>
+  <div className="col">
+    <Outlet />
+  </div>
+</div>
+-------------------code----------------------
+
+- we go to the routes.tsx  
+we change the element of the users routes to UsersPage
+-------------------code----------------------
+{
+  path: "users",
+  element: <UsersPage />,
+}
+-------------------code----------------------
+
+and we add children property to the users and move the UserDetailPage to it 
+-------------------code----------------------
+{
+  path: "users",
+  element: <UsersPage />,
+  children: [
+    {
+      path: "users/:id",
+      element: <UserDetailPage />,
+    },
+  ],
+}
+-------------------code----------------------
+
+now cause the child routes should relative to the parent route
+so we remove the users/ form the path of UserDetailPage
+-------------------code----------------------
+{
+  path: "users",
+  element: <UsersPage />,
+  children: [
+    {
+      path: ":id",
+      element: <UserDetailPage />,
+    },
+  ],
+}
+-------------------code----------------------
+
+
+- and as UserListPage we change the UserDetailPage to UserDetail for clarity
+
+-------------------code----------------------
+{
+  path: "users",
+  element: <UsersPage />,
+  children: [
+    {
+      path: ":id",
+      element: <UserDetail />,
+    },
+  ],
+}
+-------------------code----------------------
+
+and change the component name and file
+
+- now in our application if clicked on the User name the "User" only will render
+and is not clear which user we are looking at 
+
+so we render the id of the params 
+-------------------code----------------------
+const { id } = useParams();
+
+return <p>User {id}</p>;
+-------------------code----------------------
