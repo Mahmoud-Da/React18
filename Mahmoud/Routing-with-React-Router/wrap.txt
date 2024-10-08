@@ -720,5 +720,77 @@ children: [
 - now if we run our application we will see the login page 
 
 - our code is works but if have multi pages we have to go to each component to import the useAuth
-and repeat the same moves
+and repeat the same moves we did before
 
+*** 11-_Layout_Routes ***
+sometimes we want to group routes for forcing layout to avoid repeating same the lesson before
+here we use the layout routes 
+
+- inside the routes we create a new component called PrivateRoutes.tsx 
+-------------------code----------------------
+import React from "react";
+
+const PrivateRoutes = () => {
+  return <div>PrivateRoutes</div>;
+};
+
+export default PrivateRoutes;
+-------------------code----------------------
+
+- next we go to the UserPage and grab the checking authenticating code
+-------------------code----------------------
+import { Navigate } from "react-router-dom";
+import useAuth from "./hooks/useAuth";
+
+const PrivateRoutes = () => {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return <div>PrivateRoutes</div>;
+};
+
+export default PrivateRoutes;
+-------------------code----------------------
+
+
+- now if the user is not exist we return NavigateBar otherwise we return an Outlet
+so at run time we will run child component inside this outlet
+-------------------code----------------------
+const PrivateRoutes = () => {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Outlet />;
+};
+-------------------code----------------------
+
+- next in the routes files we need create a route next to root route and inside the child component
+we add the routes that must be protect
+for example we can move the users to protect it 
+-------------------code----------------------
+{
+    element: <PrivateRoutes />,
+    children: [
+      {
+        path: "users",
+        element: <UsersPage />,
+        children: [
+          {
+            path: ":id",
+            element: <UserDetail />,
+          },
+        ],
+      },
+    ],
+  },
+-------------------code----------------------
+
+- now we test our code 
+
+- so using layout we group the router for specific rules in our case authentication
