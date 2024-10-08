@@ -632,3 +632,93 @@ if it return true that means our user tried to access an invalid route
 -------------------code----------------------
 
 - now we test our code
+
+*** 10-_Private_Routes ***
+in real world application we normally need strict access for certain routes
+to authenticating a logged user 
+this normally called private routes let`s say we want to show the users page only for 
+authenticating users 
+
+- in hooks folder we have useAuth for getting the an authenticating user 
+-------------------code----------------------
+const useAuth = () => ({ user: { id: 1, name: "Mosh" } });
+
+// const useAuth = () => ({ user: null });
+
+export default useAuth;
+-------------------code----------------------
+
+it`s very simple only for demo 
+
+in the uncomment part we return function with authenticating user and with the 
+comment part we return no user now we comment the first implementation and uncomment the second one
+to simulate a scenario where the user is not logged 
+-------------------code----------------------
+// const useAuth = () => ({ user: { id: 1, name: "Mosh" } });
+
+const useAuth = () => ({ user: null });
+
+export default useAuth;
+-------------------code----------------------
+
+
+- next we call the useAuth hook in the UserPage.tsx and grab the user object 
+-------------------code----------------------
+const UsersPage = () => {
+  const { user } = useAuth();
+  .... }
+-------------------code----------------------
+
+- next we check if there is no user we want to render the user to the login page 
+-------------------code----------------------
+const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return (
+    <>
+      <div className="row">
+        <div className="col">
+          <UserList></UserList>
+        </div>
+        <div className="col">
+          <Outlet />
+        </div>
+      </div>
+    </>
+  );
+-------------------code----------------------
+PS: we didn`t use the navigate function cause it has side effect and we should only called inside useEffect
+or inside event
+
+- next we should define the login routes 
+-------------------code----------------------
+children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "users",
+        element: <UsersPage />,
+        children: [
+          {
+            path: ":id",
+            element: <UserDetail />,
+          },
+        ],
+      }, 
+      ... ]
+-------------------code----------------------
+
+- now if we run our application we will see the login page 
+
+- our code is works but if have multi pages we have to go to each component to import the useAuth
+and repeat the same moves
+
