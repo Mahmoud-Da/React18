@@ -5541,3 +5541,130 @@ reusble cause when passing the props our component did`nt relay on any data
 but now it relay on the genreId that comes from the store 
 So remmber there is no size fit all and that means there is no right way for everything 
 we have to know the project requirement and based on that chose the right tool 
+
+
+*** Routing-with-React-Router ***
+
+*** 13-_Exercise-_Setting_Up_Routing ***
+now we will set uo a basic routes in our project for example if we hit 
+http://localhost:5173/games/1 we see gameDetailpage
+
+- first we are going to install react router
+-------------------code----------------------
+npm i react-router-dom@6.10.0
+-------------------code----------------------
+
+- next we go to our project and in the src folder we create folder we called it pages
+now we are going to put multi pages in our applications and we want to seprate this pages from our components
+
+- first we need layout for this pages so we create Layout.tsx
+now our pages should have a navigation par at the top so we add NavBar and the layout
+and add outlet(placeholder for child component depennds on currnet route)
+-------------------code----------------------
+const Layout = () => {
+  return (
+    <>
+      <NavBar />
+      <Outlet />
+    </>
+  );
+};
+-------------------code----------------------
+
+- next we are going to create our HomePage and it`s gonna be simillar to the App component
+cause we have layout  we no longer need "nav" and "nav nav" so remove it from the grid 
+
+-------------------code----------------------
+<Grid
+  templateAreas={{
+    base: `"main"`,
+    lg: `"aside main"`,
+  }}
+-------------------code----------------------
+
+and remove the NavBar component from the App
+-------------------code----------------------
+<GridItem area={"nav"}>
+        <NavBar />
+</GridItem>
+-------------------code----------------------
+
+- now we move everything from the App component to our HomePage
+
+- next we remove the App.tsx and also the App.css cause we don`t more need them
+
+- inside the src folder we create routes.tsx and inside it we call createBrowserRouter()
+-------------------code----------------------
+import { createBrowserRouter } from "react-router-dom";
+
+createBrowserRouter();
+-------------------code----------------------
+
+- now inside the createBrowserRouter, first we add the root routes we add element as 
+layout and path HomePage as children
+-------------------code----------------------
+createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [{ index: true, element: <HomePage /> }],
+  },
+]);
+-------------------code----------------------
+
+now it return router so we store it and export it by default
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [{ index: true, element: <HomePage /> }],
+  },
+]);
+
+export default router;
+-------------------code----------------------
+
+- next we go to the main.tsx and replace App component with RouterProvider with router object
+that we created
+-------------------code----------------------
+<QueryClientProvider client={queryClient}>
+  <RouterProvider router={router} />
+  <ReactQueryDevtools />
+</QueryClientProvider>
+-------------------code----------------------
+
+- now we test out application 
+
+- next we create GameDetailPage.tsx inside the pages file and to for test we will add
+use params 
+-------------------code----------------------
+const GameDetailPage = () => {
+  const { id } = useParams();
+  return <div>GameDetailPage{id}</div>;
+};
+-------------------code----------------------
+
+
+- next we go to routes.tsx to add it 
+-------------------code----------------------
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      {
+        path: "games/:id",
+        element: <GameDetailPage />,
+      },
+    ],
+  },
+]);
+-------------------code----------------------
+
+
+now we test our code by access 
+http://localhost:5173/games/20
+
+and commit our code
