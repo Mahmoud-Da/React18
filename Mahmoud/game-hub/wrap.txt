@@ -5942,3 +5942,33 @@ to repeat padding in multi places
 -------------------code----------------------
 
 - finally we organize the import in all the changes files 
+
+*** 16-_Exercise-_Refactoring_Entities ***
+
+- now we will go back and fix the TODO that we declared before 
+
+- how to refactor this code 
+
+- we will create an entity folder and move all the interface to inside it 
+now instead of cut all this code (that we will make the current file full of errors)
+we can right click on it and click "Refactor" then new file 
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  slug: string;
+  description_raw: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code----------------------
+
+the vs code we create the Game.ts for us automatically  and update all the import statement
+
+- now we move this file inside entity folder 
+
+- next we do the same step with the other interface (genre and platform)
+
+- finally to make sure our project is not breaking we build our project

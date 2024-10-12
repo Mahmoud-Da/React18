@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import APIClient from "../services/api-client";
 // TODO: refactor depends on other hook
-import { Game } from "./useGames";
+import { Game } from "../entity/Game";
 
 const apiClient = new APIClient<Game>("/games");
 
