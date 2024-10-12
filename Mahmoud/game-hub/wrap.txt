@@ -994,7 +994,7 @@ now instead of writing the type of each Element
   };
 -------------------code----------------------
 
-shortcut way we grab the object inside arary [] and set all of them to same type
+shortcut way we grab the object inside array [] and set all of them to same type
 -------------------code----------------------
 const iconMap: { [key: string] } = {
     pc: FaWindows,
@@ -1051,7 +1051,7 @@ now the next thing we want to improve is the space between the Game name and the
 -------------------code----------------------
 
 PS: marginY={1}> => result is them.space * 1  {the default chakra UI them space is 4px}
-but sometimes we have to handle spece manually so we use marginY="10 px" for example
+but sometimes we have to handle space manually so we use marginY="10 px" for example
 
 now we commit our code "Displaying platform icons"
 
@@ -1076,7 +1076,7 @@ export interface Game {
 
 - next we create new component called CriticScore.tsx 
 
-inside it we need prop to recive the score 
+inside it we need prop to receive the score 
 -------------------code----------------------
 interface Props {
   score: number;
@@ -1097,7 +1097,7 @@ const CriticScore = ({ score }: Props) => {
 now we check if it`s working 
 
 - next we want to move the patch to the right next to game platform 
-so we should grab the two component PlatformIconList and CriticScore inisde horizontal stack
+so we should grab the two component PlatformIconList and CriticScore inside horizontal stack
 
 - next we justifyContent to space between (which means the space that left put between this elements)
 -------------------code----------------------
@@ -1111,7 +1111,7 @@ so we should grab the two component PlatformIconList and CriticScore inisde hori
 
 -------------------code----------------------
 
-- next we need to improve the local veiw of this patch 
+- next we need to improve the local view of this patch 
 we make it larger and add some horizontal padding and make the border more circle
 -------------------code----------------------
 
@@ -1141,7 +1141,7 @@ return (
 )
 -------------------code----------------------
 
-Ps: "colorScheme" is to give color to everything related to the Component backgroud and so
+Ps: "colorScheme" is to give color to everything related to the Component background and so
 while "color" only give color to the number  
 
 now we commit our code "Displaying Critic Score"
@@ -1168,7 +1168,7 @@ ex: and add crop/600/400 after media
 https://media.rawg.io/media/crop/600/400/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
 -------------------code----------------------
 
-- to render optimized images by make our image smaller we need to add crop/600/400 to the image url that we take fromt the api 
+- to render optimized images by make our image smaller we need to add crop/600/400 to the image url that we take format the api 
 we don`t want to optimized images in our GameCard component instead of that we will do it separately 
 
 so we need service to modify the image url so inside the service folder we create image-url.ts
@@ -1190,7 +1190,7 @@ const index = url.indexOf("media/");
 -------------------code----------------------
 
 now to insert the crop parameter after media we are gonna use the slice method 
-first we want to grab all the char from the begining until the media keyword
+first we want to grab all the char from the beginning until the media keyword
 -------------------code----------------------
 url.slice(0, index);
 -------------------code----------------------
@@ -1222,7 +1222,7 @@ url.slice(0, index) + "crop/600/400/" ;
 url.slice(0, index) + "crop/600/400/" + url.slice(index);
 -------------------code----------------------
 
-in otherword:
+in other word:
 our orl url:
 https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg
 
@@ -1262,7 +1262,7 @@ we will add loading skeletons to our page so while we wait for backend until sho
 to show loading skeletons
 
 first we need to track the loading state in our useGame.ts hook 
-so we insilize a value to false and called isLoading 
+so we initialize a value to false and called isLoading 
 -------------------code----------------------
 const [isLoading, setLoading] = useState(false);
 -------------------code----------------------
@@ -1301,7 +1301,7 @@ const useGames = () => {
 - now to render a skeletons we should render a separate component
 that component is gonna looks like game card but it`s not a game card 
 
-- in otherword: 
+- in other word: 
 we are going to render game card when we have an object from backend otherwise w will render skeletons (empty card) 
 while we are waiting 
 
@@ -1333,13 +1333,13 @@ return (
   );
 -------------------code----------------------
 
-- now our skeleton is ready and we will useit in our GameGrid.tsx
+- now our skeleton is ready and we will use it in our GameGrid.tsx
 first we add iseLoading
 -------------------code---------------------
 const { games, error, isLoading } = useGames();
 -------------------code---------------------
 
-now to render a skeleton we need an array with 6 item (otherword we render 6 skeletons (empty card) while loading)
+now to render a skeleton we need an array with 6 item (other word we render 6 skeletons (empty card) while loading)
 so we create an array with 6 elements or any number you like (for me 15)
 -------------------code---------------------
 const skeletons = [1, 2, 3, 4, 5, 6];
@@ -1365,7 +1365,7 @@ GameCardSkeleton
 -------------------code---------------------
 
 - now we have an issue we declare two related width 250px not dynamically in too places 
-so if our styles in the future change and need to change the width we have to remmber to change it 
+so if our styles in the future change and need to change the width we have to remember to change it 
 in tow places 
 so we should fix this issue (but later) after finish deploying 
 first we make our code works then we refactor it
@@ -1697,7 +1697,7 @@ export interface Genre {
 }
 -------------------code---------------------
 
-- then in GenreList component we reolace ul with List component from ChakraUI to render a list item
+- then in GenreList component we replace ul with List component from ChakraUI to render a list item
 without bullet points and replace at the same time li with ListItem 
 -------------------code---------------------
 <List>
@@ -1758,21 +1758,21 @@ so they`re not too close to each other
 <ListItem key={genre.id} paddingY="5px">
 -------------------code---------------------
 
-- next we want to increase the size of the font of the genere name
+- next we want to increase the size of the font of the genre name
 -------------------code---------------------
 <Text fontSize="lg">{genre.name}</Text>
 -------------------code---------------------
 
-- our genere are so close to the edge of the screen so we will add a horizontal padding 
+- our genre are so close to the edge of the screen so we will add a horizontal padding 
 in this case is better to apply the padding to the aside layout of App.tsx so 
-in future if we add another component other than List we have to remmber to add either to that component
+in future if we add another component other than List we have to remember to add either to that component
 -------------------code---------------------
 <GridItem area={"aside"} paddingX="5px">
 -------------------code---------------------
 
 - next we want to apply a fixed width to the columns so if we have more read estate on the screen
-our game grid stretchs and takes up the available space 
-to define the width to our component we set the templateColumns to object coz we have two different sernarios
+our game grid stretches and takes up the available space 
+to define the width to our component we set the templateColumns to object coz we have two different scenarios
 where we have base(we have single columns) and lg(where we have multi columns) screen 
 for base we will set the width to 1fr which means one fraction so our columns scratches and takes up
 all the available space on lg devices we will have two columns one 200px and one 1fr
@@ -1816,7 +1816,7 @@ and commit our code
 *** 20-_Showing_a_Spinner ***
 now we want to add a spinner while waiting to our genre data to fetch from the server 
 
-- in our GenreList we grabe isLoading from useGenres hook
+- in our GenreList we grab isLoading from useGenres hook
 -------------------code---------------------
 const { data, isLoading } = useGenres();
 -------------------code---------------------
@@ -1833,7 +1833,7 @@ return (
 -------------------code---------------------
 
 - now what if we had an error, we don`t want to throw too many different errors on different parts on the page
-that way too much conforntint, so we want only to return null 
+that way too much confronting, so we want only to return null 
 -------------------code---------------------
 const { data, isLoading, error } = useGenres();
 
@@ -1876,7 +1876,7 @@ click that genre set we set the variant to link to ou button looks like links
 
 - now when we open the console we test our click event we an error
 "Warning: Each child in a list should have a unique "key" prop."
-so before we contiune we shuold fix this Warning to do that in GameGrid component
+so before we continue we should fix this Warning to do that in GameGrid component
 we move the key properties form the child elements to the parent elements
 -------------------code---------------------
 <GameCardContainer key={skeleton}>
@@ -1910,7 +1910,7 @@ PS when we don`t have id we can use the index as key
 **************************************
 
 
-- after cleaing our code wanings now we need to share the selected genre with the game grid
+- after cleaning our code warnings now we need to share the selected genre with the game grid
 
 - so here we question how can we share the state with two components
 to do that we should lift up to the closet parent component
@@ -1918,14 +1918,14 @@ so what is the parent of this two components
 it`s the App component 
 
 
-- now in the App component we craete useState and set to null so initialilly no genre 
+- now in the App component we create useState and set to null so initially no genre 
 is selected we called selectedGenre 
 -------------------code---------------------
 const [selectedGenre, setSelectedGenre] = useState(null);
 -------------------code---------------------
 
 until this point we can`t set the selectedGenre to a different value other than null coz TypeScript 
-compiler doesn`t know that this varible can store Genre object so we need to type a generic type
+compiler doesn`t know that this variable can store Genre object so we need to type a generic type
 argument 
 
 we add null coz we want to apply select genre or null(nothing selected)
@@ -1933,8 +1933,8 @@ we add null coz we want to apply select genre or null(nothing selected)
 const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
 -------------------code---------------------
 
-- now when we select genere the GenreList component should notify the App component so set the selectedGenre
-remmber: the component that holds some state should be the one updating it 
+- now when we select genre the GenreList component should notify the App component so set the selectedGenre
+remember: the component that holds some state should be the one updating it 
 
 - so we got to the GenreList component and Props with tha callback function 
 -------------------code---------------------
@@ -1948,7 +1948,7 @@ interface Props {
 const GenreList = ({ onSelectedGenre }: Props)
 -------------------code---------------------
 
-- finally instead of loging only the genre we pass the onSelectedGenre
+- finally instead of logging only the genre we pass the onSelectedGenre
 -------------------code---------------------
 <Button
   fontSize="lg"
@@ -2006,7 +2006,7 @@ apiClient
 -------------------code---------------------
 in this second argument we can pass data or query string parameter
 
-- so we give our useData hook another paramter we called requestConfig 
+- so we give our useData hook another parameter we called requestConfig 
 and set it to the type of AxiosRequestConfig and we make it optional 
 so we don`t always have to pass it 
 -------------------code---------------------
@@ -2127,12 +2127,12 @@ we can see that when we select a genre we don`t send a request to the server why
 
 in useData when  we use useEffect we pass empty brackets([]) as second argument
 empty brackets in useEffect that`s means we want to fetch the data only the first time a component
-is rendrered.
+is rendered.
 
 to to solve this issue we should pass an array of dependencies as second argument of useEffect hook 
 so when the selector genre changes we send another request to get the games that match the selected genre
 to do that 
-we add deps as thid parameter which is going to be an array of dependencies, now at this point we don`t 
+we add deps as third parameter which is going to be an array of dependencies, now at this point we don`t 
 know the type of that dependencies, so any array 
 -------------------code---------------------
 const useData = <T>(
@@ -2181,18 +2181,18 @@ const useGames = (selectedGenre: Genre | null) =>
 </GridItem>
 -------------------code---------------------
 
-TORECAP:
+TO RECAP:
  
-- in GenreList componentwe added a new  props called onSelectGenre 
-to notify the consumer of the component that the genre has bees slected 
+- in GenreList component we added a new  props called onSelectGenre 
+to notify the consumer of the component that the genre has bees selected 
 
-- the parens of GenreList  is App component so insideit we notify and set the selector Genre
+- the props of GenreList  is App component so inside it we notify and set the selector Genre
 this cause the app component to rerender
 
 - so in the next render we will pass the selector genre to the GameGrid  
 
 - in our GameGrid we add a new props which is selectedGenre and inside the component we take the 
-value of the slected genre and pass it to our game hook 
+value of the selected genre and pass it to our game hook 
 
 - now our game hook passes the selector genre as query string parameter to the data hook 
 
@@ -2203,7 +2203,7 @@ we commit our code
 
 we should have the app component pass the selected genre, to our GenreList.tsx.
 and in GenreList where we render the button we`ll set the font weight dynamically.
-so if yo`re rendreing the selected genre, we make the font bold. other wise we render it normal 
+so if yo`re rendering the selected genre, we make the font bold. other wise we render it normal 
 
 
 to to implement it
@@ -2221,7 +2221,7 @@ interface Props {
 const GenreList = ({ selectedGenre, onSelectedGenre }: Props) => {}
 -------------------code---------------------
 
-- we pass the fontweight to button 
+- we pass the fontWeight to button 
 -------------------code---------------------
 fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
 -------------------code---------------------
@@ -2238,7 +2238,7 @@ here we commit our code
 "High light the selected genre"
 
 *** 23-_Building_Platform_Selector ***
-now we will just focus on rendreing this list and after we will implement filtering
+now we will just focus on rendering this list and after we will implement filtering
 
 - we create a component called PlatformSelector
 and inside we are going to return a Menu component of ChakraUI and inside the Menu
@@ -2288,7 +2288,7 @@ and press "Get a list of parent platforms."
 we can see the endpoint 
 GET /platforms/lists/parents
 
-- so we need to create a custome hook to fetch the data from the endpoint
+- so we need to create a custom hook to fetch the data from the endpoint
 
 - in hooks folder we create a file called usePlatforms.ts
 we copy the code from the useGenre and 
@@ -2337,9 +2337,9 @@ now we commit our code
 
 *** 24-_Filtering_Games_by_Platform  ***
 
-we will use the same approch as genere
+we will use the same approach as genre
 
-- in the App component we declear a state variable for keeping track 
+- in the App component we declare a state variable for keeping track 
 of the selected platform changes.
 we pass the selected platform to the game grid for filtering
 -------------------code---------------------
@@ -2382,10 +2382,10 @@ with that we notified our App component
 
 now let`s test our implementation until this point
 
-now if we slected a platform nothing happens but we can see in the dev tool 
+now if we selected a platform nothing happens but we can see in the dev tool 
 when we go to components that the status has changed so our plumbing is working
 
-- now we need to pass this slector platform to teh GameGrid component
+- now we need to pass this selector platform to teh GameGrid component
 
 so in App component
 -------------------code---------------------
@@ -2478,7 +2478,7 @@ instead of rendering Platforms
 {selectedPlatform?.name || "Platforms"}
 -------------------code---------------------
 
-- now we test our code until this point (filtering the genre and the platform togather)
+- now we test our code until this point (filtering the genre and the platform together)
 and we check our Network tab in dev tool to see if we send a correct request(has genre and platform parameters)
 we commit our code
 "Filter games by platforms"
@@ -2486,12 +2486,12 @@ we commit our code
 *** 25-_Refactoring-_Extracting_a_Query_Object ***
 
 it`s a refactoring time
-Currentlyin App.tsx we`ve got two useState variable (selectedGenre and selectedPlatform)
+Currently in App.tsx we`ve got two useState variable (selectedGenre and selectedPlatform)
 but as we add more feature for filtering or sorting we will need to much useState 
 which will make our code more ugly and hard repetitive
 
 so what can we do here 
-we should pack our related variable inisde what we call the "Query Object Pattern"
+we should pack our related variable inside what we call the "Query Object Pattern"
 so we`ll create Query Object that contains all the information we need to query the games.
 with this our code will be cleaner and easier to understand.
 
@@ -2525,7 +2525,7 @@ useState<GameQuery>({} as GameQuery);
 const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
 -------------------code---------------------
 
-- now we have alot of error we have to fix them one by one 
+- now we have a lot of error we have to fix them one by one 
 -------------------code---------------------
 <GridItem area={"aside"} paddingX="5px">
   <GenreList
@@ -2554,7 +2554,7 @@ and
 -------------------code---------------------
 
 - and now we need to use same technique in GameGrid.tsx 
-insetad of passing a bunch of variable here 
+instead of passing a bunch of variable here 
 -------------------code---------------------
 const GameGrid = ({ selectedGenre, selectedPlatform }: Props) => {}
 -------------------code---------------------
@@ -2563,7 +2563,7 @@ we should pass an object
 first we change the Props by adding gameQuery
 -------------------code---------------------
 interface Props {
-  gameQurey: GameQurey;
+  gameQuery: gameQuery;
   selectedGenre: Genre | null;
   selectedPlatform: Platform | null;
 }
@@ -2579,12 +2579,12 @@ selectedPlatform: Platform | null;
 
 -  change GameGrid parameters to 
 -------------------code---------------------
-const GameGrid = ({ gameQurey }: Props) => {}
+const GameGrid = ({ gameQuery }: Props) => {}
 -------------------code---------------------
 
 - now instead of passing multiple arguments to useGames we pass only one argument
 -------------------code---------------------
- const { data, error, isLoading } = useGames(gameQurey);
+ const { data, error, isLoading } = useGames(gameQuery);
 -------------------code---------------------
 
 - so we need to modify the parameter of useGames hook 
@@ -2610,7 +2610,7 @@ const useGames = (gameQuery: GameQuery) =>
 
 - finally we have in App.tsx error coz we changed the properties of GameGrid so we fix it 
 -------------------code---------------------
-<GameGrid gameQurey={gameQuery} />
+<GameGrid gameQuery={gameQuery} />
 -------------------code---------------------
 
 now we test our code if our platform and genre work fine 
@@ -2654,7 +2654,7 @@ and where we map the platform we render MenuItem*6
     }
   ></PlatformSelector>
   <SortSelector></SortSelector>
-  <GameGrid gameQurey={gameQuery} />
+  <GameGrid gameQuery={gameQuery} />
 </GridItem>
 -------------------code---------------------
 
@@ -2677,13 +2677,13 @@ now our platform menu is not lined up with the first card so we need to apply le
 <HStack spacing={5} paddingLeft={2}>
 -------------------code---------------------
 
-now our card is too close the card so we need seprate them by adding bottom margin 
+now our card is too close the card so we need separate them by adding bottom margin 
 
 now we commit our code
 "Build Sort Selector"
 
 *** 27-_Sorting_Games ***
-to sort the game we will take the same approch as filtering
+to sort the game we will take the same approach as filtering
 
 so when the user select the sort order the SortSelector component will notify App component
 and then the app component will pass the new sort order to the game grid.
@@ -2691,7 +2691,7 @@ and then the app component will pass the new sort order to the game grid.
 - for sorting the data we will look at the documentation of the rog 
 in Get a list of games.
 we can see the "QUERY PARAMETER" inside we can see ordering query parameter
-we can set it as it writin to name, released and so on 
+we can set it as it written to name, released and so on 
 and if we want for the reverse sort order we can use "-" before the sort order as the example
 -------------------code---------------------
 ordering	 string
@@ -2700,7 +2700,7 @@ ordering	 string
 -------------------code---------------------
 
 
-- now in SortSelector.tsx insetad of apply onClick to each Menuitem 
+- now in SortSelector.tsx instead of apply onClick to each Menuitem 
 -------------------code---------------------
 <MenuList>
   <MenuItem onClick{}>Relevance</MenuItem>
@@ -2712,10 +2712,10 @@ ordering	 string
 </MenuList>
 -------------------code---------------------
 
-it`s better to store all MenuItem(sort order) valuse inside  an array and map each item of that array to MenuItem
+it`s better to store all MenuItem(sort order) values inside  an array and map each item of that array to MenuItem
 
 - so on the top we create array of sort order 
-this array containes objects each object has value (the one we want to send it the backend) and label (to show to UI)
+this array contains objects each object has value (the one we want to send it the backend) and label (to show to UI)
 -------------------code---------------------
 const sortOrders = [
     { value: "", label: "" },
@@ -2750,7 +2750,7 @@ Name:
 value will be name
 
 Release date:
-the value will be released with hyphon coz we want to show the newest one -released
+the value will be released with hyphen coz we want to show the newest one -released
 
 Popularity:
 the value will be -metacritic
@@ -2822,7 +2822,7 @@ next pass the new game query object to our GameGrid
 ></SortSelector>
 -------------------code---------------------
 
-now by adding the onSelectSortOrder to gameGrid it will causees the app component to be render (coz the status is changed)
+now by adding the onSelectSortOrder to gameGrid it will cause the app component to be render (coz the status is changed)
 
 now in the next render we will pass the new game query object to our GameGrid
 inside GameGrid already we use useGame(gameQuery) so we don`t need to make any changes 
@@ -2849,15 +2849,15 @@ useData<Game>(
 in console we have this error:
 TypeError: Cannot read properties of null (reading 'indexOf')
 
-this happend in image URL on the line 4 if we click it we can see in the Browser
-the error lcoation 
+this happened in image URL on the line 4 if we click it we can see in the Browser
+the error location 
 -------------------code---------------------
 const index = url.indexOf(target) + target.length;
 -------------------code---------------------
 
-the reasong why coz some games doesn`t have images so we need to handle it 
-but this issue is problem and different of what we are working on we will temproray fix 
-and then we will fix it temproray by adding TODO: 
+the reason why coz some games doesn`t have images so we need to handle it 
+but this issue is problem and different of what we are working on we will temporary fix 
+and then we will fix it temporary by adding TODO: 
 -------------------code---------------------
 const getCroppedImageUrl = (url: string) => {
   // TODO: Cannot read properties of null (reading 'indexOf') for games without image
@@ -2869,7 +2869,7 @@ const getCroppedImageUrl = (url: string) => {
 -------------------code---------------------
 
 
-now we test or code and if we sorted by name we can see the games withuot image
+now we test or code and if we sorted by name we can see the games without image
 we will fix this later 
 
 now let`s check our request in dev tool to see if we are sending the right query parameter
@@ -2879,14 +2879,14 @@ key: --------
 ordering: name
 -------------------code---------------------
 
-and now what if we select the platform then we slected the order 
+and now what if we select the platform then we selected the order 
 -------------------code---------------------
 parent_platforms: 3
 ordering: -released
 -------------------code---------------------
 it`s still work finally
 
-now one thing is missing is the dynamic currnet sorting label 
+now one thing is missing is the dynamic current sorting label 
 to render it we should have the app component pass the current sort order to SortSelector component
 -------------------code---------------------
 <SortSelector
@@ -2928,7 +2928,7 @@ we commit our code
 
 *** 28-_Handling_Games_without_an_Image ***
 
-to handle the games without image we will use default placehoder from GameHub Resources.zip
+to handle the games without image we will use default placeholder from GameHub Resources.zip
 and grab it inside the assets folder
 
 we rename it to no-image-placeholder (make sure to webp)
@@ -2937,7 +2937,7 @@ we rename it to no-image-placeholder (make sure to webp)
 in our application 
 we can`t type path like ex
 -------------------code---------------------
-if (!url) return "../asset/imgae.webp";
+if (!url) return "../asset/image.webp";
 -------------------code---------------------
 
 instead we should import the image as module 
@@ -2975,7 +2975,7 @@ we will add search input to the navbar to search the games
 
 - first we create SearchInput.tsx
 
-- we add inside Input component with placehoder and variant
+- we add inside Input component with placeholder and variant
 -------------------code---------------------
 <>
   <Input borderRadius={20} placeholder="Search games ..."></Input>
@@ -3028,7 +3028,7 @@ so when user type something in the search bar and press enter the SearchInput co
 will notify the App component take this search text, store it in our query object
 and pass it down to the GameGrid component exactly like platform and sort
 
-- fisrt in the SearchInput component we will wrap all the elements inside form element
+- first in the SearchInput component we will wrap all the elements inside form element
 and we don`t need action instead we handle it manually using onSubmit
 - we use preventDefault to prevent our form to post data to server 
 -------------------code---------------------
@@ -3074,7 +3074,7 @@ and then we associate this ref object with input components
 now we check our code 
 first we have layout issue coz form element doesn`t have the width of 100% 
 we have two options 
-option1 to add css dirctery 
+option1 to add css directory 
 -------------------code---------------------
 <form
   style={{ width: "100%" }}
@@ -3084,9 +3084,9 @@ option1 to add css dirctery
   }}
 >
 -------------------code---------------------
-but generaly speaking inline style are ugly and we should try to avoid them as much as possible
+but generally speaking inline style are ugly and we should try to avoid them as much as possible
 
-the better approach to add global rule in our stylesheet  
+the better approach to add global rule in our stylesheets  
 so we go to index.css and give all the form the width of 100% 
 -------------------code---------------------
 form {
@@ -3107,7 +3107,7 @@ interface Props {
 }
 -------------------code---------------------
 
-next we add as paramter 
+next we add as parameter 
 -------------------code---------------------
 const SearchInput = ({ onSearch }: Props) => {
 
@@ -3133,9 +3133,9 @@ export interface GameQuery {
 }
 -------------------code---------------------
 
-now we can`t pass the searchText to Navbar coz we should pass it to InputSreach and InputSreach we called inside the 
+now we can`t pass the searchText to Navbar coz we should pass it to InputSearch and InputSearch we called inside the 
 NavBar 
-we can`t pass a props to Navbar then pass it InputSreach coz it will make our code hard to maintaine in the future 
+we can`t pass a props to Navbar then pass it InputSearch coz it will make our code hard to maintain in the future 
 but now we will do it in this way then we will fix in the next part 
 
 to save time we copy the interface from the SearchInput.tsx to NavBar.tsx
@@ -3167,10 +3167,10 @@ no we go back to App component and pass it the same as platform and sort game
 -------------------code---------------------
 
 - now we will test out state if the value is the same as search input before sending it to server
-we add "grand" to serach input and check in dev tool Components => App if the hooks state has serachText with grand 
+we add "grand" to search input and check in dev tool Components => App if the hooks state has searchText with grand 
 -------------------code---------------------
-State : {searchText: "dsadasd"}
-searchText : "dsadasd"
+State : {searchText: "test"}
+searchText : "test"
 -------------------code---------------------
 
 - now we check it and saw it`s work fine then in useGames we pass it to backend
@@ -3195,7 +3195,7 @@ const useGames = (gameQuery: GameQuery) =>
 "implement Search"
 
 *** 32-_Adding_a_Dynamic_Heading ***
-next we will add a dynamic Header above the Platform and SortSelector components changes based on currunt
+next we will add a dynamic Header above the Platform and SortSelector components changes based on current
 filter
 
 ex: if we select Action from Genre  we will have "Action Games" and if we select Xbox from platform 
@@ -3269,8 +3269,8 @@ and we can also make our fon bigger
 now we have issue that our GameHeading is not a line with our Sorts component coz we already pass paddingLeft={2}
 to HStack now to fix we have two options 
 1- add paddingLeft={2} to GameHeading either but that will make our code repetitive
-and in future if add another component we have to remmber to paddingLeft={2} to it
-2- better approach to wrap HStack and GameHeading inisde A Box and give a paddingLeft={2}
+and in future if add another component we have to remember to paddingLeft={2} to it
+2- better approach to wrap HStack and GameHeading inside A Box and give a paddingLeft={2}
 
 -------------------code---------------------
 <Box paddingLeft={2}>
@@ -3292,7 +3292,7 @@ and in future if add another component we have to remmber to paddingLeft={2} to 
 </Box>
 -------------------code---------------------
 
-now our code looks beautiful and aligind 
+now our code looks beautiful and aligned 
 
 now we commit our code 
 "Add a dynamic page heading"
@@ -3300,7 +3300,7 @@ now we commit our code
 *** 33-_Cleaning_Up_the_Genres ***
 there some few things that we want to improve in the look for example 
 in genre we have 
-"Massively Multiplayer" the text is too sticked togather and overlapping the image
+"Massively Multiplayer" the text is too sticked together and overlapping the image
 this because we are using button and buttons by default don`t wrap text
 
 how to fix it in GenreList.tsx we set the whiteSpace of the Button to normal (nowrap is the default value)
@@ -3316,7 +3316,7 @@ how to fix it in GenreList.tsx we set the whiteSpace of the Button to normal (no
 </Button>
 -------------------code---------------------
 
-but the text is currently center aligind, so we should make it left aligind, so it aligins with other 
+but the text is currently center aligned, so we should make it left aligned, so it aligns with other 
 genres 
 -------------------code---------------------
 <Button
@@ -3358,7 +3358,7 @@ now we commit our code
 
 *** 34-_Cleaning_Up_the_Game_Cards  ***
 
-now we will clean our GameCards.tsx first we want to move the icons and metacritic a bove the name 
+now we will clean our GameCards.tsx first we want to move the icons and metacritic above the name 
 -------------------code---------------------
 <HStack justifyContent="space-between">
   <PlatformIconList
@@ -3390,7 +3390,7 @@ we change the space to 6
 >
 -------------------code---------------------
 
-- now having 5 cards on larg screen is too much so we will do it 4
+- now having 5 cards on large screen is too much so we will do it 4
 -------------------code---------------------
 <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
@@ -3427,7 +3427,7 @@ is rating is a floating point number, while rating_top is a whole number
 3-thups-up.webp
 
 - next we create new component called Emoji.tsx
-inside it we shoukd receive game rating_top as Props
+inside it we should receive game rating_top as Props
 -------------------code---------------------
 interface Props {
   rating: number;
@@ -3448,7 +3448,7 @@ const Emoji = ({ rating }: Props) => {
 -------------------code---------------------
 
 - next depend on rating we want to show different emoji but we will are not going to use 
-nasting if statement (remmber nasting if statement is ugly ) 
+nesting if statement (remember nesting if statement is ugly ) 
 instead we are going to use map function
 
 so to do that first we import the images 
@@ -3515,7 +3515,7 @@ const emojiMap: { [key: number]: ImageProps } = {
 };
 -------------------code---------------------
 
-now we emojis is code but the Emoji is too close o our haeading so we give it marginTop of 1
+now we emojis is code but the Emoji is too close o our heading so we give it marginTop of 1
 -------------------code---------------------
  <Image {...emojiMap[rating]} marginTop={1} />
 -------------------code---------------------
@@ -3525,19 +3525,19 @@ now we commit our code
 
 *** 36-_Shipping_Static_Data ***
 
-in the correct implementation we show a spinner while we fetch the genere 
+in the correct implementation we show a spinner while we fetch the genre 
 and skeletons while we fetch the games.
 so we`re dynamically loading to different parts of the page and showing loading indicators.
-now whike this isn`t necessarily a bad thing, overusing this technique can negatively impact 
+now while this isn`t necessarily a bad thing, overusing this technique can negatively impact 
 the user expression. it makes their eyes dart around the page.
 
 so as cool idea to improve things:
-we can ship the list of generes with our application. since the list of genres hardly 
-ever chanages we can treat the genres as static data and included with our app
+we can ship the list of genres with our application. since the list of genres hardly 
+ever changes we can treat the genres as static data and included with our app
 with that we don`t need to make extra request to our backend and the data will be available right away 
 so no need to wait and show a spinner 
 
-- now to do that we go to the deve tool and to to the request that have the Genres
+- now to do that we go to the devtool and to to the request that have the Genres
 and click on Preview and right click on result and copy the values 
 
 - next in our src folder we create a folder called a data inside it we create a file called 
@@ -3563,7 +3563,7 @@ export default [
     ]}]
 -------------------code---------------------
 
-with that we including satic data in our application we don`t have to load them from the server 
+with that we including static data in our application we don`t have to load them from the server 
 
 next we go to the useGenres.ts  and instead of using useData we return object
 
@@ -3576,7 +3576,7 @@ of useGenres hook. (we used the same return statements of useData)
 ex: 
 in GenreList when using useGenres we use { data, isLoading, error } properties
 so we want the changes that we apply in the useGenres.ts to impact the components 
-where we useed it 
+where we used it 
 -------------------code---------------------
 const { data, isLoading, error } = useGenres();
 -------------------code---------------------
@@ -3592,7 +3592,7 @@ import genres from "../data/genres";
 const useGenres = () => ({ data: genres, isLoading: false, error: null });
 -------------------code---------------------
 
-- now we test our code we can see our generes available right away without spinner 
+- now we test our code we can see our genres available right away without spinner 
 in another word without connecting to server
 
 
@@ -3618,7 +3618,7 @@ in Chakra documentation we got to "Styled System" and then in the menu we go to 
 
 we can see see this line  
 "We recommend adding a palette that ranges from 50 to 900. Tools like Themera,
- Smart Swatch, Coolors or Palx are available to generate these palettes."
+ Smart Swatch, Colors or Palx are available to generate these palettes."
 
 and we can try colors using "Smart Swatch" we can write a number thin click on the colors plate 
 to have the value and copy it to our project
@@ -3678,7 +3678,7 @@ now we commit our code
 *** 39-_Building_for_Production ***
 
 we are ready to deploy our Project but first we should run it locally to make sure it doesn`t have error
-remmber it easier to check it locally than waiting for deployment to finish 
+remember it easier to check it locally than waiting for deployment to finish 
 so to build our application we run "npm run build"  
 
 
@@ -3724,12 +3724,12 @@ src/components/SortSelector.tsx:31:30 - error TS2552: Cannot find name 'xonSelec
 Found 1 error in src/components/SortSelector.tsx:31
 *********************************************************************
 
-so remmber we can catch error in our application we build it to the production 
+so remember we can catch error in our application we build it to the production 
 
-using "shif+cmd P" we can select "Task: Run Build Task" then we select "npm build"
-or shortcut "shif+cmd B"
+using "shift+cmd P" we can select "Task: Run Build Task" then we select "npm build"
+or shortcut "shift+cmd B"
 
-PS: the output of the input is file called dist which is shortcut of distributeable, is what we deploy to our production
+PS: the output of the input is file called dist which is shortcut of distributable, is what we deploy to our production
 
 *** 40-_Deploying_to_Vercel ***
 the final part we are going to deploy our application to a platform called Vercel
@@ -3741,10 +3741,10 @@ then press on Guide we can see "Deploying a Static Site"
 we can multi ways to deploy our project 
 
 but now we will use Vercel
-remmber we need to create repository so when add new feature our application will build and push it
+remember we need to create repository so when add new feature our application will build and push it
 to Vercel
 
-- fisrt we create an account in Vercel
+- first we create an account in Vercel
 
 - then install Vercel to in our application
 "npm i -g vercel"
@@ -3755,7 +3755,7 @@ then we will have url if we access we can see our project
 
 finally:
 we need to link our github to that project 
-in our Vercel account we can see our project and "No Git Repository connected" is writin 
+in our Vercel account we can see our project and "No Git Repository connected" is written 
 so we select it the we go to "Connect Git Repository" then we select "GitHub" and from the list we select
 our repository
 
@@ -3785,7 +3785,7 @@ npm i @tanstack/react-query-devtools@4.28
 
 
 - next we go to main.tsx 
---import the the nessery component for using React Query in our application
+--import the the necessary component for using React Query in our application
 -------------------code----------------------
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -3793,7 +3793,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 PS: there is two ReactQueryDevtools we import the one with blue icon 
 
--- craete a new instance of QueryClient
+-- create a new instance of QueryClient
 -------------------code----------------------
 const queryClient = new QueryClient();
 -------------------code----------------------
@@ -3820,10 +3820,10 @@ we can see the object that we return from this hook has three properties
 data, isLoading, error 
 
 -- the good thing here is that this object has same shape as the object we return from ReactQuery
-so we can easily replace it with useQurey 
-PS: we call useQurey make sure to import from transtack not chakraUI 
+so we can easily replace it with useQuery 
+PS: we call useQuery make sure to import from tanstack not chakraUI 
 
--- we call the queryKey genres and set queryFn for simplicity geting only the data  
+-- we call the queryKey genres and set queryFn for simplicity getting only the data  
 -------------------code----------------------
 const useGenres = () =>
   useQuery({
@@ -3861,7 +3861,7 @@ queryFn: () => apiClient.get<Genre[]>("/genres").then((res) => res.data),
 -------------------code----------------------
 and that make a sense cause the call to the server could be failed 
 
-so we should use optional chaning 
+so we should use optional chining 
 -------------------code----------------------
 {data?.map((genre) => (...))}
 -------------------code----------------------
@@ -3900,7 +3900,7 @@ data:
 {data?.result.map((genre) => ()...)}
 -------------------code----------------------
 -------------------code----------------------
-roperty 'result' does not exist on type 'Genre[]'.
+property 'result' does not exist on type 'Genre[]'.
 -------------------code----------------------
 
 -- so we made mistake instead of using Genre[] 
@@ -3916,7 +3916,7 @@ at that time we add only count and results cause we are not going to use next an
 -------------------code----------------------
 apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
 -------------------code----------------------
-PS: we don`t have to add Genre[] cause we already add type genrec and called with array with result 
+PS: we don`t have to add Genre[] cause we already add type generic and called with array with result 
 -------------------code----------------------
 results: T[]
 -------------------code----------------------
@@ -3928,10 +3928,10 @@ now we render the genre of the results
 
 - now we check out implementation and we can see it works fine 
 
-- we impove our code 
+- we improve our code 
 cause genre is hardly coding we want to put the staleTime to 24hours 
 
-24 * 60minutes * 60seconds * 1000 milisecond
+24 * 60minutes * 60seconds * 1000 millisecond
 -------------------code----------------------
 staleTime: 24 * 60 * 60 * 1000, // 24hours
 -------------------code----------------------
@@ -3939,7 +3939,7 @@ staleTime: 24 * 60 * 60 * 1000, // 24hours
 we will improve the way we write it later but now we want to focus on the implementation 
 
 
-- next we set the Initial data to the static data that we shiped in our application
+- next we set the Initial data to the static data that we shipped in our application
 -------------------code----------------------
 initialData: genres
 -------------------code----------------------
@@ -3951,7 +3951,7 @@ No overload matches this call.
     Object literal may only specify known properties, and 'queryKey' does not exist in type 'readonly unknown[]'.
 -------------------code----------------------
 
-the error happned cause 
+the error happened cause 
 -------------------code----------------------
 apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
 -------------------code----------------------
@@ -4020,13 +4020,13 @@ now if we open the console we can see that we only have one API request to the g
 
 *** 26-_Exercise-_Fetching_Games *** 
 
-now we will replace useData hook use useQuery cause everything all the functionality that implementent in data hook
+now we will replace useData hook use useQuery cause everything all the functionality that implemented in data hook
 is already build in better way in query hook 
 
 so we will replace data hook with query hook then remove data hook from the project
 
 as we did before we use in useGames.ts
-- we rewrite usedata with useQuery
+- we rewrite useData with useQuery
 -------------------code----------------------
 const useGames = (gameQuery: GameQuery) =>
   useQuery({
@@ -4050,7 +4050,7 @@ const useGames = (gameQuery: GameQuery) =>
 
 - now we have duplication in our code we used  interface Platform in to two places useGames and usePlatforms
 but now we want to focus in current implementation and as a good software engineer we should have a note while we coding 
-and write in that note for example fix the deplication of our interfaces so we back later to fix it 
+and write in that note for example fix the duplication of our interfaces so we back later to fix it 
 (for me i will add TODO)
 
 -------------------code----------------------
@@ -4065,7 +4065,7 @@ export interface Platform {
 
 - now we test our code 
 
-we see white screen wo we opne the console to see the errors 
+we see white screen wo we open the console to see the errors 
 -------------------code----------------------
 Uncaught TypeError: Cannot read properties of undefined (reading 'map')
     at GameGrid (GameGrid.tsx:30:13)
@@ -4089,7 +4089,7 @@ as we did in PlatformList
 
 Type '{}' is not assignable to type 'ReactNode'.ts(2322)
 
-- to fix it we go to useGames.ts and add type genric to the useQuery
+- to fix it we go to useGames.ts and add type generic to the useQuery
 -------------------code----------------------
 const useGames = (gameQuery: GameQuery) =>
   useQuery<FetchResponse<Game>, Error>({
@@ -4103,22 +4103,22 @@ const useGames = (gameQuery: GameQuery) =>
 
 - now we test our code 
 we click on Action genre the on Indie genre 
-now if reclick on Action we can see it refresh faster cause the cashe 
+now if re click on Action we can see it refresh faster cause the cache 
 
 
 - now we remove we useData to remove the useData hook 
 PS: before removing any block of code it`s better to check if it reference in another place 
 so it will not effect another place
-so we go useData and right click on "Go to Refrences"
+so we go useData and right click on "Go to References"
 
-so we after clicked we can see it refrence in only one place which is the same file so it`s save to remove 
+so we after clicked we can see it reference in only one place which is the same file so it`s save to remove 
 
 so we can simply remove it 
 
-- now in useData we stil have FetchResponse interface and if press on "Go to Refrences" 
-we can see it refrence in 8 different places 
+- now in useData we still have FetchResponse interface and if press on "Go to References" 
+we can see it reference in 8 different places 
 
-but it doesn`t make any sense to make a useData file to conatain only this function 
+but it doesn`t make any sense to make a useData file to contain only this function 
 cause this file is for data hook
 so the right place to move it the apiClient.ts 
 -------------------code----------------------
@@ -4156,8 +4156,8 @@ now we can see we have no errors
 we have Platform interface in two places useGames.ts and usePlatforms.ts
 we will remove the duplication from our code 
 
-- as before we said before removing an interface or any method we see it all the Refrences
-right click and "Go To Refrences"
+- as before we said before removing an interface or any method we see it all the References
+right click and "Go To References"
 
 first in App.tsx 
 - we change import Platform from useGames to usePlatforms
@@ -4165,9 +4165,9 @@ first in App.tsx
 import { Platform } from "./hooks/usePlatforms";
 -------------------code----------------------
 
-and the same for other refrence places
+and the same for other reference places
 
-PS: in PlatformSelctor we fix to be like that 
+PS: in PlatformSelector we fix to be like that 
 -------------------code----------------------
 import usePlatforms, { Platform } from "../hooks/usePlatforms";
 -------------------code----------------------
@@ -4178,13 +4178,13 @@ import usePlatforms, { Platform } from "../hooks/usePlatforms";
 
 
 *** 28-_Exercise-_Creating_a_Reusable_API_Client *** 
-in all our hooks inside useQurey we dublicate our fetching code 
+in all our hooks inside useQuery we duplicate our fetching code 
 -------------------code----------------------
 apiClient.get<FetchResponse<Genre>>("/genres").then((res) => res.data),
 -------------------code----------------------
-so we want to resolve this by ceating reusble API Client 
+so we want to resolve this by creating reusable API Client 
 
-- in api-client.ts instead of export the axios instance we change to contant 
+- in api-client.ts instead of export the axios instance we change to contact 
 -------------------code----------------------
 const axiosInstance = axios.create({
   baseURL: "https://api.rawg.io/api",
@@ -4201,7 +4201,7 @@ class APIClient <T>{
 }
 -------------------code----------------------
 
-- now we give it property called endpoint and insilize it using constractor 
+- now we give it property called endpoint and initialize it using constructor 
 -------------------code----------------------
 class APIClient<T> {
   endpoint: string;
@@ -4242,7 +4242,7 @@ then we call then method
   }
 -------------------code----------------------
 
-PS: to aviod this problem we change the getAll to arrow function 
+PS: to avoid this problem we change the getAll to arrow function 
 
 -------------------code----------------------
 getAll = (config: AxiosRequestConfig) => {
@@ -4311,17 +4311,17 @@ then commit our code
 
 *** 29-_Exercise-_Implementing_Infinite_Queries ***
 
-now we will take the application to the next level and implement Infinite querys
+now we will take the application to the next level and implement Infinite query
 so we will add button for loading more games 
 
-- in useGames.ts we should change the useQuery wiht useInfiniteQuery 
+- in useGames.ts we should change the useQuery with useInfiniteQuery 
 -------------------code----------------------
 useInfiniteQuery<FetchResponse<Game>, Error>({
   queryKey: ["games", gameQuery],
   queryFn: () => ..}) 
 -------------------code----------------------
 
-- next we have queryFn to resive our page number as parameter 
+- next we have queryFn to receive our page number as parameter 
 so we destruct the parameter to take pageParam and set to 1 
 -------------------code----------------------
 queryFn: ({ pageParam = 1 }) => ...
@@ -4345,7 +4345,7 @@ queryFn: ({ pageParam = 1 }) =>
 
 - next we should call the getNextPageParam un useInfiniteQuery to compute next page number 
 this function should take two parameter last page and all pages 
-all pages contains tha data for each page we have retrive  so to compute the next page number 
+all pages contains tha data for each page we have retrieve  so to compute the next page number 
 we return all pages number + 1 
 -------------------code----------------------
 useInfiniteQuery<FetchResponse<Game>, Error>({
@@ -4366,8 +4366,8 @@ useInfiniteQuery<FetchResponse<Game>, Error>({
   });
 -------------------code----------------------
 
-- now in getNextPageParam we still increament until we hit last page and that time 
-query paramter of page will be defined so we need write code says if we reach the last page 
+- now in getNextPageParam we still increment until we hit last page and that time 
+query parameter of page will be defined so we need write code says if we reach the last page 
 
 back to the api documentation from the responses we can see that we 
 count 
@@ -4377,7 +4377,7 @@ results
 until now we only implement count and results
 but if we see next we can see next to it string<ui> Nullable
 which means when we reach the last page 
-page query paramter => undefined
+page query parameter => undefined
 next (from the fetch responses) => null 
 
 - so we press cmd + t and go to FetchResponse interface 
@@ -4390,7 +4390,7 @@ export interface FetchResponse<T> {
 }
 -------------------code----------------------
 
-- now we wirte condition says if the lastPage is truthy return all page number + 1 other wise undefined
+- now we write condition says if the lastPage is truthy return all page number + 1 other wise undefined
 -------------------code----------------------
 getNextPageParam: (lastPage, allPages) => {
     return lastPage.next ? allPages.length + 1 : undefined;
@@ -4417,7 +4417,7 @@ now we should map each page to React fragment and then map each page result to g
 ))}
 -------------------code----------------------
 
-- next we import the functions of InfinityQurey pages 
+- next we import the functions of InfinityQuery pages 
 -------------------code----------------------
 const {
     data,
@@ -4426,7 +4426,7 @@ const {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useGames(gameQurey);
+  } = useGames(gameQuery);
 -------------------code----------------------
 
 - next we add Button component and we want to render only if there is a next page 
@@ -4453,21 +4453,21 @@ const {
 </Button>
 -------------------code----------------------
 
-- aligin our button to Grid but before we add padding="10px" to the SimpleGrid 
-now to aviod repetitive we change the fragment to Box and add padding 10px to it 
+- align our button to Grid but before we add padding="10px" to the SimpleGrid 
+now to avoid repetitive we change the fragment to Box and add padding 10px to it 
 and remove it form SimpleGrid 
 -------------------code----------------------
 <Box padding="10px">
 <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} spacing={6}>
 -------------------code----------------------
 
-now we test our InfinityQurey with another geenre and check if we got the right page 
+now we test our InfinityQuery with another genre and check if we got the right page 
 using devtool 
 
 
 *** 30-_Exercise-_Implementing_Infinite_Scroll ***
 
-now we will make the application better by show games while scroling not clicking a Button 
+now we will make the application better by show games while scrolling not clicking a Button 
 to do that we are gonna use popular library called react-infinite-scroll-component
 try read the documentation and implement it 
 
@@ -4476,7 +4476,7 @@ try read the documentation and implement it
 npm i react-infinite-scroll-component@6.1
 -------------------code----------------------
 
-- we go to the GameGrid.tsx and warap SimpleGrid component with InfiniteScroll component
+- we go to the GameGrid.tsx and warp SimpleGrid component with InfiniteScroll component
 -------------------code----------------------
 <InfiniteScroll>
   <SimpleGrid 
@@ -4488,7 +4488,7 @@ npm i react-infinite-scroll-component@6.1
 - the InfiniteScroll component has multi property we should set 
 dataLength: we have to put the number of data that we fetch so far 
 
-- so we define a constat we called fetchedGamesCount and use reduce method 
+- so we define a constant we called fetchedGamesCount and use reduce method 
 to reduce this array of pages into a number are present the total number og games 
 we have fetch so far, we know that each page of games contain an array og games
 
@@ -4511,20 +4511,20 @@ console.log(sumWithInitial);
 
 
 - so we want to combine the games we have in the array 
-reduce have two paramter we call the first paramter acc and that refer to the or call it total
+reduce have two parameter we call the first parameter acc and that refer to the or call it total
 the second parameter is the element of the array which is page 
 so now in each iteration we have to count the games to that page and add to the total and as 
-second argument we should give it the insilize value which is 0 
+second argument we should give it the initialize value which is 0 
 -------------------code----------------------
-const fetchdGamesCount = data?.pages.reduce(
+const fetchedGamesCount = data?.pages.reduce(
     (total, page) => total + page.results.length,
     0
   );
 -------------------code----------------------
 
-- now we can use fetchdGamesCount to set the dataLength prop 
+- now we can use fetchedGamesCount to set the dataLength prop 
 -------------------code----------------------
-<InfiniteScroll dataLength={fetchdGamesCount}>
+<InfiniteScroll dataLength={fetchedGamesCount}>
 -------------------code----------------------
 
 - now we got compilation error says 
@@ -4534,15 +4534,15 @@ Type 'number | undefined' is not assignable to type 'number'.
 -------------------code----------------------
 
 - cause data?.pages is a result of fetching and could be undefined
-to fix that we give fetchdGamesCount a default value of 0 
+to fix that we give fetchedGamesCount a default value of 0 
 -------------------code----------------------
-const fetchdGamesCount =
+const fetchedGamesCount =
     data?.pages.reduce((total, page) => total + page.results.length, 0) || 0;
 -------------------code----------------------
 
 - now the next property called hasMore we set it to hasNextPage
 -------------------code----------------------
-<InfiniteScroll dataLength={fetchdGamesCount} hasMore={hasNextPage}>
+<InfiniteScroll dataLength={fetchedGamesCount} hasMore={hasNextPage}>
 -------------------code----------------------
 
 we have compilation error cause hasMore only accept boolean while hasNextPage has type of boolean | undefined
@@ -4554,13 +4554,13 @@ Type 'boolean | undefined' is not assignable to type 'boolean'.
 - now to fix that we !! before hasNextPage to convert it to actual boolean value 
 so if it undefined that means it`s falsy so the result will be false 
 -------------------code----------------------
-<InfiniteScroll dataLength={fetchdGamesCount} hasMore={!!hasNextPage}>
+<InfiniteScroll dataLength={fetchedGamesCount} hasMore={!!hasNextPage}>
 -------------------code----------------------
 
 - next we add the next props and call the fetchNextPage
 -------------------code----------------------
 <InfiniteScroll
-  dataLength={fetchdGamesCount}
+  dataLength={fetchedGamesCount}
   hasMore={!!hasNextPage}
   next={() => fetchNextPage()}
 >
@@ -4570,7 +4570,7 @@ so if it undefined that means it`s falsy so the result will be false
 so we set to Spinner 
 -------------------code----------------------
  <InfiniteScroll
-        dataLength={fetchdGamesCount}
+        dataLength={fetchedGamesCount}
         hasMore={!!hasNextPage}
         next={() => fetchNextPage()}
         loader={<Spinner />}
@@ -4590,7 +4590,7 @@ SimpleGrid and remove the Box component
         >
 -------------------code----------------------
 
-- finally we remove unnecessary import statements by pressing orginize the import statement
+- finally we remove unnecessary import statements by pressing organize the import statement
 
 - one more thing to add staleTime to the useGames hook 
 -------------------code----------------------
@@ -4629,7 +4629,7 @@ in our application we select a genre for example indie then we open the dev tool
 in our object where we store the games we have over complexity  we have games at first then genre then again a games 
 obviously we don`t need any of this stuff here to filter games by genre all we need is the genre id 
 
-- in App.tsx when we select a geenre 
+- in App.tsx when we select a genre 
 -------------------code----------------------
 onSelectedGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
 -------------------code----------------------
@@ -4646,7 +4646,7 @@ onSelectPlatform={(platform) =>
 
 - now when the user select the genre we want to store the genre id in our game query object
 
-- first we look at the gameQurey interface 
+- first we look at the gameQuery interface 
 -------------------code----------------------
 export interface GameQuery {
   genre: Genre | null;
@@ -4656,7 +4656,7 @@ export interface GameQuery {
 }
 -------------------code----------------------
 
-- before change the genre we right click on genre and check for the refrences 
+- before change the genre we right click on genre and check for the references 
 we can see there is only 3 places where it used 
 
 so we change it to number 
@@ -4669,9 +4669,9 @@ export interface GameQuery {
 }
 -------------------code----------------------
 
-- why we put instaed of null an undefined
+- why we put instead of null an undefined
 undefined: the absence of a value 
-null: the intenational absence of a value 
+null: the international absence of a value 
 
 ******************************************************************
 undefined and null represent different concepts regarding the 
@@ -4694,9 +4694,9 @@ console.log(y); // Output: null
 ******************************************************************
 
 - in this case in our application we can use undefined
-initially our user doen`t select the genre yet 
+initially our user doesn`t select the genre yet 
 but ones set select the genre they can`t unselected it 
-so platform and genre could be undefined instad of null 
+so platform and genre could be undefined instead of null 
 
 -------------------code----------------------
 export interface GameQuery {
@@ -4753,7 +4753,7 @@ export interface GameQuery {
 }
 -------------------code----------------------
 
-- now we go the other refrence for updating 
+- now we go the other reference for updating 
 
 (App.tsx) we change it to genreId 
 -------------------code----------------------
@@ -4770,8 +4770,8 @@ Type 'number | undefined' is not assignable to type 'Genre | null'.
   Type 'undefined' is not assignable to type 'Genre | null'.
 
 - by Clicking to GenreList we go to GenreList.tsx
-the error happing here because we compary the genre.id with all selectedGenre.id
-but after we changeed the value of genre to only genre id 
+the error happing here because we compare the genre.id with all selectedGenre.id
+but after we changed the value of genre to only genre id 
 our code right now 
 selectedGenre = genreIdd so it`s like id.id?
 -------------------code----------------------
@@ -4809,12 +4809,12 @@ and fix genreId of setGameQuery to genreId: genre.id
 />
 -------------------code----------------------
 
-- now we back to the GameQuery interface and go to the genreId refrence 
+- now we back to the GameQuery interface and go to the genreId reference 
 next we go to GameHeading.tsx 
 
 ******************************************************************
-PS: when we open the Refrences first the first time don`t close it until fix all the refrence
-but if close it accidently rewrite the property name ex:
+PS: when we open the References first the first time don`t close it until fix all the reference
+but if close it accidentally rewrite the property name ex:
 -------------------code----------------------
 export interface GameQuery {
   genre: number,
@@ -4844,8 +4844,8 @@ const genre = genres?.results.find((g) => g.id === gameQuery.genreId);
 ${genre?.name || ""}
 -------------------code----------------------
 
-- now we go to the next refrence and remove the genre: number, we set it 
-next refrence is useGames and fix to genre id 
+- now we go to the next reference and remove the genre: number, we set it 
+next reference is useGames and fix to genre id 
 -------------------code----------------------
 params: {
           genres: gameQuery.genreId,
@@ -4854,14 +4854,14 @@ params: {
 
 - now before apply the same refactor to the platform the check if our code is working
 
-our code work fine and our query object is simpilar 
+our code work fine and our query object is simpler 
 -------------------code----------------------
 ["games",{"genreId":3}]
 -------------------code----------------------
 
 
 - now we apply the same thing to our platform query
-- first we open the refrence and keep it then we change the interface property name 
+- first we open the reference and keep it then we change the interface property name 
 -------------------code----------------------
 export interface GameQuery {
   genreId?: number;
@@ -4872,7 +4872,7 @@ export interface GameQuery {
 -------------------code----------------------
 
 
-- we fix the first refrence in App.tsx same as genre
+- we fix the first reference in App.tsx same as genre
 -------------------code----------------------
 <PlatformSelector
   selectedPlatformId={gameQuery.platformId}
@@ -4891,14 +4891,14 @@ interface Props {
 -------------------code----------------------
 
 
-- selcet the platform from the hook 
+- select the platform from the hook 
 -------------------code----------------------
 const selectedPlatform = data?.results.find(
     (p) => p.id === selectedPlatformId
   );
 -------------------code----------------------
 
-- next we go the next refrence GameHeading.tsx we replay the code 
+- next we go the next reference GameHeading.tsx we replay the code 
 from PlatformSelector where we use the hook for now, next we will refactor our entire code 
 
 -------------------code----------------------
@@ -4909,7 +4909,7 @@ const { data: platforms } = usePlatforms();
 -------------------code----------------------
 
 
-- next we go the next refrence useGames.ts amd change the params 
+- next we go the next reference useGames.ts amd change the params 
 -------------------code----------------------
 params: {
           genres: gameQuery.genreId,
@@ -4930,7 +4930,7 @@ our query object
 *** 32-_Exercise-_Creating_Lookup_Hooks ***
 we have this logic in two places 
 - GameHeading.tsx 
-- PlatformSelctor.tsx
+- PlatformSelector.tsx
 -------------------code----------------------
 const { data: platforms } = usePlatforms();
   const selectedPlatform = platforms?.results.find(
@@ -4938,7 +4938,7 @@ const { data: platforms } = usePlatforms();
   );
 -------------------code----------------------
 
-- for avioding the complexity we will incapsulate this logic inisde custom reusble hook 
+- for avoiding the complexity we will encapsulate this logic inside custom reusable hook 
 and we can use it for platform and even genre 
 -------------------code----------------------
 const { data: genres } = useGenres();
@@ -5006,7 +5006,7 @@ const usePlatform = (id?: number) => {
 };
 -------------------code----------------------
 
--  then we callit instad of selectedPlatform
+-  then we call it instead of selectedPlatform
 -------------------code----------------------
 const heading = `${platform?.name || ""} 
 -------------------code----------------------
@@ -5058,7 +5058,7 @@ if platform name and genre rendering without a problems
 
 - now we had a previous problem in the genre hook 
 we have error at the queryKey property
-there is no wrong with the key the problem is somewher else in queryFn or initialData 
+there is no wrong with the key the problem is somewhere else in queryFn or initialData 
 
 
 -  we hover on apiClient.getAll  we see 
@@ -5075,7 +5075,7 @@ and if check of the type of initialData we can see it
 -------------------code----------------------
 
 and it`s different from the fetch Response so here we have initial data type different from the fetch Response type 
-so if commnet out the initialData property the error goes away 
+so if comment out the initialData property the error goes away 
 
 - we can add next: null and error goes
 -------------------code----------------------
@@ -5088,14 +5088,14 @@ useQuery({
 -------------------code----------------------
 
 - but this is a hack so what if we decide in future to add more property to the FetchResponse interface
-again we have to remmber to come here and fix the issue 
+again we have to remember to come here and fix the issue 
 
 - so a better approach is to modify the static data and make exactly same as the response we get it 
 from our backend so currently in static data we have only the array of genre and next and result 
 and previous and count property are missing 
 
 
-- so we commnet out the initial values first 
+- so we comment out the initial values first 
 -------------------code----------------------
 // initialData: { count: genres.length, results: genres, next: null },
 -------------------code----------------------
@@ -5154,7 +5154,7 @@ const usePlatforms = () =>
   });
 -------------------code----------------------
 
-- finally we orginize the imports to all the changed files 
+- finally we organize the imports to all the changed files 
 
 and test our code 
 
@@ -5162,8 +5162,8 @@ and test our code
 *** 33-_Exercise-_Simplifying_Time_Calculations ***
 
 - we have two issue when we set the staleTime 
-first: we need to remmber to add commnet, if we forgot it will be unreadable 
-second: even if we add a comment we can`t know which one is of the numbers is seconds or minutues and so 
+first: we need to remember to add comment, if we forgot it will be unreadable 
+second: even if we add a comment we can`t know which one is of the numbers is seconds or minutes and so 
 
 - we can simplify the time using library called "ms"
 https://www.npmjs.com/package/ms
@@ -5172,8 +5172,8 @@ it`s very popular if we saw the weekly downloads (PS: when using a library make 
 it`s updates frequency )
 
 - we can arguing that why we need to add a new library for only simplify our time readability 
-is not the best way and it will incerase the bundle that we shiped to the client 
-but in the documentation we can see the the size is only 6.72 kb so the impcat is minimum
+is not the best way and it will increase the bundle that we shipped to the client 
+but in the documentation we can see the the size is only 6.72 kb so the impact is minimum
 beside we can create methods to simplify the time without library but we are going to study how 
 to use "ms" library 
 
@@ -5229,7 +5229,7 @@ then we comment our code
 *** Global State Management ***
 
 *** 21-_Exercise-_Picking_the_Right_State_Management_Solution ***
-now we want to improve the way we manage the clinet state 
+now we want to improve the way we manage the client state 
 
 we have the useState that we defined before
 -------------------code----------------------
@@ -5340,7 +5340,7 @@ Type '{ gameQuery: {}; }' is missing the following properties from type 'GameQue
 -------------------code----------------------
 
 - for search method if the user while search the game forget the genre selected that may cause not finding the 
-right game to aviod that we need only to change the gameQuery searchText
+right game to avoid that we need only to change the gameQuery searchText
 -------------------code----------------------
 create<GameQueryStore>((set) => ({
   gameQuery: {},
@@ -5354,7 +5354,7 @@ create<GameQueryStore>((set) => ({
 }));
 -------------------code----------------------
 
-next we save it in contant we called useGamesQueryStore
+next we save it in contact we called useGamesQueryStore
 
 -------------------code----------------------
 import { create } from "zustand";
@@ -5456,7 +5456,7 @@ onClick={() => setSelectedGenreId(genre.id)}
 -------------------code----------------------
 
 - we clean our import statement and move to GameHeading
-- we define the genreId and platformId and orginize our code 
+- we define the genreId and platformId and organize our code 
 -------------------code----------------------
 const genreId = useGamesQueryStore((s) => s.gameQuery.genreId);
 const genre = useGenre(genreId);
@@ -5465,7 +5465,7 @@ const platformId = useGamesQueryStore((s) => s.gameQuery.platformId);
 const platform = usePlatform(platformId);
 -------------------code----------------------
 
-- we orginize our imports
+- we organize our imports
 
 
 - next we go to PlatformSelector
@@ -5486,20 +5486,20 @@ const setSelectedPlatformId = useGamesQueryStore((s) => s.setPlatformId);
 onClick={() => setSelectedPlatformId(platform.id)}
 -------------------code----------------------
 
-- orginize imports 
+- organize imports 
 
 - next we go to SortSelector component
 -------------------code----------------------
 <SortSelector />
 -------------------code----------------------
 
-- define the nessery values 
+- define the necessary values 
 -------------------code----------------------
 const setSortOrder = useGamesQueryStore((s) => s.setSortOrder);
 const sortOrder = useGamesQueryStore((s) => s.gameQuery.sortOrder);
 -------------------code----------------------
 
-- orginize the code 
+- organize the code 
 
 - finally we GameGrid
 
@@ -5521,7 +5521,7 @@ const {
 
 
 inside the useGames hook 
-now with that evertime the gameQuery changes it will fetch the data from the backend
+now with that every time the gameQuery changes it will fetch the data from the backend
 and add return to useInfiniteQuery
 -------------------code----------------------
 const useGames = () => {
@@ -5532,14 +5532,14 @@ const useGames = () => {
 -------------------code----------------------
 
 
-now we orginize the imports of our changed files
+now we organize the imports of our changed files
 and run build our code to check if there is not error and now we test our code
 
 *** 24-_Discussion-_Building_Reusable_Components ***
 - we make our code less by using Zustand but the cost is our components now in longer are 
-reusble cause when passing the props our component did`nt relay on any data 
+reusable cause when passing the props our component did`nt relay on any data 
 but now it relay on the genreId that comes from the store 
-So remmber there is no size fit all and that means there is no right way for everything 
+So remember there is no size fit all and that means there is no right way for everything 
 we have to know the project requirement and based on that chose the right tool 
 
 
@@ -5555,11 +5555,11 @@ npm i react-router-dom@6.10.0
 -------------------code----------------------
 
 - next we go to our project and in the src folder we create folder we called it pages
-now we are going to put multi pages in our applications and we want to seprate this pages from our components
+now we are going to put multi pages in our applications and we want to separate this pages from our components
 
 - first we need layout for this pages so we create Layout.tsx
 now our pages should have a navigation par at the top so we add NavBar and the layout
-and add outlet(placeholder for child component depennds on currnet route)
+and add outlet(placeholder for child component depends on current route)
 -------------------code----------------------
 const Layout = () => {
   return (
@@ -5571,7 +5571,7 @@ const Layout = () => {
 };
 -------------------code----------------------
 
-- next we are going to create our HomePage and it`s gonna be simillar to the App component
+- next we are going to create our HomePage and it`s gonna be similar to the App component
 cause we have layout  we no longer need "nav" and "nav nav" so remove it from the grid 
 
 -------------------code----------------------
@@ -5688,7 +5688,7 @@ const ErrorPage = () => {
 export default ErrorPage;
 -------------------code----------------------
 
-- next we sperate the error between application error and Route error
+- next we separate the error between application error and Route error
 -------------------code----------------------
 const error = useRouteError();
 -------------------code----------------------
@@ -5720,7 +5720,7 @@ const error = useRouteError();
 
 - now we test our application
 
-- we see that our navigation bar gones cause the Outlet inside the Layout component
+- we see that our navigation bar gone cause the Outlet inside the Layout component
 only render the children not the ErrorPage too
 so we will add NavBar above the Error Page
 -------------------code----------------------
@@ -5753,8 +5753,8 @@ and give it padding of 5
 
 *** 15-_Exercise-_Fetching_a_Game ***
 now we will show the description of each game when access the game detail 
-and we want the url to be more search freindly for 
-so we will use the currnet name(slug) instead of id
+and we want the url to be more search friendly for 
+so we will use the current name(slug) instead of id
 ex:
 http://localhost:5173/games/gta5 instead of http://localhost:5173/games/12 
 
@@ -5795,7 +5795,7 @@ ex:
 name: Grand Theft Auto V
 slug: grand-theft-auto-v
 
-- now to make our card more stylesh we add hover to the Box that contain the card
+- now to make our card more stylish we add hover to the Box that contain the card
 -------------------code----------------------
  <Box
   _hover={{
@@ -5941,4 +5941,4 @@ to repeat padding in multi places
 </>
 -------------------code----------------------
 
-- finally we orginize the import in all the changes files 
+- finally we organize the import in all the changes files 
