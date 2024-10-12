@@ -5972,3 +5972,139 @@ the vs code we create the Game.ts for us automatically  and update all the impor
 - next we do the same step with the other interface (genre and platform)
 
 - finally to make sure our project is not breaking we build our project
+
+*** 17-_Exercise-_Building_Expandable_Text ***
+- now in our game description if it`s longer than 300 characters we will add "Show more" button
+
+- cause text expanding is not only related to game description we should implement it 
+in separate component
+inside the Component file we create ExpandableText.tsx 
+
+- first we need state hook to check if the state of the text if it`s expandable or not 
+-------------------code----------------------
+const [expanded, setExpanded] = useState(false);
+-------------------code----------------------
+
+- next we should pass the Text as child component to this component so we define children
+in Props 
+-------------------code----------------------
+interface Props {
+  children: string;
+}
+
+const ExpandableText = ({ children }: Props) => {
+  .. }
+-------------------code----------------------
+
+- next we have to specify the limit of our characters which we want to set to 300
+-------------------code----------------------
+const limit = 300;
+-------------------code----------------------
+
+- now we write if statement to check if the children length is less than the limit to render 
+the entire Text
+-------------------code----------------------
+if (children.length >= 300) {
+    <Text>{children}</Text>;
+  }
+-------------------code----------------------
+
+- otherwise we gonna summarize the text which means we are going to show the first 300 characters only 
+with the ... Show more button 
+-------------------code----------------------
+const summary = children.substring(0, limit);
+
+  return (
+    <Text>
+      {summary}... <Button></Button>
+    </Text>
+  );
+-------------------code----------------------
+
+- now the label of the Button should be based on the state of this component
+if it`s expanded or not 
+-------------------code----------------------
+<Text>
+  {summary}... <Button>{expanded ? "Show Less" : "Read More"}</Button>
+</Text>
+-------------------code----------------------
+
+- now we test our component
+we go to GameDetailPage and replace Text element with our ExpandableText component
+-------------------code----------------------
+<ExpandableText>{game.description_raw}</ExpandableText>
+-------------------code----------------------
+
+- now our button is a little big and make the font bold and change the color 
+-------------------code----------------------
+<Button size="xs" fontWeight="bold" colorScheme="yellow">
+-------------------code----------------------
+
+- we should handle the click event
+-------------------code----------------------
+onClick={() => setExpanded(!expanded)}
+-------------------code----------------------
+
+- now if click the button the button changed but not all the text render cause we always
+render the summary 
+to fix that 
+-------------------code----------------------
+const summary = expanded ? children : children.substring(0, limit);
+-------------------code----------------------
+
+- but we still see the ... when we click the button to fix that we move the ... to the summary
+-------------------code----------------------
+const summary = expanded ? children : children.substring(0, limit) + "...";
+-------------------code----------------------
+
+
+- now our button is so close to the ... so we give the Button marginLeft to 1
+
+
+- now we test our code
+-------------------code----------------------
+<Text>
+  {summary}
+  <Button
+    size="xs"
+    marginLeft={1}
+    fontWeight="bold"
+    colorScheme="yellow"
+    onClick={() => setExpanded(!expanded)}
+  >
+    {expanded ? "Show Less" : "Read More"}
+  </Button>
+</Text>
+-------------------code----------------------
+
+- one last thing of the children is null we access the length in the summary and that will cause ur 
+an error to fix that we add if statement and return null
+-------------------code----------------------
+const ExpandableText = ({ children }: Props) => {
+  const [expanded, setExpanded] = useState(false);
+  const limit = 300;
+
+  if (!children) return null;
+
+  if (children.length >= 300) {
+    <Text>{children}</Text>;
+  }
+
+  const summary = expanded ? children : children.substring(0, limit) + "...";
+
+  return (
+    <Text>
+      {summary}
+      <Button
+        size="xs"
+        marginLeft={1}
+        fontWeight="bold"
+        colorScheme="yellow"
+        onClick={() => setExpanded(!expanded)}
+      >
+        {expanded ? "Show Less" : "Read More"}
+      </Button>
+    </Text>
+  );
+};
+-------------------code----------------------
