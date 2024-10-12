@@ -5751,3 +5751,194 @@ and give it padding of 5
 </>
 -------------------code----------------------
 
+*** 15-_Exercise-_Fetching_a_Game ***
+now we will show the description of each game when access the game detail 
+and we want the url to be more search freindly for 
+so we will use the currnet name(slug) instead of id
+ex:
+http://localhost:5173/games/gta5 instead of http://localhost:5173/games/12 
+
+- we go to routes.tsx and change the id to slug
+-------------------code----------------------
+{
+  path: "games/:slug",
+  element: <GameDetailPage />,
+}
+-------------------code----------------------
+
+- we go to the GameCard component and add link to the GameDetailPage
+where we render the game.name we wrap it with Link component (use react route Link component not 
+the ChakraUI)
+-------------------code----------------------
+<Link to={`/games/` + game.slug}>{game.name}</Link>
+-------------------code----------------------
+
+- but the game.slug is not defined in the game interface so we go to Game interface using cmd + t
+and add slug
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  slug: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code----------------------
+
+- now let`s test our implementation until this point 
+we click on the name of the game and goes to that game and the URL changes 
+to the name of that game
+PS: we used slug cause is name without spaces we can`t type space in the URL
+ex:
+name: Grand Theft Auto V
+slug: grand-theft-auto-v
+
+- now to make our card more stylesh we add hover to the Box that contain the card
+-------------------code----------------------
+ <Box
+  _hover={{
+    transform: "scale(1.03)",
+    transition: "transform .15s ease-in",
+  }}
+-------------------code----------------------
+
+- now we will go to the GameDetailPage and fetch the game with given slug
+
+- inside the gameDetailpage we should read the prams from the URL so we use the useParams hook
+-------------------code----------------------
+const { slug } = useParams();
+-------------------code----------------------
+
+- next we need hook to fetch the game from the backend
+
+- we go to hook folder and create useGame hook that take a slug and use the useQuery of
+and give the queryKey as the game slug
+-------------------code----------------------
+const useGame = (slug: string) =>
+  useQuery({
+    queryKey: ["game", slug],
+  });
+-------------------code----------------------
+
+- now for the queryFn we have to use our apiClient inside the apiClient we create function to 
+fetch all the game called getAll now we want to create function to get only a single game
+-------------------code----------------------
+get = (id: string | number) => {
+    return axiosInstance
+      .get<T>(this.endpoint + "/" + id)
+      .then((res) => res.data);
+  };
+-------------------code----------------------
+
+- now we go back to our useGame hook and import APIClient and create apiClient instance
+-------------------code----------------------
+import APIClient from "../services/api-client";
+import { Game } from "./useGames";
+
+const apiClient = new APIClient<Game>("/games");
+-------------------code----------------------
+
+- now we have a small issue we import the interface of Game from another hook which make our 
+hook depends on other hook so we will add TODO and fix it later
+-------------------code----------------------
+// TODO: refactor depends on other hook
+import { Game } from "./useGames";
+-------------------code----------------------
+
+- now we call our queryFn with the get method 
+-------------------code----------------------
+const useGame = (slug: string) =>
+  useQuery({
+    queryKey: ["game", slug],
+    queryFn: () => apiClient.get(slug),
+  });
+
+export default useGame;
+-------------------code----------------------
+
+and now our hook is ready 
+
+- we go to the GameDetailPage and import the useGame hook and 
+pass the slug form the useParams
+-------------------code----------------------
+const { slug } = useParams();
+useGame(slug);
+-------------------code----------------------
+
+- we got error cause the slug from the useParams type is "string | undefined"
+-------------------code----------------------
+Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+-------------------code----------------------
+
+- now we now that in our application the slug Cannot be empty cause we already set ErrorPage 
+so if it empty we will get error so we use "!" to tell the TypeScript compiler that this value
+cannot be undefined
+we can test that by access only 
+http://localhost:5173/games/
+
+- now we grab the data and isLoading and error
+-------------------code----------------------
+const { data: game, isLoading, error } = useGame(slug!);
+-------------------code----------------------
+
+- now we implement the error and loading
+-------------------code----------------------
+if (isLoading) return <Spinner />;
+if (error) throw error;
+-------------------code----------------------
+
+- now we render the game name as Heading but we have error says Heading maybe undefined
+-------------------code----------------------
+<Heading>{game.name}</Heading>
+-------------------code----------------------
+
+we got error 
+-------------------code----------------------
+'game' is possibly 'undefined'
+-------------------code----------------------
+
+- instead of write optional chaining "?" in multi places we change the error statement
+-------------------code----------------------
+if (error || !game) throw error;
+-------------------code----------------------
+
+- now we render the game description
+-------------------code----------------------
+<>
+  <Heading>{game.name}</Heading>
+  <Text>{game.description_raw}</Text>
+</>
+-------------------code----------------------
+
+- cause the description_raw not exist in the interface we got error so we add it to the game interface
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  slug: string;
+  description_raw: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code----------------------
+
+- now we test our code
+
+- last thing we need to do is to add padding around the text but to do it to all our layout
+we go to the Layout component and add Box with padding so all pages has this padding and we don`t need
+to repeat padding in multi places
+-------------------code----------------------
+<>
+  <Box padding={5}>
+    <NavBar />
+    <Outlet />
+  </Box>
+</>
+-------------------code----------------------
+
+- finally we orginize the import in all the changes files 
