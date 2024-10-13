@@ -6605,3 +6605,35 @@ we take the user back to the homePage
 -------------------code----------------------
 
 - now we test our code
+
+*** 23-_Exercise-_Refactoring_Entities ***
+the last thing we want to do in this section to refactor the entities 
+when there is only one export in the file it`s better to use default export
+
+- in the Game.ts before change anything we should see the impact of the change 
+by clicking on the right button and "Go the References" or "find All References" it`s the 
+same but how the vs code show the result will be difference
+-------------------code----------------------
+export default interface Game {
+  id: number;
+  name: string;
+  slug: string;
+  genres: Genre[];
+  publishers: Publisher[];
+  description_raw: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code----------------------
+
+and fix the impact one by one
+ex:
+-------------------code----------------------
+import Game from "../entity/Game";
+-------------------code----------------------
+
+- the same thing we do for the other entities
+- finally we organize all the imports in all files  and "run build task"
+to check there is no problem
