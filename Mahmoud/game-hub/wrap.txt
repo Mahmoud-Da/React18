@@ -6108,3 +6108,161 @@ const ExpandableText = ({ children }: Props) => {
   );
 };
 -------------------code----------------------
+
+*** 18-_Exercise-_Building_Game_Attributes ***
+we will add the game attributes (Platforms, Meta score, Genre, publisher)
+
+- in the component folder we create DefinitionItem.tsx 
+inside it we create Props with term and children with React node or 
+array of react node so we can pass multi elements
+-------------------code----------------------
+interface Props {
+  term: string;
+  children: ReactNode | ReactNode[];
+}
+-------------------code----------------------
+
+- we want to create as HTML dd inside dt 
+but we set the dt to heading and render the term inside it 
+and we add dd to children
+-------------------code----------------------
+return (
+    <Box marginY={5}>
+      <Heading as="dt" fontSize="md" color="gray.500">
+        {term}
+      </Heading>
+      <dd>{children}</dd>
+    </Box>
+  );
+-------------------code----------------------
+
+- now we go to GameDetailPage and use our DefinitionItem component
+and map the platform to show each game platforms 
+-------------------code----------------------
+<DefinitionItem term="Platform">
+  {game.parent_platforms?.map(({ platform }) => (
+    <Text key={platform.id}>{platform.name}</Text>
+  ))}
+</DefinitionItem>
+-------------------code----------------------
+
+- we repeat the same thing to other items 
+-------------------code----------------------
+<DefinitionItem term="Metascore">
+  <CriticScore score={game.metacritic} />
+</DefinitionItem>
+-------------------code----------------------
+
+- when rendering the genres 
+we need first to add the property genres to the Game interface
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  slug: string;
+  genres: Genre[];
+  description_raw: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code----------------------
+
+- now we map the genres 
+-------------------code----------------------
+<DefinitionItem term="Genres">
+  {game.genres.map((genre) => (
+    <Text key={genre.id}>{genre.name}</Text>
+  ))}
+</DefinitionItem>
+-------------------code----------------------
+
+- finally we need to another DefinitionItem for rendering the
+publisher 
+but first we should add the publishers property which is array to the Game interface
+-------------------code----------------------
+export interface Game {
+  id: number;
+  name: string;
+  slug: string;
+  genres: Genre[];
+  publishers: Publisher[];
+  description_raw: string;
+  background_image: string;
+  parent_platforms: { platform: Platform }[];
+  metacritic: number;
+  rating_top: number;
+}
+-------------------code----------------------
+
+- now we don`t have Publisher interface so inside the entity folder we create Publisher.ts
+-------------------code----------------------
+export interface Publisher {
+  id: number;
+  name: string;
+}
+-------------------code----------------------
+
+
+- now we map the publishers inside the gameDetailpage and we add "?" in case 
+theres is no publisher we don`t want our application to crash
+-------------------code----------------------
+<DefinitionItem term="Publishers">
+  {game.publishers?.map((publisher) => (
+    <Text key={publisher.id}>{publisher.name}</Text>
+  ))}
+</DefinitionItem>
+-------------------code----------------------
+
+- now we need to put our DefinitionItem in two columns so we use SimpleGrid component
+-------------------code----------------------
+<SimpleGrid columns={2}>
+  <DefinitionItem term="Platform">
+    {game.parent_platforms?.map(({ platform }) => (
+      <Text key={platform.id}>{platform.name}</Text>
+    ))}
+  </DefinitionItem>
+  <DefinitionItem term="Metascore">
+    <CriticScore score={game.metacritic} />
+  </DefinitionItem>
+  <DefinitionItem term="Genres">
+    {game.genres.map((genre) => (
+      <Text key={genre.id}>{genre.name}</Text>
+    ))}
+  </DefinitionItem>
+  <DefinitionItem term="Publishers">
+    {game.publishers?.map((publisher) => (
+      <Text key={publisher.id}>{publisher.name}</Text>
+    ))}
+  </DefinitionItem>
+</SimpleGrid> 
+-------------------code----------------------
+
+- now in real HTML MarkUp we should have multi dt inside on dl (definition list)
+so we use as keyword to make our code more Html markup organized
+-------------------code----------------------
+<SimpleGrid columns={2} as="dl">
+-------------------code----------------------
+
+- last thing we want to do is move the SimpleGrid and the DefinitionItems to a separate component
+in the component folder we create component called GameAttributes.tsx
+this component should take game as props
+-------------------code----------------------
+interface Props {
+  game: Game;
+}
+-------------------code----------------------
+
+- then we move all the SimpleGrid code to inside the GameAttributes.tsx 
+
+- finally we organize the imports and call GameAttributes inside the GameDetailPage
+-------------------code----------------------
+<>
+  <Heading>{game.name}</Heading>
+  <ExpandableText>{game.description_raw}</ExpandableText>
+  <GameAttributes game={game} />
+</>
+-------------------code----------------------
+
+- now we test our implementation
