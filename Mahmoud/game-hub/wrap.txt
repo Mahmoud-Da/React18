@@ -6526,3 +6526,32 @@ between so inside the GameScreenshots component we set the spacing of the Simple
 -------------------code----------------------
 
 - now we test our code
+
+*** 21-_Exercise-_Improving_the_Layout ***
+we will put all the content of GameDetailPage in two columns right one 
+we will add trailer and screenshot left one we will add the description and 
+and game info (platform, genre and etc) and for small devices everything
+should be in single column
+
+- instead of wrapping the elements with fragment we wrap them with SimpleGrid
+component we give columns 2 for medium and large screen and 1 for small screen
+and wrap each section with GridItem and finally we give space of 5
+-------------------code----------------------
+<SimpleGrid
+  columns={{
+    base: 1,
+    md: 2,
+  }}
+  spacing={5}
+>
+  <GridItem>
+    <Heading>{game.name}</Heading>
+    <ExpandableText>{game.description_raw}</ExpandableText>
+    <GameAttributes game={game} />
+  </GridItem>
+  <GridItem>
+    <GameTrailer gameId={game.id} />
+    <GameScreenshots gameId={game.id} />
+  </GridItem>
+</SimpleGrid>
+-------------------code----------------------
