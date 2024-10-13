@@ -6416,3 +6416,113 @@ return first ? (
     <video src={first.data[480]} poster={first.preview} controls />
   ) : null;
 -------------------code----------------------
+
+*** 20-_Exercise-_Building_Game_Screenshots ***
+next thing we want to add to the GameDetailPage is the screenshots  
+depends on the devices we want to show the grid 
+we can access to the api documentation and we can access the "Get screenshots for the game"
+to see the endpoint detail 
+
+- similar to the useTrailers first we create hook useScreenshots.ts 
+that take the gameId as parameter 
+-------------------code----------------------
+const useScreenshots = (gameId: number) => {
+  useQuery({
+    queryKey: ["screenshot", gameId],
+    queryFn,
+  });
+};
+-------------------code----------------------
+
+- for the queryFn we need to call the apiClient with getAll method 
+so first we need to create instance of the APIClient
+-------------------code----------------------
+const apiClient = new APIClient<Screenshot>();
+-------------------code----------------------
+
+- currently we don`t have the Screenshot interface so we go to the entity and create 
+Screenshot.ts to create the interface depends on the api documentation
+-------------------code----------------------
+export interface Screenshot {
+  id: number;
+  image: string;
+  width: number;
+  height: number;
+}
+-------------------code----------------------
+
+- now back to our useScreenshots hook the endpoint should be dynamic cause it depends on the gameId 
+so we should create the instance of the apiClient inside the hook 
+-------------------code----------------------
+const useScreenshots = (gameId: number) => {
+  const apiClient = new APIClient<Screenshot>(`/games/${gameId}/screenshots`);
+  return useQuery({
+    queryKey: ["screenshot", gameId],
+    queryFn: apiClient.getAll,
+  });
+};
+-------------------code----------------------
+
+- next we create a new component called GameScreenshots.tsx and this component should receive the
+the gameId as Props
+-------------------code----------------------
+interface Props {
+  gameId: number;
+}
+-------------------code----------------------
+
+- next we call the useScreenshots hook and pass the gameId and destructure the data
+and error and isLoading and add the if statement for it
+-------------------code----------------------
+const { data, error, isLoading } = useScreenshots(gameId);
+
+if (isLoading) return null;
+
+if (error) throw error;
+
+return <div>GameScreenshots</div>;
+-------------------code----------------------
+
+- next we return SimpleGrid with column number depends on the screen 2 for big screen and medium 
+and 1 for small screen
+-------------------code----------------------
+<SimpleGrid
+      columns={{
+        base: 1,
+        md: 2,
+      }}
+    ></SimpleGrid>
+-------------------code----------------------
+
+- next we map the result to get each file 
+-------------------code----------------------
+<SimpleGrid
+  columns={{
+    base: 1,
+    md: 2,
+  }}
+>
+  {data?.results.map((file) => (
+    <Image key={file.id} src={file.image} />
+  ))}
+</SimpleGrid>
+-------------------code----------------------
+
+- now we test our component by add it to GameDetailPage
+-------------------code----------------------
+<GameScreenshots gameId={game.id} />
+-------------------code----------------------
+
+- now our screenshots is too close to each other so we will apply some space 
+between so inside the GameScreenshots component we set the spacing of the SimpleGrid to 2
+-------------------code----------------------
+<SimpleGrid
+    columns={{
+      base: 1,
+      md: 2,
+    }}
+    spacing={2}
+  >
+-------------------code----------------------
+
+- now we test our code
