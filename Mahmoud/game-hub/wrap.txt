@@ -6555,3 +6555,53 @@ and wrap each section with GridItem and finally we give space of 5
   </GridItem>
 </SimpleGrid>
 -------------------code----------------------
+
+*** 22-_Exercise-_Fixing_the_NavBar ***
+we have couple problems in our NavBar 
+- first we can`t click i=on the logo as best practice
+when we press on the logo we should go back to home
+
+- second if we search on games nothing is happens when we are inside the GameDetailPage
+
+- to fix the first problem in the NavBar component we wrap the Image element
+with the Link component
+-------------------code----------------------
+<Link to="/">
+  <Image src={logo} boxSize="60px" />
+</Link>
+-------------------code----------------------
+
+- now our logo look a little squash to fix that we se the objectFit to cover
+-------------------code----------------------
+<Image src={logo} boxSize="60px" objectFit="cover" />
+-------------------code----------------------
+
+- for the second problem we go to the SearchInput component when submit all 
+we are doing is we set the setSearchText to the new value 
+so our code is working but we need to get the use to the HomePage first
+cause that where we show the games
+-------------------code----------------------
+onSubmit={(event) => {
+          event.preventDefault();
+          if (ref.current) setSearchText(ref.current.value);}
+}
+-------------------code----------------------
+
+- so we call the navigation hook 
+-------------------code----------------------
+const navigate = useNavigate();
+-------------------code----------------------
+
+- after the setting the setSearchText the our search value 
+we take the user back to the homePage
+-------------------code----------------------
+ onSubmit={(event) => {
+          event.preventDefault();
+          if (ref.current) {
+            setSearchText(ref.current.value);
+            navigate("/");}
+          }
+        }
+-------------------code----------------------
+
+- now we test our code
