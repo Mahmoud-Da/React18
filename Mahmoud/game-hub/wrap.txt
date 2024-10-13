@@ -6266,3 +6266,153 @@ interface Props {
 -------------------code----------------------
 
 - now we test our implementation
+
+*** 19-_Exercise-_Building_Game_Trailer ***
+next we are going to add the game trailer in our gameDetailpage
+we have an endpoint we can access it from "Get a list of game trailer" in the api documentation
+to see the data object we can fetch the response and inspect the Data object while we 
+do that we can see there is multi type links each one for different video resolution
+
+- we are going to encapsulate this feature inside separate component 
+so inside the component folder we create GameTrailer.tsx 
+
+- in this component we need to fetch the trailer from the backend first 
+so we need to create a hook for that we called useTrailers  
+-------------------code----------------------
+const useTrailers = (gameId: number) =>
+  useQuery({
+    queryKey: ["trailers", gameId],
+    queryFn: 
+  });
+
+-------------------code----------------------
+
+- for queryFn we need to use the apiClient
+-------------------code----------------------
+const apiClient = new APIClient<Trailer>()
+-------------------code----------------------
+
+- but we don`t have the Trailer interface yet so we define it
+in the entity folder we create Trailer.ts
+we set the data to any cause we don`t now the object type yet 
+-------------------code----------------------
+export interface Trailer {
+  id: number;
+  name: string;
+  preview: string;
+  data: any;
+}
+-------------------code----------------------
+
+- now we want to pass the gameId as the endpoint
+so we move it inside the useTrailers hook by adding new object
+-------------------code----------------------
+const useTrailers = (gameId: number) =>
+  {
+    const apiClient = new APIClient<Trailer>(`/games/${gameId}/movies`)
+
+    return useQuery({
+      queryKey: ["trailers", gameId],
+      queryFn: 
+    });
+  }
+-------------------code----------------------
+
+- now we set the queryFn to getAll cause we get multi object
+-------------------code----------------------
+useQuery({
+    queryKey: ["trailers", gameId],
+    queryFn: apiClient.getAll,
+  });
+-------------------code----------------------
+
+- now we go to the GameTrailer to use this hook 
+now before that we need to pass the gameId as props so we create interface
+-------------------code----------------------
+interface Props {
+  gameId: number;
+}
+
+const GameTrailer = ({ gameId }: Props) => {
+  return <div>GameTrailer</div>;
+};
+-------------------code----------------------
+
+- now we call the useTrailer and log the data to see the type of that data
+-------------------code----------------------
+const GameTrailer = ({ gameId }: Props) => {
+  const { data, error, isLoading } = useTrailers(gameId);
+  console.log(data);
+  return <div>GameTrailer</div>;
+};
+-------------------code----------------------
+
+- so we go to gameDetailpage to render this component
+-------------------code----------------------
+<GameTrailer gameId={game.id} />
+-------------------code----------------------
+
+
+- now in the console we can see that we 8 trailers and in the data
+we have two links depends on the resolution for our application we will use smaller
+videos with 480 resolution
+-------------------code----------------------
+{count: 8, next: null, previous: null, results: Array(8)}
+count: 8
+next: null
+previous: null
+results: Array(8)
+0: 
+data: 
+{480: 'https://steamcdn-a.akamaihd.net/steam/apps/256693661/movie480.mp4', max: 'https://steamcdn-a.akamaihd.net/steam/apps/256693661/movie_max.mp4'}
+id: 16228
+name: "GTA Online: Smuggler's Run Trailer"
+preview: "https://media.rawg.io/media/movies/d8a/d8a61a3a12e52114afdbc28f2c813f5c.jpg"
+[[Prototype]]: Object
+-------------------code----------------------
+
+- so we are going to say the data property is object of two properties of 480 and max
+-------------------code----------------------
+export interface Trailer {
+  id: number;
+  name: string;
+  preview: string;
+  data: { 480: string; max: string };
+}
+-------------------code----------------------
+
+- now in our GameDetailPage we render null if it`s loading and throw and error if there is an error
+other wise we return video element and we add "?" in case there is no video for that game and 
+we add preview image 
+-------------------code----------------------
+<video
+  src={data?.results[0]?.data[480]}
+  poster={data?.results[0]?.preview}
+></video>
+-------------------code----------------------
+
+- now we don`t want to duplicate the "data?.results[0]" so we store it inside 
+constant we called first 
+-------------------code----------------------
+const first = data?.results[0];
+
+return <video src={first?.data[480]} poster={first?.preview}></video>;
+};
+-------------------code----------------------
+
+- now to avoid using the "?" multi times
+-------------------code----------------------
+const first = data?.results[0];
+if (!first) return null;
+
+return <video src={first.data[480]} poster={first.preview}></video>;
+-------------------code----------------------
+
+- finally we add control to make the user control play and pause the video
+and we can simply our code instead of using if(!first) and use self closed tag 
+-------------------code----------------------
+const first = data?.results[0];
+return first ? (
+    <video src={first.data[480]} poster={first.preview} controls />
+  ) : null;
+-------------------code----------------------
